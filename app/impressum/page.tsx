@@ -33,7 +33,7 @@ export default function Impressum() {
               Contact
             </p>
             <p className="font-body text-sm text-[#888888] leading-relaxed">
-              Email: hello@aivik.eu
+              Email: info@aivik.eu
               <br />
               Website: aivik.eu
             </p>

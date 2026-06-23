@@ -24,27 +24,62 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "AIVIK — Software Engineering & AI Automation",
+  metadataBase: new URL("https://aivik.eu"),
+  title: {
+    default: "AIVIK — Software Engineering & AI Automation",
+    template: "%s | AIVIK",
+  },
   description:
-    "We build software and AI systems for companies ready to move faster. Custom web applications, AI automation, and digital products. Registered in Germany.",
+    "AIVIK is a Germany-registered tech consultancy delivering custom software development, AI automation, cloud infrastructure, and data analysis for European startups and growing companies.",
   keywords: [
-    "software development",
-    "AI automation",
-    "web applications",
-    "Germany",
-    "Europe",
-    "startup",
-    "Next.js",
-    "React",
+    "software engineering Germany",
+    "AI automation Europe",
+    "custom software development",
+    "tech consultancy Munich",
+    "web application development",
+    "AI workflow automation",
+    "cloud infrastructure",
+    "data analysis",
+    "GDPR compliant software",
+    "software agency Germany",
   ],
+  authors: [{ name: "AIVIK", url: "https://aivik.eu" }],
+  creator: "AIVIK",
+  publisher: "AIVIK",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
   openGraph: {
-    title: "AIVIK — Software Engineering & AI Automation",
-    description:
-      "Custom software and AI automation for European startups. Registered in Germany.",
+    type: "website",
+    locale: "en_EU",
     url: "https://aivik.eu",
     siteName: "AIVIK",
-    locale: "en_EU",
-    type: "website",
+    title: "AIVIK — Software Engineering & AI Automation",
+    description:
+      "Custom software, AI automation, and cloud infrastructure for companies ready to move faster. Germany registered. GDPR compliant.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "AIVIK — Software Engineering & AI Automation",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AIVIK — Software Engineering & AI Automation",
+    description:
+      "Custom software, AI automation, and cloud infrastructure for European companies.",
+    images: ["/og-image.jpg"],
+  },
+  alternates: {
+    canonical: "https://aivik.eu",
   },
 };
 

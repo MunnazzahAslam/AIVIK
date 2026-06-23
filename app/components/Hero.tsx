@@ -1,38 +1,34 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
 
-function scrambleText(
-  el: HTMLElement,
-  finalText: string,
-  duration: number
-): () => void {
-  let iteration = 0;
-  const totalIterations = duration / 40;
-  const resolvePerIteration = finalText.length / (totalIterations * 0.5);
+function scrambleText(el: HTMLElement, finalText: string, duration: number): Promise<void> {
+  return new Promise((resolve) => {
+    let iteration = 0;
+    const totalIterations = duration / 40;
+    const resolvePerIteration = finalText.length / (totalIterations * 0.5);
 
-  const interval = setInterval(() => {
-    el.textContent = finalText
-      .split("")
-      .map((char, index) => {
-        if (char === " " || char === ".") return char;
-        if (index < Math.floor(iteration * resolvePerIteration)) {
-          return finalText[index];
-        }
-        return CHARS[Math.floor(Math.random() * CHARS.length)];
-      })
-      .join("");
+    const interval = setInterval(() => {
+      el.innerText = finalText
+        .split("")
+        .map((char, index) => {
+          if (char === " " || char === ".") return char;
+          if (index < Math.floor(iteration * resolvePerIteration)) {
+            return finalText[index];
+          }
+          return CHARS[Math.floor(Math.random() * CHARS.length)];
+        })
+        .join("");
 
-    if (iteration >= totalIterations) {
-      el.textContent = finalText;
-      clearInterval(interval);
-    }
-
-    iteration += 1;
-  }, 40);
-
-  return () => clearInterval(interval);
+      if (iteration >= totalIterations) {
+        el.innerText = finalText;
+        clearInterval(interval);
+        resolve();
+      }
+      iteration += 1;
+    }, 40);
+  });
 }
 
 function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
@@ -78,29 +74,32 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   );
 }
 
+const GRID_SIZE = 6;
+
 function DotGrid() {
   return (
     <div
       aria-hidden="true"
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(5, 3px)",
-        gap: "16px",
+        gridTemplateColumns: `repeat(${GRID_SIZE}, 4px)`,
+        gap: "18px",
       }}
     >
-      {Array.from({ length: 25 }).map((_, i) => {
-        const r = Math.floor(i / 5);
-        const c = i % 5;
+      {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
+        const r = Math.floor(i / GRID_SIZE);
+        const c = i % GRID_SIZE;
         return (
           <div
             key={i}
             style={{
-              width: 3,
-              height: 3,
+              width: 4,
+              height: 4,
               borderRadius: "50%",
               backgroundColor: "#1A1A1A",
               animation: "dotPulse 2s ease-in-out infinite",
               animationDelay: `${-((r + c) / 8) * 2000}ms`,
+              transition: "background-color 200ms ease",
             }}
           />
         );
@@ -113,42 +112,37 @@ export default function Hero() {
   const word1Ref = useRef<HTMLSpanElement>(null);
   const word2Ref = useRef<HTMLSpanElement>(null);
   const word3Ref = useRef<HTMLSpanElement>(null);
-  const [labelVisible, setLabelVisible] = useState(false);
 
   useEffect(() => {
-    const DURATION = 1200;
-    const STAGGER = 300;
-    const cleanups: (() => void)[] = [];
+    const w1 = word1Ref.current;
+    const w2 = word2Ref.current;
+    const w3 = word3Ref.current;
+    if (!w1 || !w2 || !w3) return;
 
-    if (word1Ref.current) {
-      cleanups.push(scrambleText(word1Ref.current, "Build.", DURATION));
-    }
+    let cancelled = false;
 
-    const t1 = setTimeout(() => {
-      if (word2Ref.current) {
-        cleanups.push(scrambleText(word2Ref.current, "Scale.", DURATION));
-      }
-    }, DURATION + STAGGER);
-    cleanups.push(() => clearTimeout(t1));
+    scrambleText(w1, "Build.", 600)
+      .then(() => { if (!cancelled) return scrambleText(w2, "Scale.", 600); })
+      .then(() => { if (!cancelled) return scrambleText(w3, "Automate.", 600); });
 
-    const t2 = setTimeout(() => {
-      if (word3Ref.current) {
-        cleanups.push(scrambleText(word3Ref.current, "Automate.", DURATION));
-      }
-    }, (DURATION + STAGGER) * 2);
-    cleanups.push(() => clearTimeout(t2));
-
-    const t3 = setTimeout(
-      () => setLabelVisible(true),
-      (DURATION + STAGGER) * 2 + DURATION + 100
-    );
-    cleanups.push(() => clearTimeout(t3));
-
-    return () => cleanups.forEach((c) => c());
+    return () => { cancelled = true; };
   }, []);
 
+  const scrollToContact = () => {
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const scrollToServices = () => {
+    document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section className="relative min-h-screen flex flex-col bg-black pt-[72px]">
+    <section
+      id="hero"
+      data-theme="dark"
+      className="relative min-h-screen flex flex-col pt-[72px]"
+      style={{ backgroundColor: "var(--section-dark)" }}
+    >
       {/* Two-column main content */}
       <div className="flex-1 flex items-center px-6">
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 py-16 lg:py-0">
@@ -183,32 +177,32 @@ export default function Hero() {
           {/* RIGHT COLUMN */}
           <div className="relative flex flex-col justify-center lg:pl-20">
             <p
-              className="animate-fade-in-up font-body text-lg text-[#888888] max-w-[420px] leading-[1.7]"
-              style={{ animationDelay: "0.3s" }}
+              className="animate-fade-in-up font-body text-lg leading-[1.7]"
+              style={{ color: "var(--section-dark-muted)", animationDelay: "0.3s", maxWidth: 420 }}
             >
-               We turn complex business problems into intelligent technology solutions that scale with your ambition and grow with your vision. </p>
+              We turn complex business problems into intelligent technology
+              solutions that scale with your ambition and grow with your vision.
+            </p>
 
             <div
               className="animate-fade-in-up flex flex-col sm:flex-row gap-3 mt-10"
               style={{ animationDelay: "0.5s" }}
             >
-              <a
-                href="https://calendly.com"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                onClick={scrollToContact}
                 className="font-body text-sm font-semibold bg-white text-black px-7 py-[14px] hover:bg-[#F0F0F0] transition-colors duration-200 text-center"
               >
                 Get a Quote
-              </a>
-              <a
-                href="#services"
+              </button>
+              <button
+                onClick={scrollToServices}
                 className="font-body text-sm font-semibold bg-transparent border border-[#333333] text-white px-7 py-[14px] hover:border-white transition-colors duration-200 text-center"
               >
-                See our work
-              </a>
+                Explore our services
+              </button>
             </div>
 
-            {/* Dot grid — desktop only, bottom-right of column */}
+            {/* Wave dot grid — desktop only, subtle background element */}
             <div className="hidden lg:block absolute bottom-0 right-0">
               <DotGrid />
             </div>
@@ -217,33 +211,32 @@ export default function Hero() {
       </div>
 
       {/* Stats bar */}
-      <div className="border-t border-[#1A1A1A]">
+      <div style={{ borderTop: "1px solid var(--section-dark-border)" }}>
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-3 divide-x divide-[#1A1A1A] py-8">
-            <div className="text-center px-4 md:px-8">
-              <div className="font-heading text-[28px] md:text-[48px] font-bold text-white leading-none mb-2">
-                <CountUp to={5} suffix="+" />
+          <div className="grid grid-cols-3 py-8">
+            {[
+              { to: 5, suffix: "+", label: "Years of engineering excellence" },
+              { to: 6, suffix: "", label: "Industries transformed" },
+              { to: 20, suffix: "+", label: "Solutions delivered to scale" },
+            ].map(({ to, suffix, label }, i) => (
+              <div
+                key={label}
+                className="text-center px-4 md:px-8"
+                style={{
+                  borderRight: i < 2 ? "1px solid var(--section-dark-border)" : "none",
+                }}
+              >
+                <div className="font-heading text-[28px] md:text-[48px] font-bold text-white leading-none mb-2">
+                  <CountUp to={to} suffix={suffix} />
+                </div>
+                <p
+                  className="font-body text-[11px] md:text-[13px] leading-snug"
+                  style={{ color: "var(--section-dark-muted)" }}
+                >
+                  {label}
+                </p>
               </div>
-              <p className="font-body text-[11px] md:text-[13px] text-[#888888] leading-snug">
-                Years of engineering excellence
-              </p>
-            </div>
-            <div className="text-center px-4 md:px-8">
-              <div className="font-heading text-[28px] md:text-[48px] font-bold text-white leading-none mb-2">
-                <CountUp to={6} />
-              </div>
-              <p className="font-body text-[11px] md:text-[13px] text-[#888888] leading-snug">
-                Industries transformed
-              </p>
-            </div>
-            <div className="text-center px-4 md:px-8">
-              <div className="font-heading text-[28px] md:text-[48px] font-bold text-white leading-none mb-2">
-                <CountUp to={20} suffix="+" />
-              </div>
-              <p className="font-body text-[11px] md:text-[13px] text-[#888888] leading-snug">
-                Solutions delivered to scale
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>

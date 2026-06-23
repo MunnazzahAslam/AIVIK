@@ -42,8 +42,8 @@ const cards = [
       "AIVIK is a registered German company. GDPR compliant by default. European clients get a European partner.",
     icon: (
       <svg
-        width="32"
-        height="32"
+        width="28"
+        height="28"
         viewBox="0 0 32 32"
         fill="none"
         stroke="currentColor"
@@ -64,8 +64,8 @@ const cards = [
       "We overlap with European business hours without friction. Async by default, available when it matters.",
     icon: (
       <svg
-        width="32"
-        height="32"
+        width="28"
+        height="28"
         viewBox="0 0 32 32"
         fill="none"
         stroke="currentColor"
@@ -86,8 +86,8 @@ const cards = [
       "Most projects start within one week of signing. No months of discovery before a line of code is written.",
     icon: (
       <svg
-        width="32"
-        height="32"
+        width="28"
+        height="28"
         viewBox="0 0 32 32"
         fill="none"
         stroke="currentColor"
@@ -146,13 +146,9 @@ export default function WhyChooseUs() {
     <section
       ref={sectionRef}
       id="about"
+      data-theme="dark"
       className="py-20 md:py-[120px] px-6"
-      style={{
-        background:
-          "linear-gradient(135deg, #000 0%, #0A0A0A 50%, #000 100%)",
-        backgroundSize: "200% 200%",
-        animation: "gradientShift 8s ease alternate infinite",
-      }}
+      style={{ backgroundColor: "var(--section-dark)" }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="mb-16">
@@ -175,14 +171,16 @@ export default function WhyChooseUs() {
             return (
               <div
                 key={number}
-                className="bg-[#111111] p-10 flex flex-col gap-6 cursor-default"
+                className="bg-[#111111] flex flex-col gap-6 cursor-default"
                 style={{
+                  padding: "40px 32px",
                   border: `1px solid ${isHovered ? "#FFFFFF" : "#1A1A1A"}`,
                   opacity: cardsVisible ? 1 : 0,
-                  transform: cardsVisible
-                    ? "translateY(0)"
-                    : "translateY(30px)",
-                  transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, border-color 200ms ease`,
+                  transform: cardsVisible ? "translateY(0)" : "translateY(30px)",
+                  transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, border-color 200ms ease, box-shadow 200ms ease`,
+                  boxShadow: isHovered
+                    ? "0 -4px 0 0 rgba(255,255,255,0.08)"
+                    : "none",
                 }}
                 onMouseEnter={() => setHoveredCard(i)}
                 onMouseLeave={() => setHoveredCard(null)}
@@ -197,20 +195,36 @@ export default function WhyChooseUs() {
                   {number}
                 </span>
 
-                <div className="text-white">{icon}</div>
+                <div
+                  style={{
+                    color: "#FFFFFF",
+                    transform: isHovered ? "translateY(-4px)" : "translateY(0)",
+                    transition: "transform 200ms ease",
+                  }}
+                >
+                  {icon}
+                </div>
 
                 <h3
                   className="font-heading text-xl font-bold text-white"
                   style={{
-                    transform: isHovered ? "scale(1.02)" : "scale(1)",
-                    transformOrigin: "left",
+                    marginTop: 0,
+                    transform: isHovered ? "translateY(-4px)" : "translateY(0)",
                     transition: "transform 200ms ease",
                   }}
                 >
                   {title}
                 </h3>
 
-                <p className="font-body text-sm text-[#888888] leading-relaxed">
+                <p
+                  className="font-body text-[14px] leading-[1.6]"
+                  style={{
+                    color: "#888888",
+                    marginTop: -8,
+                    transform: isHovered ? "translateY(-4px)" : "translateY(0)",
+                    transition: "transform 200ms ease",
+                  }}
+                >
                   {description}
                 </p>
               </div>

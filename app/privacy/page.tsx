@@ -44,10 +44,10 @@ export default function Privacy() {
               Contact
             </p>
             <a
-              href="mailto:hello@aivik.eu"
+              href="mailto:info@aivik.eu"
               className="font-body text-sm text-[#888888] hover:text-white transition-colors duration-200"
             >
-              hello@aivik.eu
+              info@aivik.eu
             </a>
           </div>
 

@@ -52,10 +52,10 @@ export default function CTA() {
               <p className="text-[#334155] text-sm mt-7">
                 Or email us at{" "}
                 <a
-                  href="mailto:hello@aivik.eu"
+                  href="mailto:info@aivik.eu"
                   className="text-[#475569] hover:text-[#94A3B8] transition-colors underline underline-offset-2"
                 >
-                  hello@aivik.eu
+                  info@aivik.eu
                 </a>
               </p>
             </div>

@@ -1,0 +1,23 @@
+:root {
+  /* Dark sections */
+  --section-dark: #000000;
+  --section-dark-surface: #111111;
+  --section-dark-border: #1A1A1A;
+  --section-dark-text: #FFFFFF;
+  --section-dark-muted: #888888;
+
+  /* Light sections */
+  --section-light: #FFFFFF;
+  --section-light-surface: #F5F5F5;
+  --section-light-border: #E5E5E5;
+  --section-light-text: #000000;
+  --section-light-muted: #666666;
+
+  /* Nav */
+  --nav-bg-on-dark: #000000;
+  --nav-bg-on-light: #FFFFFF;
+  --nav-text-on-dark: #FFFFFF;
+  --nav-text-on-light: #000000;
+  --nav-border-on-dark: #1A1A1A;
+  --nav-border-on-light: #E5E5E5;
+}

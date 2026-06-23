@@ -61,32 +61,36 @@ export default function Services() {
   }, []);
 
   return (
-    <section id="services" className="bg-white py-20 md:py-[120px] px-6">
+    <section
+      id="services"
+      data-theme="light"
+      className="py-20 md:py-[120px] px-6"
+      style={{ backgroundColor: "var(--section-light)" }}
+    >
       <div className="max-w-6xl mx-auto">
         <FadeIn className="mb-16">
           <h2
-            className="font-heading font-black text-black"
+            className="font-heading font-black"
             style={{
               fontSize: "clamp(48px, 6vw, 72px)",
               letterSpacing: "-2px",
               lineHeight: "1",
+              color: "var(--section-light-text)",
             }}
           >
             OUR SERVICES
           </h2>
         </FadeIn>
 
-        {/* Desktop: flex-row with flex-grow zoom | Mobile: stacked */}
         <div
           className="flex flex-col md:flex-row gap-px"
-          style={{ minHeight: isDesktop ? 520 : "auto" }}
+          style={{ minHeight: isDesktop ? 480 : "auto" }}
         >
           {services.map((service, index) => {
             const isHovered = hoveredIndex === index;
             const anyHovered = hoveredIndex !== null;
 
             const desktopFlexGrow = anyHovered ? (isHovered ? 3 : 1) : 1;
-            const mobileMinHeight = isHovered ? "auto" : 200;
 
             return (
               <div
@@ -94,14 +98,12 @@ export default function Services() {
                 onMouseEnter={() => isDesktop && setHoveredIndex(index)}
                 onMouseLeave={() => isDesktop && setHoveredIndex(null)}
                 onClick={() =>
-                  !isDesktop &&
-                  setHoveredIndex(isHovered ? null : index)
+                  !isDesktop && setHoveredIndex(isHovered ? null : index)
                 }
                 style={{
                   position: "relative",
                   overflow: "hidden",
                   cursor: "pointer",
-                  padding: "40px 32px",
                   backgroundColor: isHovered
                     ? "#000000"
                     : anyHovered
@@ -118,9 +120,7 @@ export default function Services() {
                       }
                     : {
                         width: "100%",
-                        minHeight: mobileMinHeight,
-                        transition:
-                          "min-height 400ms cubic-bezier(0.16,1,0.3,1), background-color 400ms ease",
+                        transition: "background-color 400ms ease",
                       }),
                 }}
               >
@@ -132,7 +132,7 @@ export default function Services() {
                     bottom: -20,
                     right: -10,
                     fontFamily: "var(--font-space-grotesk), sans-serif",
-                    fontSize: 160,
+                    fontSize: 140,
                     fontWeight: 900,
                     lineHeight: 1,
                     color: isHovered ? "#1A1A1A" : "#EEEEEE",
@@ -145,67 +145,91 @@ export default function Services() {
                   {service.number}
                 </span>
 
-                {/* Card content */}
+                {/* Card inner — flexbox layout, all layers anchored */}
                 <div
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    height: "100%",
                     display: "flex",
                     flexDirection: "column",
+                    padding: 32,
+                    height: "100%",
                   }}
                 >
-                  {/* TOP ZONE — fixed 48px: service number */}
-                  <div className="h-12 flex items-center">
+                  {/* Number area — fixed 40px */}
+                  <div
+                    style={{
+                      height: 40,
+                      display: "flex",
+                      alignItems: "flex-start",
+                    }}
+                  >
                     <span
                       className="font-mono text-[11px]"
-                      style={{ color: "#CCCCCC" }}
+                      style={{
+                        color: isHovered ? "#888888" : "#CCCCCC",
+                        transition: "color 400ms ease",
+                      }}
                     >
                       {service.number}
                     </span>
                   </div>
 
-                  {/* TITLE ZONE — fixed 112px: title + subtitle anchored to bottom */}
-                  <div className="h-28 flex flex-col justify-end">
-                    {/* Title */}
+                  {/* Title + subtitle area — fixed 140px, content anchored to bottom */}
+                  <div
+                    style={{
+                      height: 140,
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end",
+                    }}
+                  >
                     <h3
                       className="font-heading font-bold"
                       style={{
-                        fontSize: isHovered ? 28 : 20,
+                        fontSize: isHovered ? 24 : 20,
                         color: isHovered ? "#FFFFFF" : "#000000",
+                        lineHeight: 1.2,
                         transition: "font-size 300ms ease, color 400ms ease",
                       }}
                     >
                       {service.title}
                     </h3>
-
-                    {/* Description */}
                     <p
                       className="font-body text-[13px]"
                       style={{
-                        color: isHovered ? "#888888" : "#999999",
-                        transition: "color 400ms ease",
-                        marginTop: 6,
+                        color: "#888888",
+                        marginTop: 8,
                       }}
                     >
                       {service.description}
                     </p>
                   </div>
 
-                  {/* Divider */}
+                  {/* Divider — visible by default */}
                   <div
                     style={{
                       height: 1,
                       backgroundColor: isHovered
-                        ? "rgba(255,255,255,0.1)"
+                        ? "rgba(255,255,255,0.15)"
                         : "#E5E5E5",
-                      margin: "24px 0",
+                      margin: "20px 0",
                       transition: "background-color 400ms ease",
                     }}
                   />
 
-                  {/* Sub-services */}
-                  <ul className="flex flex-col gap-2">
+                  {/* Sub-services — hidden by default, shown on hover */}
+                  <ul
+                    style={{
+                      flex: 1,
+                      listStyle: "none",
+                      margin: 0,
+                      padding: 0,
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 8,
+                    }}
+                  >
                     {service.items.map((item, itemIdx) => (
                       <li
                         key={item}

@@ -1,6 +1,13 @@
 export default function Footer() {
   return (
-    <footer className="bg-black border-t border-[#1A1A1A] pt-20 pb-10 px-6">
+    <footer
+      data-theme="dark"
+      className="border-t pt-20 pb-10 px-6"
+      style={{
+        backgroundColor: "var(--section-dark)",
+        borderColor: "var(--section-dark-border)",
+      }}
+    >
       <div className="max-w-6xl mx-auto">
         {/* Top 4-column grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
@@ -28,8 +35,8 @@ export default function Footer() {
               {[
                 "Custom Software Development",
                 "AI and Automation",
-                "Digital Presence",
-                "Hardware and IoT",
+                "Cloud Infrastructure",
+                "Data Analysis",
               ].map((label) => (
                 <a
                   key={label}
@@ -88,10 +95,10 @@ export default function Footer() {
             </p>
             <div className="flex flex-col gap-2.5">
               <a
-                href="mailto:hello@aivik.eu"
+                href="mailto:info@aivik.eu"
                 className="font-body text-sm text-[#888888] hover:text-white transition-colors duration-200"
               >
-                hello@aivik.eu
+                info@aivik.eu
               </a>
               <a
                 href="https://calendly.com"
@@ -109,12 +116,18 @@ export default function Footer() {
               >
                 linkedin.com/company/aivik
               </a>
+              <p className="font-body text-sm text-[#888888]">
+                Munich, Germany
+              </p>
             </div>
           </div>
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-[#1A1A1A] pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div
+          className="border-t pt-8 flex flex-col md:flex-row items-center justify-between gap-4"
+          style={{ borderColor: "var(--section-dark-border)" }}
+        >
           <p className="font-body text-xs text-[#444444]">
             © 2026 AIVIK. All rights reserved.
           </p>

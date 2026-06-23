@@ -1,4 +1,5 @@
-import FadeIn from "./FadeIn";
+"use client";
+import { useEffect, useRef, useState } from "react";
 
 const steps = [
   {
@@ -103,71 +104,180 @@ const steps = [
   },
 ];
 
+// Sticky top values in px — 40px increments so 40px of each card peeks below the next
+const STICKY_TOPS = [80, 120, 160, 200];
+
 export default function Process() {
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 768);
+    check();
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) {
+      setActiveIndex(-1);
+      return;
+    }
+
+    const handleScroll = () => {
+      // Find the highest-indexed card whose top has reached or passed its sticky threshold.
+      // That card is the active/topmost stuck card; all cards below it index are collapsed.
+      const newActive = cardRefs.current.reduce((max, card, i) => {
+        if (!card) return max;
+        const top = card.getBoundingClientRect().top;
+        if (top <= STICKY_TOPS[i] + 2) return i;
+        return max;
+      }, -1);
+
+      setActiveIndex(newActive);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isDesktop]);
+
+  const topClasses = [
+    "md:top-[80px]",
+    "md:top-[120px]",
+    "md:top-[160px]",
+    "md:top-[200px]",
+  ];
+  const zClasses = ["md:z-10", "md:z-20", "md:z-30", "md:z-40"];
+
   return (
-    <section id="process" className="bg-white pt-20 md:pt-[120px] pb-20 md:pb-[60px] px-6">
+    <section
+      id="process"
+      data-theme="light"
+      className="px-6"
+      style={{ backgroundColor: "var(--section-light)" }}
+    >
       <div className="max-w-6xl mx-auto">
-        <FadeIn className="mb-16">
+
+        {/* HEADING — outside sticky container, scrolls normally */}
+        <div className="pt-20 md:pt-[120px] pb-10">
           <h2
-            className="font-heading font-black text-black"
+            className="font-heading font-black"
             style={{
               fontSize: "clamp(48px, 6vw, 72px)",
               letterSpacing: "-2px",
               lineHeight: "1",
+              color: "var(--section-light-text)",
             }}
           >
             OUR PROCESS
           </h2>
-        </FadeIn>
+        </div>
 
-        {/* Sticky stacked cards */}
+        {/* STICKY CARDS — only cards here, no heading */}
         <div className="flex flex-col gap-4 md:gap-0">
           {steps.map(({ step, title, description, dark, shape }, i) => {
-            const topValues = [
-              "md:top-[80px]",
-              "md:top-[120px]",
-              "md:top-[160px]",
-              "md:top-[200px]",
-            ];
-            const zValues = ["md:z-10", "md:z-20", "md:z-30", "md:z-40"];
+            // isCollapsed: this card is stuck but another card is stacked above it
+            const isCollapsed = isDesktop && activeIndex > i;
 
             return (
               <div
                 key={step}
-                className={`md:sticky ${topValues[i]} ${zValues[i]} max-w-[900px] mx-auto w-full
-                  ${dark ? "bg-black border border-[#1A1A1A]" : "bg-white border border-[#E5E5E5]"}
-                  p-10 md:p-16`}
+                ref={(el) => { cardRefs.current[i] = el; }}
+                className={`md:sticky ${topClasses[i]} ${zClasses[i]} max-w-[900px] mx-auto w-full`}
+                style={{
+                  backgroundColor: dark ? "#000000" : "#FFFFFF",
+                  border: `1px solid ${dark ? "#1A1A1A" : "#E5E5E5"}`,
+                }}
               >
-                <div className="flex flex-col md:flex-row items-start justify-between gap-10 md:gap-16">
-                  <div className="flex-1">
-                    <p className="font-mono text-[11px] tracking-[3px] uppercase text-[#888888] mb-6">
-                      {step}
-                    </p>
-                    <h3
-                      className={`font-heading text-3xl md:text-[36px] font-bold mb-5 ${
-                        dark ? "text-white" : "text-black"
-                      }`}
-                    >
-                      {title}
-                    </h3>
-                    <p
-                      className={`font-body text-base leading-[1.7] max-w-[480px] ${
-                        dark ? "text-[#888888]" : "text-[#666666]"
-                      }`}
-                    >
-                      {description}
-                    </p>
-                  </div>
+                {/* Collapsed indicator — 48px strip, only visible when this card is covered */}
+                <div
+                  style={{
+                    height: 48,
+                    paddingLeft: 40,
+                    paddingRight: 40,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 0,
+                    overflow: "hidden",
+                    opacity: isCollapsed ? 1 : 0,
+                    transition: "opacity 300ms ease",
+                    // Always in the DOM so the 48px reserves space at the top of each card
+                    // for the stacking peek effect
+                    pointerEvents: isCollapsed ? "auto" : "none",
+                  }}
+                >
+                  <span
+                    className="font-mono text-[10px] tracking-[2px] uppercase"
+                    style={{ color: dark ? "#888888" : "#888888" }}
+                  >
+                    {step}
+                  </span>
 
-                  <div className="shrink-0 opacity-60">{shape}</div>
+                  {/* Vertical separator */}
+                  <div
+                    style={{
+                      width: 1,
+                      height: 16,
+                      backgroundColor: dark ? "#333333" : "#CCCCCC",
+                      margin: "0 12px",
+                      flexShrink: 0,
+                    }}
+                  />
+
+                  <span
+                    className="font-body text-[12px]"
+                    style={{ color: "#666666" }}
+                  >
+                    {title}
+                  </span>
+                </div>
+
+                {/* Main card content — fades out when this card is collapsed */}
+                <div
+                  className="p-10 md:p-16"
+                  style={{
+                    opacity: isCollapsed ? 0 : 1,
+                    transition: "opacity 300ms ease",
+                  }}
+                >
+                  <div className="flex flex-col md:flex-row items-start justify-between gap-10 md:gap-16">
+                    <div className="flex-1">
+                      <p
+                        className="font-mono text-[11px] tracking-[3px] uppercase mb-6"
+                        style={{ color: dark ? "#555555" : "#888888" }}
+                      >
+                        {step}
+                      </p>
+                      <h3
+                        className="font-heading text-3xl md:text-[36px] font-bold mb-5"
+                        style={{ color: dark ? "#FFFFFF" : "#000000" }}
+                      >
+                        {title}
+                      </h3>
+                      <p
+                        className="font-body text-base leading-[1.7] max-w-[480px]"
+                        style={{ color: dark ? "#888888" : "#666666" }}
+                      >
+                        {description}
+                      </p>
+                    </div>
+
+                    <div className="shrink-0 opacity-60">{shape}</div>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <div className="hidden md:block h-[100px]" aria-hidden="true" />
-        <div className="h-px bg-[#E5E5E5] mt-10 max-w-[900px] mx-auto" />
+        {/* Bottom spacer */}
+        <div className="hidden md:block h-[80px]" aria-hidden="true" />
+        <div
+          className="h-px mt-10 max-w-[900px] mx-auto mb-20 md:mb-[60px]"
+          style={{ backgroundColor: "#E5E5E5" }}
+        />
       </div>
     </section>
   );
