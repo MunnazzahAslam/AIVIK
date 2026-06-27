@@ -89,11 +89,18 @@ export default function WhyAivik() {
 
         <SectionReveal className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {reasons.map(({ iconBg, iconColor, icon, title, desc }) => (
-            <div key={title} className="group card-hover border border-[#1E2D4A] rounded-2xl p-7 flex flex-col gap-5 bg-[#111827]/30">
+            <div
+              key={title}
+              className="group card-hover rounded-2xl p-7 flex flex-col gap-5"
+              style={{
+                backgroundColor: "color-mix(in srgb, var(--section-dark-surface) 30%, transparent)",
+                border: "1px solid var(--section-dark-border)",
+              }}
+            >
               {/* Icon */}
               <div
-                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${iconBg} border border-[#1E2D4A] flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110`}
-                style={{ color: iconColor }}
+                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${iconBg} flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110`}
+                style={{ color: iconColor, border: "1px solid var(--section-dark-border)" }}
               >
                 {icon}
               </div>

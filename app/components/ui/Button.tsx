@@ -30,7 +30,7 @@ export default function Button({
   }`;
 
   const variants = {
-    primary: "bg-white text-black hover:bg-[#F5F5F5] disabled:opacity-50 disabled:cursor-not-allowed",
+    primary: "aivik-btn-primary disabled:opacity-50 disabled:cursor-not-allowed",
     secondary:
       "bg-transparent border border-white text-white hover:bg-white hover:text-black",
   };

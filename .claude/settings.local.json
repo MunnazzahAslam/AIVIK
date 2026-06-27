@@ -7,10 +7,21 @@
       "Bash(echo \"Dev server PID: $!\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "Bash(curl -s http://localhost:3000)",
-      "Bash(mkdir -p /Users/munnazzahaslam/Downloads/aivik/app/styles)"
+      "Bash(mkdir -p /Users/munnazzahaslam/Downloads/aivik/app/styles)",
+      "Bash(grep -rn \"#[0-9A-Fa-f]\\\\{3,6\\\\}\" app/components/ app/impressum/ app/privacy/ app/globals.css app/styles/ --include=\"*.tsx\" --include=\"*.css\")",
+      "Bash(grep -rn '#[0-9A-Fa-f]\\\\{3,6\\\\}' app/components/Nav.tsx app/components/Hero.tsx app/components/Services.tsx app/components/WhyChooseUs.tsx app/components/Process.tsx app/components/GetAQuote.tsx app/components/Footer.tsx app/components/WhyAivik.tsx app/components/ui/SectionLabel.tsx app/components/ui/Button.tsx app/impressum/page.tsx app/privacy/page.tsx app/globals.css)",
+      "Bash(npx tsc *)",
+      "Bash(git -C /Users/munnazzahaslam/Downloads/aivik diff HEAD -- app/components/Hero.tsx)",
+      "Bash(git -C /Users/munnazzahaslam/Downloads/aivik checkout HEAD -- app/components/Hero.tsx)",
+      "Bash(npm install *)",
+      "Bash(sudo npm install three @types/three --save)",
+      "Read(//Users/munnazzahaslam/Downloads/**)",
+      "Bash(grep -iE '\\\\.\\(jpg|jpeg|png|webp|avif\\)$')",
+      "Bash(cp \"/Users/munnazzahaslam/Downloads/WhatsApp Image 2026-06-27 at 2.47.26 PM.jpeg\" \"/Users/munnazzahaslam/Downloads/aivik/public/cloud-bg.jpeg\")"
     ],
     "additionalDirectories": [
-      "/Users/munnazzahaslam/Downloads/aivik/app"
+      "/Users/munnazzahaslam/Downloads/aivik/app",
+      "/Users/munnazzahaslam/Downloads"
     ]
   }
 }

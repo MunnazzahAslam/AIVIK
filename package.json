@@ -8,10 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@types/three": "^0.185.0",
     "framer-motion": "^12.40.0",
     "next": "14.2.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "three": "^0.185.0"
   },
   "devDependencies": {
     "@types/node": "^20",

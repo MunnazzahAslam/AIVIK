@@ -5,6 +5,7 @@ import FadeIn from "./FadeIn";
 const services = [
   {
     number: "01",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000",
     title: "Custom Software Development",
     description: "End-to-end web and application engineering",
     items: [
@@ -16,6 +17,7 @@ const services = [
   },
   {
     number: "02",
+    image: "/cloud-bg.jpeg",
     title: "Cloud Infrastructure",
     description: "Scalable, secure cloud foundations",
     items: [
@@ -27,6 +29,7 @@ const services = [
   },
   {
     number: "03",
+    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000",
     title: "AI Workflow Automation",
     description: "Intelligent systems that work for you",
     items: [
@@ -38,6 +41,7 @@ const services = [
   },
   {
     number: "04",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
     title: "Data Analysis",
     description: "Turn data into decisions",
     items: [
@@ -104,124 +108,95 @@ export default function Services() {
                   position: "relative",
                   overflow: "hidden",
                   cursor: "pointer",
-                  backgroundColor: isHovered
-                    ? "#000000"
-                    : anyHovered
-                    ? "#FAFAFA"
-                    : "#F5F5F5",
+                  backgroundColor: "var(--section-dark)",
                   ...(isDesktop
                     ? {
                         flexGrow: desktopFlexGrow,
                         flexShrink: 1,
                         flexBasis: 0,
                         minWidth: 0,
-                        transition:
-                          "flex-grow 400ms cubic-bezier(0.16,1,0.3,1), background-color 400ms ease",
+                        transition: "flex-grow 400ms cubic-bezier(0.16,1,0.3,1)",
                       }
-                    : {
-                        width: "100%",
-                        transition: "background-color 400ms ease",
-                      }),
+                    : { width: "100%" }),
                 }}
               >
-                {/* Ghost number watermark */}
-                <span
+                {/* Background image — fades out on hover */}
+                <div
                   aria-hidden="true"
                   style={{
                     position: "absolute",
-                    bottom: -20,
-                    right: -10,
-                    fontFamily: "var(--font-space-grotesk), sans-serif",
-                    fontSize: 140,
-                    fontWeight: 900,
-                    lineHeight: 1,
-                    color: isHovered ? "#1A1A1A" : "#EEEEEE",
-                    pointerEvents: "none",
-                    userSelect: "none",
+                    inset: 0,
+                    backgroundImage: `url(${service.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    opacity: isHovered ? 0.35 : 1,
+                    transition: "opacity 500ms ease",
                     zIndex: 0,
-                    transition: "color 400ms ease",
                   }}
-                >
-                  {service.number}
-                </span>
+                />
+                {/* Dark gradient overlay over the image */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.25) 100%)",
+                    opacity: isHovered ? 0.35 : 1,
+                    transition: "opacity 500ms ease",
+                    zIndex: 0,
+                  }}
+                />
 
                 {/* Card inner — flexbox layout, all layers anchored */}
                 <div
                   style={{
                     position: "relative",
-                    zIndex: 1,
+                    zIndex: 2,
                     display: "flex",
                     flexDirection: "column",
                     padding: 32,
                     height: "100%",
                   }}
                 >
-                  {/* Number area — fixed 40px */}
-                  <div
+                  {/* Spacer — pushes content to bottom */}
+                  <div style={{ flex: 1 }} />
+
+                  {/* Title */}
+                  <h3
+                    className="font-heading font-bold"
                     style={{
-                      height: 40,
-                      display: "flex",
-                      alignItems: "flex-start",
+                      fontSize: isHovered ? 28 : 24,
+                      color: "var(--section-dark-text)",
+                      lineHeight: 1.2,
+                      transition: "font-size 300ms ease",
                     }}
                   >
-                    <span
-                      className="font-mono text-[11px]"
-                      style={{
-                        color: isHovered ? "#888888" : "#CCCCCC",
-                        transition: "color 400ms ease",
-                      }}
-                    >
-                      {service.number}
-                    </span>
-                  </div>
+                    {service.title}
+                  </h3>
 
-                  {/* Title + subtitle area — fixed 140px, content anchored to bottom */}
-                  <div
+                  {/* Subtitle */}
+                  <p
+                    className="font-body text-[14px]"
                     style={{
-                      height: 140,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "flex-end",
+                      color: "rgba(255,255,255,0.65)",
+                      marginTop: 8,
                     }}
                   >
-                    <h3
-                      className="font-heading font-bold"
-                      style={{
-                        fontSize: isHovered ? 24 : 20,
-                        color: isHovered ? "#FFFFFF" : "#000000",
-                        lineHeight: 1.2,
-                        transition: "font-size 300ms ease, color 400ms ease",
-                      }}
-                    >
-                      {service.title}
-                    </h3>
-                    <p
-                      className="font-body text-[13px]"
-                      style={{
-                        color: "#888888",
-                        marginTop: 8,
-                      }}
-                    >
-                      {service.description}
-                    </p>
-                  </div>
+                    {service.description}
+                  </p>
 
-                  {/* Divider — visible by default */}
+                  {/* Divider */}
                   <div
                     style={{
                       height: 1,
-                      backgroundColor: isHovered
-                        ? "rgba(255,255,255,0.15)"
-                        : "#E5E5E5",
+                      backgroundColor: "rgba(255,255,255,0.15)",
                       margin: "20px 0",
-                      transition: "background-color 400ms ease",
                     }}
                   />
 
                   {/* Sub-services — hidden by default, shown on hover */}
                   <ul
                     style={{
-                      flex: 1,
                       listStyle: "none",
                       margin: 0,
                       padding: 0,
@@ -235,7 +210,7 @@ export default function Services() {
                         key={item}
                         className="font-body text-[13px] flex items-start gap-2"
                         style={{
-                          color: "#888888",
+                          color: "rgba(255,255,255,0.65)",
                           opacity: isHovered ? 1 : 0,
                           transform: isHovered
                             ? "translateY(0)"
@@ -244,7 +219,7 @@ export default function Services() {
                         }}
                       >
                         <span
-                          style={{ color: "#FFFFFF", flexShrink: 0 }}
+                          style={{ color: "var(--section-dark-text)", flexShrink: 0 }}
                           aria-hidden="true"
                         >
                           →

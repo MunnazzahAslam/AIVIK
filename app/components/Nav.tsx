@@ -42,18 +42,18 @@ export default function Nav() {
 
   const isLight = navTheme === "light";
 
-  // hero-dark: black bg, white text, no visible border
-  // dark:      black bg, white text, #1A1A1A border
-  // light:     white bg, black text, #E5E5E5 border
-  const bgColor = isLight ? "#FFFFFF" : "#000000";
-  const textColor = isLight ? "#000000" : "#FFFFFF";
-  const mutedColor = isLight ? "#666666" : "#888888";
+  // hero-dark: black bg, white text, invisible border (same as bg)
+  // dark:      black bg, white text, dark border
+  // light:     white bg, black text, light border
+  const bgColor = isLight ? "var(--nav-bg-on-light)" : "var(--nav-bg-on-dark)";
+  const textColor = isLight ? "var(--nav-text-on-light)" : "var(--nav-text-on-dark)";
+  const mutedColor = isLight ? "var(--section-light-muted)" : "var(--section-dark-muted)";
   const borderColor =
     navTheme === "hero-dark"
-      ? "#000000"
+      ? "var(--nav-bg-on-dark)"
       : navTheme === "dark"
-      ? "#1A1A1A"
-      : "#E5E5E5";
+      ? "var(--nav-border-on-dark)"
+      : "var(--nav-border-on-light)";
 
   const scrollToContact = () => {
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
@@ -117,8 +117,8 @@ export default function Nav() {
               onClick={scrollToContact}
               className="font-body text-sm font-semibold px-5 py-[10px] transition-colors duration-300"
               style={{
-                backgroundColor: isLight ? "#000000" : "#FFFFFF",
-                color: isLight ? "#FFFFFF" : "#000000",
+                backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
+                color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",
               }}
             >
               Get a Quote
@@ -169,14 +169,25 @@ export default function Nav() {
             <a
               key={label}
               href={href}
-              className="font-heading text-4xl font-bold text-white hover:text-[#888888] transition-colors duration-200"
+              className="font-heading text-4xl font-bold transition-colors duration-200"
+              style={{ color: "var(--section-dark-text)" }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLElement).style.color = "var(--section-dark-muted)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLElement).style.color = "var(--section-dark-text)";
+              }}
               onClick={() => setOpen(false)}
             >
               {label}
             </a>
           ))}
           <button
-            className="mt-4 font-body text-sm font-semibold bg-white text-black px-8 py-4"
+            className="mt-4 font-body text-sm font-semibold px-8 py-4"
+            style={{
+              backgroundColor: "var(--section-light)",
+              color: "var(--section-light-text)",
+            }}
             onClick={() => {
               setOpen(false);
               scrollToContact();

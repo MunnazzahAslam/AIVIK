@@ -1,23 +1,34 @@
 :root {
-  /* Dark sections */
-  --section-dark: #000000;
-  --section-dark-surface: #111111;
-  --section-dark-border: #1A1A1A;
-  --section-dark-text: #FFFFFF;
-  --section-dark-muted: #888888;
+/* Dark sections */
+--section-dark:         #03060D;
+--section-dark-surface: #080E1A;
+--section-dark-border:  #121D30;
+--section-dark-ghost:   #1E2E47;
+--section-dark-subtle:  #3A506E;
+--section-dark-text:    #FFFFFF;
+--section-dark-muted:   #8499B8;
 
+/* Optional: NymCard-inspired accent upgrade */
+--accent-primary:  #00B4D8;   /* cyan replaces blue */
+--accent-hover:    #0096B4;
+--accent-light:    #90E0EF;
+--accent-purple:   #6D28D9;   /* headline punch */
   /* Light sections */
   --section-light: #FFFFFF;
-  --section-light-surface: #F5F5F5;
-  --section-light-border: #E5E5E5;
-  --section-light-text: #000000;
-  --section-light-muted: #666666;
+  --section-light-surface: #F8FAFC;
+  --section-light-border: #E2E8F0;
+  --section-light-text: #050B14;
+  --section-light-muted: #64748B;
+
 
   /* Nav */
-  --nav-bg-on-dark: #000000;
+  --nav-bg-on-dark: #050B14;
   --nav-bg-on-light: #FFFFFF;
   --nav-text-on-dark: #FFFFFF;
-  --nav-text-on-light: #000000;
-  --nav-border-on-dark: #1A1A1A;
-  --nav-border-on-light: #E5E5E5;
+  --nav-text-on-light: #050B14;
+  --nav-border-on-dark: #182235;
+  --nav-border-on-light: #E2E8F0;
+
+  /* Animations */
+  --dot-pulse-peak: rgba(79, 140, 255, 0.75);
 }

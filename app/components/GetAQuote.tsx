@@ -25,10 +25,10 @@ const initialForm: FormState = {
   message: "",
 };
 
-const inputClass =
-  "w-full font-body text-sm text-white bg-[#0A0A0A] border border-[#1A1A1A] px-4 py-3 placeholder:text-[#444444] focus:outline-none focus:border-white transition-colors duration-200";
+// Color classes (.aivik-input, .text-on-dark-muted) are defined in globals.css
+const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
 
-const labelClass = "block font-body text-xs text-[#888888] mb-1.5";
+const labelClass = "block font-body text-xs text-on-dark-muted mb-1.5";
 
 function validateForm(form: FormState): string | null {
   if (!form.name.trim()) return "Name is required.";
@@ -46,6 +46,7 @@ export default function GetAQuote() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [submitHovered, setSubmitHovered] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -104,8 +105,9 @@ export default function GetAQuote() {
           {/* Left column */}
           <FadeIn className="flex flex-col justify-center">
             <h2
-              className="font-heading font-black text-white mb-6"
+              className="font-heading font-black mb-6"
               style={{
+                color: "var(--section-dark-text)",
                 fontSize: "clamp(48px, 6vw, 72px)",
                 letterSpacing: "-2px",
                 lineHeight: "1",
@@ -134,7 +136,7 @@ export default function GetAQuote() {
                 "Long-term partnership beyond project delivery",
               ].map((text) => (
                 <div key={text} className="flex items-start gap-3">
-                  <span className="font-body text-sm text-white shrink-0">&#10003;</span>
+                  <span className="font-body text-sm shrink-0" style={{ color: "var(--section-dark-text)" }}>&#10003;</span>
                   <p
                     className="font-body text-sm"
                     style={{ color: "var(--section-dark-muted)" }}
@@ -151,12 +153,12 @@ export default function GetAQuote() {
             />
 
             <div>
-              <p className="font-mono text-[11px] text-[#444444] tracking-[2px] uppercase mb-2">
+              <p className="font-mono text-[11px] text-on-dark-muted tracking-[2px] uppercase mb-2">
                 Prefer email?
               </p>
               <a
                 href="mailto:info@aivik.eu"
-                className="font-body text-sm text-white hover:text-[#888888] transition-colors duration-200"
+                className="font-body text-sm link-on-dark"
               >
                 info@aivik.eu
               </a>
@@ -179,7 +181,7 @@ export default function GetAQuote() {
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="white"
+                    stroke="var(--section-dark-text)"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -188,7 +190,10 @@ export default function GetAQuote() {
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </div>
-                <h3 className="font-heading text-2xl font-bold text-white">
+                <h3
+                  className="font-heading text-2xl font-bold"
+                  style={{ color: "var(--section-dark-text)" }}
+                >
                   Thank you.
                 </h3>
                 <p
@@ -221,7 +226,7 @@ export default function GetAQuote() {
                     required
                     value={form.name}
                     onChange={handleChange}
-                    placeholder="Munnazzah Aslam"
+                    placeholder="Your name"
                     className={inputClass}
                     autoComplete="name"
                   />
@@ -267,7 +272,7 @@ export default function GetAQuote() {
                 <div>
                   <label htmlFor="phone" className={labelClass}>
                     Phone number{" "}
-                    <span className="text-[#444444]">(optional)</span>
+                    <span className="text-on-dark-muted">(optional)</span>
                   </label>
                   <input
                     id="phone"
@@ -315,7 +320,7 @@ export default function GetAQuote() {
                         height="12"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="#888888"
+                        stroke="var(--section-dark-muted)"
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -365,7 +370,13 @@ export default function GetAQuote() {
                 <button
                   type="submit"
                   disabled={status === "submitting"}
-                  className="w-full font-body text-sm font-semibold bg-white text-black py-4 hover:bg-[#F5F5F5] transition-colors duration-200 mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="w-full font-body text-sm font-semibold py-4 transition-colors duration-200 mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    backgroundColor: submitHovered ? "var(--section-light-surface)" : "var(--section-light)",
+                    color: "var(--section-light-text)",
+                  }}
+                  onMouseEnter={() => setSubmitHovered(true)}
+                  onMouseLeave={() => setSubmitHovered(false)}
                 >
                   {status === "submitting" ? "Sending..." : "Book a discovery call"}
                 </button>

@@ -11,9 +11,7 @@ export default function SectionLabel({
 }: SectionLabelProps) {
   return (
     <p
-      className={`font-mono text-[11px] tracking-[3px] uppercase mb-5 ${
-        dark ? "text-[#888888]" : "text-[#666666]"
-      } ${className}`}
+      className={`font-mono text-[11px] tracking-[3px] uppercase mb-5 text-on-dark-muted ${className}`}
     >
       {text}
     </p>

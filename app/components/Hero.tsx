@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef } from "react";
+import GlobeBackground from "./GlobeBackground";
 
 const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
 
@@ -74,39 +75,6 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
   );
 }
 
-const GRID_SIZE = 6;
-
-function DotGrid() {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${GRID_SIZE}, 4px)`,
-        gap: "18px",
-      }}
-    >
-      {Array.from({ length: GRID_SIZE * GRID_SIZE }).map((_, i) => {
-        const r = Math.floor(i / GRID_SIZE);
-        const c = i % GRID_SIZE;
-        return (
-          <div
-            key={i}
-            style={{
-              width: 4,
-              height: 4,
-              borderRadius: "50%",
-              backgroundColor: "#1A1A1A",
-              animation: "dotPulse 2s ease-in-out infinite",
-              animationDelay: `${-((r + c) / 8) * 2000}ms`,
-              transition: "background-color 200ms ease",
-            }}
-          />
-        );
-      })}
-    </div>
-  );
-}
 
 export default function Hero() {
   const word1Ref = useRef<HTMLSpanElement>(null);
@@ -143,8 +111,10 @@ export default function Hero() {
       className="relative min-h-screen flex flex-col pt-[72px]"
       style={{ backgroundColor: "var(--section-dark)" }}
     >
+      <GlobeBackground />
+
       {/* Two-column main content */}
-      <div className="flex-1 flex items-center px-6">
+      <div className="relative z-10 flex-1 flex items-center px-6">
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 py-16 lg:py-0">
 
           {/* LEFT COLUMN */}
@@ -180,9 +150,7 @@ export default function Hero() {
               className="animate-fade-in-up font-body text-lg leading-[1.7]"
               style={{ color: "var(--section-dark-muted)", animationDelay: "0.3s", maxWidth: 420 }}
             >
-              We turn complex business problems into intelligent technology
-              solutions that scale with your ambition and grow with your vision.
-            </p>
+              We design intelligent software, AI solutions, and digital platforms that help businesses automate operations, accelerate growth, and stay ahead in a rapidly evolving world.</p>
 
             <div
               className="animate-fade-in-up flex flex-col sm:flex-row gap-3 mt-10"
@@ -202,16 +170,12 @@ export default function Hero() {
               </button>
             </div>
 
-            {/* Wave dot grid — desktop only, subtle background element */}
-            <div className="hidden lg:block absolute bottom-0 right-0">
-              <DotGrid />
-            </div>
           </div>
         </div>
       </div>
 
       {/* Stats bar */}
-      <div style={{ borderTop: "1px solid var(--section-dark-border)" }}>
+      <div className="relative z-10" style={{ borderTop: "1px solid var(--section-dark-border)" }}>
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid grid-cols-3 py-8">
             {[

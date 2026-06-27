@@ -15,8 +15,8 @@ html {
 }
 
 body {
-  background-color: #000000;
-  color: #ffffff;
+  background-color: var(--section-dark);
+  color: var(--section-dark-text);
   font-family: var(--font-inter), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -32,8 +32,8 @@ h6 {
 }
 
 ::selection {
-  background: #333333;
-  color: #ffffff;
+  background: var(--section-dark-ghost);
+  color: var(--section-dark-text);
 }
 
 /* ─── Keyframes ─── */
@@ -109,14 +109,62 @@ h6 {
 
 @keyframes dotPulse {
   0%, 100% {
-    background-color: #1A1A1A;
+    background-color: var(--section-dark-border);
   }
   15% {
-    background-color: rgba(255, 255, 255, 0.75);
+    background-color: var(--dot-pulse-peak);
   }
   35% {
-    background-color: #1A1A1A;
+    background-color: var(--section-dark-border);
   }
+}
+
+/* ─── Shared link styles (for server components without JS hover handlers) ─── */
+
+.link-on-dark {
+  color: var(--section-dark-muted);
+  transition: color 200ms ease;
+}
+.link-on-dark:hover {
+  color: var(--section-dark-text);
+}
+
+/* ─── Muted text on dark background ─── */
+
+.text-on-dark-muted {
+  color: var(--section-dark-muted);
+}
+
+/* ─── Divider line on dark background ─── */
+
+.aivik-section-divider {
+  border-top: 1px solid var(--section-dark-border);
+}
+
+/* ─── Form inputs / selects / textareas ─── */
+
+.aivik-input {
+  color: var(--section-dark-text);
+  background-color: var(--section-dark);
+  border: 1px solid var(--section-dark-border);
+  transition: border-color 200ms ease;
+}
+.aivik-input::placeholder {
+  color: var(--section-dark-muted);
+}
+.aivik-input:focus {
+  outline: none;
+  border-color: var(--section-dark-text);
+}
+
+/* ─── Primary button ─── */
+
+.aivik-btn-primary {
+  background-color: var(--section-light);
+  color: var(--section-light-text);
+}
+.aivik-btn-primary:hover {
+  background-color: var(--section-light-surface);
 }
 
 /* ─── Reduced motion ─── */

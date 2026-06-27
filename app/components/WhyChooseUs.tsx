@@ -154,8 +154,9 @@ export default function WhyChooseUs() {
         <div className="mb-16">
           <h2
             ref={headingRef}
-            className="font-heading font-black text-white"
+            className="font-heading font-black"
             style={{
+              color: "var(--section-dark-text)",
               fontSize: "clamp(48px, 6vw, 72px)",
               letterSpacing: "-2px",
               lineHeight: "1",
@@ -165,16 +166,20 @@ export default function WhyChooseUs() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[#1A1A1A]">
+        <div
+          className="grid grid-cols-1 md:grid-cols-3 gap-px"
+          style={{ backgroundColor: "var(--section-dark-border)" }}
+        >
           {cards.map(({ number, title, description, icon }, i) => {
             const isHovered = hoveredCard === i;
             return (
               <div
                 key={number}
-                className="bg-[#111111] flex flex-col gap-6 cursor-default"
+                className="flex flex-col gap-6 cursor-default"
                 style={{
                   padding: "40px 32px",
-                  border: `1px solid ${isHovered ? "#FFFFFF" : "#1A1A1A"}`,
+                  backgroundColor: "var(--section-dark-surface)",
+                  border: `1px solid ${isHovered ? "var(--section-dark-text)" : "var(--section-dark-border)"}`,
                   opacity: cardsVisible ? 1 : 0,
                   transform: cardsVisible ? "translateY(0)" : "translateY(30px)",
                   transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 150}ms, border-color 200ms ease, box-shadow 200ms ease`,
@@ -188,7 +193,7 @@ export default function WhyChooseUs() {
                 <span
                   className="font-mono text-[11px]"
                   style={{
-                    color: isHovered ? "#888888" : "#444444",
+                    color: "var(--section-dark-muted)",
                     transition: "color 200ms ease",
                   }}
                 >
@@ -197,7 +202,7 @@ export default function WhyChooseUs() {
 
                 <div
                   style={{
-                    color: "#FFFFFF",
+                    color: "var(--section-dark-text)",
                     transform: isHovered ? "translateY(-4px)" : "translateY(0)",
                     transition: "transform 200ms ease",
                   }}
@@ -206,8 +211,9 @@ export default function WhyChooseUs() {
                 </div>
 
                 <h3
-                  className="font-heading text-xl font-bold text-white"
+                  className="font-heading text-xl font-bold"
                   style={{
+                    color: "var(--section-dark-text)",
                     marginTop: 0,
                     transform: isHovered ? "translateY(-4px)" : "translateY(0)",
                     transition: "transform 200ms ease",
@@ -219,7 +225,7 @@ export default function WhyChooseUs() {
                 <p
                   className="font-body text-[14px] leading-[1.6]"
                   style={{
-                    color: "#888888",
+                    color: "var(--section-dark-muted)",
                     marginTop: -8,
                     transform: isHovered ? "translateY(-4px)" : "translateY(0)",
                     transition: "transform 200ms ease",

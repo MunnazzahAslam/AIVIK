@@ -187,8 +187,8 @@ export default function Process() {
                 ref={(el) => { cardRefs.current[i] = el; }}
                 className={`md:sticky ${topClasses[i]} ${zClasses[i]} max-w-[900px] mx-auto w-full`}
                 style={{
-                  backgroundColor: dark ? "#000000" : "#FFFFFF",
-                  border: `1px solid ${dark ? "#1A1A1A" : "#E5E5E5"}`,
+                  backgroundColor: dark ? "var(--section-dark)" : "var(--section-light)",
+                  border: `1px solid ${dark ? "var(--section-dark-border)" : "var(--section-light-border)"}`,
                 }}
               >
                 {/* Collapsed indicator — 48px strip, only visible when this card is covered */}
@@ -210,7 +210,7 @@ export default function Process() {
                 >
                   <span
                     className="font-mono text-[10px] tracking-[2px] uppercase"
-                    style={{ color: dark ? "#888888" : "#888888" }}
+                    style={{ color: "var(--section-dark-muted)" }}
                   >
                     {step}
                   </span>
@@ -220,7 +220,7 @@ export default function Process() {
                     style={{
                       width: 1,
                       height: 16,
-                      backgroundColor: dark ? "#333333" : "#CCCCCC",
+                      backgroundColor: dark ? "var(--section-dark-ghost)" : "#CCCCCC",
                       margin: "0 12px",
                       flexShrink: 0,
                     }}
@@ -228,7 +228,7 @@ export default function Process() {
 
                   <span
                     className="font-body text-[12px]"
-                    style={{ color: "#666666" }}
+                    style={{ color: "var(--section-light-muted)" }}
                   >
                     {title}
                   </span>
@@ -246,19 +246,19 @@ export default function Process() {
                     <div className="flex-1">
                       <p
                         className="font-mono text-[11px] tracking-[3px] uppercase mb-6"
-                        style={{ color: dark ? "#555555" : "#888888" }}
+                        style={{ color: dark ? "var(--section-dark-subtle)" : "var(--section-dark-muted)" }}
                       >
                         {step}
                       </p>
                       <h3
                         className="font-heading text-3xl md:text-[36px] font-bold mb-5"
-                        style={{ color: dark ? "#FFFFFF" : "#000000" }}
+                        style={{ color: dark ? "var(--section-dark-text)" : "var(--section-light-text)" }}
                       >
                         {title}
                       </h3>
                       <p
                         className="font-body text-base leading-[1.7] max-w-[480px]"
-                        style={{ color: dark ? "#888888" : "#666666" }}
+                        style={{ color: dark ? "var(--section-dark-muted)" : "var(--section-light-muted)" }}
                       >
                         {description}
                       </p>
@@ -276,7 +276,7 @@ export default function Process() {
         <div className="hidden md:block h-[80px]" aria-hidden="true" />
         <div
           className="h-px mt-10 max-w-[900px] mx-auto mb-20 md:mb-[60px]"
-          style={{ backgroundColor: "#E5E5E5" }}
+          style={{ backgroundColor: "var(--section-light-border)" }}
         />
       </div>
     </section>
