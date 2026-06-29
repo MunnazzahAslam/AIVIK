@@ -134,20 +134,33 @@ export default function Services() {
                     zIndex: 0,
                   }}
                 />
-                {/* Dark gradient overlay over the image */}
+                {/* Subtle overall dark veil so image doesn't feel raw */}
                 <div
                   aria-hidden="true"
                   style={{
                     position: "absolute",
                     inset: 0,
-                    background: "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,0.25) 100%)",
-                    opacity: isHovered ? 0.35 : 1,
-                    transition: "opacity 500ms ease",
+                    background: "rgba(0,0,0,0.25)",
                     zIndex: 0,
                   }}
                 />
 
-                {/* Card inner — flexbox layout, all layers anchored */}
+                {/* Text background panel — keeps content readable against the image */}
+                <div
+                  aria-hidden="true"
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "65%",
+                    background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.85) 50%, transparent 100%)",
+                    zIndex: 1,
+                    pointerEvents: "none",
+                  }}
+                />
+
+                {/* Card inner */}
                 <div
                   style={{
                     position: "relative",
@@ -158,76 +171,108 @@ export default function Services() {
                     height: "100%",
                   }}
                 >
-                  {/* Spacer — pushes content to bottom */}
-                  <div style={{ flex: 1 }} />
+                  {/* Top spacer: full flex centers title at rest; shrinks to minHeight on hover */}
+                  <div style={{
+                    flexGrow: isHovered ? 0 : 1,
+                    flexShrink: 1,
+                    flexBasis: "0px",
+                    minHeight: isHovered ? 72 : 0,
+                    transition: "flex-grow 420ms cubic-bezier(0.16,1,0.3,1), min-height 420ms cubic-bezier(0.16,1,0.3,1)",
+                  }} />
 
                   {/* Title */}
                   <h3
                     className="font-heading font-bold"
                     style={{
-                      fontSize: isHovered ? 28 : 24,
+                      fontSize: isHovered ? 26 : anyHovered ? 17 : 22,
                       color: "var(--section-dark-text)",
-                      lineHeight: 1.2,
+                      lineHeight: 1.25,
                       transition: "font-size 300ms ease",
+                      overflowWrap: "break-word",
+                      wordBreak: "break-word",
                     }}
                   >
                     {service.title}
                   </h3>
 
-                  {/* Subtitle */}
-                  <p
-                    className="font-body text-[14px]"
-                    style={{
-                      color: "rgba(255,255,255,0.65)",
-                      marginTop: 8,
-                    }}
-                  >
-                    {service.description}
-                  </p>
-
-                  {/* Divider */}
+                  {/* Subtitle — collapses to 0 height when hidden so it doesn't affect layout */}
                   <div
                     style={{
-                      height: 1,
-                      backgroundColor: "rgba(255,255,255,0.15)",
-                      margin: "20px 0",
-                    }}
-                  />
-
-                  {/* Sub-services — hidden by default, shown on hover */}
-                  <ul
-                    style={{
-                      listStyle: "none",
-                      margin: 0,
-                      padding: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 8,
+                      maxHeight: isHovered ? 60 : 0,
+                      overflow: "hidden",
+                      transition: "max-height 400ms cubic-bezier(0.16,1,0.3,1)",
                     }}
                   >
-                    {service.items.map((item, itemIdx) => (
-                      <li
-                        key={item}
-                        className="font-body text-[13px] flex items-start gap-2"
-                        style={{
-                          color: "rgba(255,255,255,0.65)",
-                          opacity: isHovered ? 1 : 0,
-                          transform: isHovered
-                            ? "translateY(0)"
-                            : "translateY(12px)",
-                          transition: `opacity 300ms ease ${150 + itemIdx * 50}ms, transform 300ms ease ${150 + itemIdx * 50}ms`,
-                        }}
-                      >
-                        <span
-                          style={{ color: "var(--section-dark-text)", flexShrink: 0 }}
-                          aria-hidden="true"
+                    <p
+                      className="font-body text-[14px]"
+                      style={{
+                        color: "rgba(255,255,255,0.65)",
+                        marginTop: 8,
+                        opacity: isHovered ? 1 : 0,
+                        transition: "opacity 300ms ease 80ms",
+                      }}
+                    >
+                      {service.description}
+                    </p>
+                  </div>
+
+                  {/* Divider — collapses to 0 when hidden */}
+                  <div
+                    style={{
+                      maxHeight: isHovered ? 41 : 0,
+                      overflow: "hidden",
+                      transition: "max-height 400ms cubic-bezier(0.16,1,0.3,1)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        height: 1,
+                        backgroundColor: "rgba(255,255,255,0.15)",
+                        margin: "20px 0",
+                        opacity: isHovered ? 1 : 0,
+                        transition: "opacity 300ms ease 80ms",
+                      }}
+                    />
+                  </div>
+
+                  {/* Sub-services — collapses to 0 when hidden */}
+                  <div
+                    style={{
+                      maxHeight: isHovered ? 200 : 0,
+                      overflow: "hidden",
+                      transition: "max-height 400ms cubic-bezier(0.16,1,0.3,1) 50ms",
+                    }}
+                  >
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        margin: 0,
+                        padding: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 8,
+                      }}
+                    >
+                      {service.items.map((item, itemIdx) => (
+                        <li
+                          key={item}
+                          className="font-body text-[13px] flex items-start gap-2"
+                          style={{
+                            color: "rgba(255,255,255,0.65)",
+                            opacity: isHovered ? 1 : 0,
+                            transform: isHovered ? "translateY(0)" : "translateY(8px)",
+                            transition: `opacity 280ms ease ${120 + itemIdx * 50}ms, transform 280ms ease ${120 + itemIdx * 50}ms`,
+                          }}
                         >
-                          →
-                        </span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                          <span style={{ color: "var(--section-dark-text)", flexShrink: 0 }} aria-hidden="true">→</span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Bottom spacer: always flex 1 — absorbs remaining space below content on hover */}
+                  <div style={{ flexGrow: 1, flexShrink: 1, flexBasis: "0px" }} />
                 </div>
               </div>
             );

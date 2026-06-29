@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import AIVIKLogo from "./AIVIKLogo";
 
 const links = [
   ["Services", "#services"],
@@ -62,7 +63,7 @@ export default function Nav() {
   return (
     <>
       <nav
-        className="fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center px-6"
+        className="fixed top-0 left-0 right-0 z-50 h-[72px] flex items-center px-8 md:px-14"
         style={{
           backgroundColor: bgColor,
           borderBottom: `1px solid ${borderColor}`,
@@ -70,26 +71,14 @@ export default function Nav() {
         }}
         aria-label="Main navigation"
       >
-        <div className="max-w-6xl mx-auto w-full h-full relative flex items-center">
-          {/* Logo */}
-          <a
-            href="/"
-            className="flex items-center gap-3 shrink-0 md:absolute md:left-0 md:top-1/2 md:-translate-y-1/2"
-          >
-            <span
-              className="font-heading font-bold text-2xl tracking-tight"
-              style={{
-                color: textColor,
-                transition: "color 300ms ease",
-              }}
-            >
-              AIVIK
-            </span>
+          {/* Logo — far left */}
+          <a href="/" className="flex items-center shrink-0">
+            <AIVIKLogo size="md" variant={isLight ? "light" : "dark"} />
           </a>
 
-          {/* Desktop nav links — centered */}
+          {/* Desktop nav links — truly centered on full nav width */}
           <div
-            className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2"
+            className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2"
             role="list"
           >
             {links.map(([label, href]) => (
@@ -97,14 +86,10 @@ export default function Nav() {
                 key={label}
                 href={href}
                 role="listitem"
-                className="font-body text-sm transition-colors duration-300"
-                style={{ color: mutedColor }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = textColor;
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color = mutedColor;
-                }}
+                className="font-body font-medium text-[15px] transition-opacity duration-200"
+                style={{ color: textColor, opacity: 0.5 }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.5"; }}
               >
                 {label}
               </a>
@@ -112,18 +97,17 @@ export default function Nav() {
           </div>
 
           {/* Desktop CTA — far right */}
-          <div className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2">
-            <button
-              onClick={scrollToContact}
-              className="font-body text-sm font-semibold px-5 py-[10px] transition-colors duration-300"
-              style={{
-                backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
-                color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",
-              }}
-            >
-              Get a Quote
-            </button>
-          </div>
+          <button
+            onClick={scrollToContact}
+            className="hidden md:block ml-auto font-heading font-bold text-[13px] px-6 py-[10px] transition-colors duration-200 shrink-0"
+            style={{
+              backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
+              color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",
+              letterSpacing: "0.02em",
+            }}
+          >
+            Get a Quote
+          </button>
 
           {/* Mobile hamburger */}
           <button
@@ -134,27 +118,17 @@ export default function Nav() {
           >
             <span
               className="block w-6 h-0.5 transition-transform duration-200 origin-center"
-              style={{
-                backgroundColor: textColor,
-                transform: open ? "rotate(45deg) translateY(7px)" : "none",
-              }}
+              style={{ backgroundColor: textColor, transform: open ? "rotate(45deg) translateY(7px)" : "none" }}
             />
             <span
               className="block w-6 h-0.5 transition-opacity duration-200"
-              style={{
-                backgroundColor: textColor,
-                opacity: open ? 0 : 1,
-              }}
+              style={{ backgroundColor: textColor, opacity: open ? 0 : 1 }}
             />
             <span
               className="block w-6 h-0.5 transition-transform duration-200 origin-center"
-              style={{
-                backgroundColor: textColor,
-                transform: open ? "rotate(-45deg) translateY(-7px)" : "none",
-              }}
+              style={{ backgroundColor: textColor, transform: open ? "rotate(-45deg) translateY(-7px)" : "none" }}
             />
           </button>
-        </div>
       </nav>
 
       {/* Mobile full-screen overlay */}
