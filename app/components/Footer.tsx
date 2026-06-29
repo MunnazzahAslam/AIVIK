@@ -1,3 +1,5 @@
+import AIVIKLogo from "./AIVIKLogo";
+
 export default function Footer() {
   return (
     <footer
@@ -14,9 +16,7 @@ export default function Footer() {
           {/* Column 1 — Brand */}
           <div>
             <a href="/" className="block mb-4">
-              <span className="font-heading font-bold text-xl text-white tracking-tight">
-                AIVIK
-              </span>
+              <AIVIKLogo size="sm" variant="dark" animate={false} />
             </a>
             <p className="font-mono text-[11px] text-on-dark-muted mb-4">
               Think it. Build it. AIVIK.

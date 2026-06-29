@@ -167,6 +167,21 @@ h6 {
   background-color: var(--section-light-surface);
 }
 
+/* ─── AIVIK logo cursor blink ─── */
+
+@keyframes aivik-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.aivik-cursor {
+  animation: aivik-blink 1.1s steps(1) infinite;
+}
+
+.aivik-logo:hover .aivik-cursor {
+  animation-play-state: paused;
+}
+
 /* ─── Reduced motion ─── */
 
 @media (prefers-reduced-motion: reduce) {
@@ -188,5 +203,10 @@ h6 {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .aivik-cursor {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }
