@@ -148,18 +148,14 @@ export default function WhyAivik() {
                 onMouseEnter={() => !isTouch && setHoveredIndex(i)}
                 onMouseLeave={() => !isTouch && setHoveredIndex(null)}
                 style={{
-                  display:    "flex",
-                  transform:  isHovered ? "scale(1.04)" : "scale(1)",
-                  transition: "transform 300ms ease",
-                  position:   "relative",
-                  zIndex:     isHovered ? 1 : 0,
-                  cursor:     "default",
-                  overflow:   "visible",
+                  display:  "flex",
+                  position: "relative",
+                  zIndex:   isHovered ? 1 : 0,
+                  cursor:   "default",
                 }}
               >
                 {/* ── Inner: owns scroll-reveal + borders + padding.
-                    flex:1 stretches to fill the outer div (= grid cell height),
-                    making all cards in a row equal height.                      */}
+                    Borders are NOT scaled — only the content inside scales. */}
                 <div
                   className={`py-5 px-4 md:py-7 md:px-6 lg:py-9 lg:px-8 ${BORDER_CLASSES[i]}`}
                   style={{
@@ -173,32 +169,40 @@ export default function WhyAivik() {
                                     transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms`,
                   }}
                 >
-                  {/* minHeight reserves space for 2 wrapped lines, equalising card heights
-                      within each row regardless of which title happens to wrap.          */}
-                  <h3
-                    className="font-heading font-bold"
+                  {/* Content wrapper: scale lives here so borders never move */}
+                  <div
                     style={{
-                      fontSize:      "clamp(14px, 2vw, 17px)",
-                      lineHeight:    1.3,
-                      letterSpacing: "-0.3px",
-                      color:         "var(--section-dark-text)",
-                      marginBottom:  12,
-                      minHeight:     "2.6em",
+                      transform:       isHovered ? "scale(1.04)" : "scale(1)",
+                      transition:      "transform 300ms ease",
+                      transformOrigin: "top left",
                     }}
                   >
-                    {reason.title}
-                  </h3>
+                    {/* minHeight reserves space for 2 wrapped lines, equalising card heights */}
+                    <h3
+                      className="font-heading font-bold"
+                      style={{
+                        fontSize:      "clamp(14px, 2vw, 17px)",
+                        lineHeight:    1.3,
+                        letterSpacing: "-0.3px",
+                        color:         "var(--section-dark-text)",
+                        marginBottom:  12,
+                        minHeight:     "2.6em",
+                      }}
+                    >
+                      {reason.title}
+                    </h3>
 
-                  <p
-                    className="font-body"
-                    style={{
-                      fontSize:   13,
-                      lineHeight: 1.75,
-                      color:      "var(--section-dark-muted)",
-                    }}
-                  >
-                    {reason.desc}
-                  </p>
+                    <p
+                      className="font-body"
+                      style={{
+                        fontSize:   13,
+                        lineHeight: 1.75,
+                        color:      "var(--section-dark-muted)",
+                      }}
+                    >
+                      {reason.desc}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
