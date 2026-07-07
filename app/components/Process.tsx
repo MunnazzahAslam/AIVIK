@@ -60,7 +60,11 @@ const THRESHOLDS = [0.12, 0.35, 0.58, 0.80];
 const STEP = 110;
 const CONTAINER_H = STEP * 3 + 220; /* ~550px */
 
-function makePath(pts: { x: number; y: number }[], W: number, H: number): string {
+/* Mobile cards are narrower (70% width) so text wraps taller — bigger step needed */
+const MOBILE_STEP = 190;
+const MOBILE_CONTAINER_H = MOBILE_STEP * 3 + 260; /* ~830px */
+
+function makePath(pts: { x: number; y: number }[], W: number, _H: number): string {
   if (!pts.length) return "";
   const cx = W / 2;
   let d = `M ${cx} 0`;
@@ -70,8 +74,6 @@ function makePath(pts: { x: number; y: number }[], W: number, H: number): string
     const mid = (a.y + b.y) / 2;
     d += ` C ${a.x} ${mid}, ${b.x} ${mid}, ${b.x} ${b.y}`;
   }
-  const last = pts[pts.length - 1];
-  d += ` C ${last.x} ${(last.y + H) * 0.6}, ${cx} ${H * 0.82}, ${cx} ${H}`;
   return d;
 }
 
@@ -82,29 +84,52 @@ export default function Process() {
   const glowRef      = useRef<SVGPathElement>(null);
   const cardRefs     = useRef<(HTMLDivElement | null)[]>([]);
 
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const mobileCardRefs     = useRef<(HTMLDivElement | null)[]>([]);
+
   const [pathD,     setPathD]     = useState("");
   const [waypoints, setWaypoints] = useState<{ x: number; y: number }[]>([]);
   const [svgDims,   setSvgDims]   = useState({ w: 1000, h: CONTAINER_H });
   const [revealed,  setRevealed]  = useState([false, false, false, false]);
   const [active,    setActive]    = useState([false, false, false, false]);
 
+  const [mobilePathD,     setMobilePathD]     = useState("");
+  const [mobileWaypoints, setMobileWaypoints] = useState<{ x: number; y: number }[]>([]);
+  const [mobileSvgDims,   setMobileSvgDims]   = useState({ w: 400, h: MOBILE_CONTAINER_H });
+
   useLayoutEffect(() => {
     const measure = () => {
       const container = containerRef.current;
-      if (!container) return;
-      if (cardRefs.current.some(c => !c)) return;
-      const cr = container.getBoundingClientRect();
-      setSvgDims({ w: cr.width, h: cr.height });
-      const pts = cardRefs.current.map((card, i) => {
-        const r = card!.getBoundingClientRect();
-        const y = r.top - cr.top + r.height / 2;
-        const x = steps[i].side === "left"
-          ? r.right - cr.left + 12
-          : r.left  - cr.left - 12;
-        return { x, y };
-      });
-      setWaypoints(pts);
-      setPathD(makePath(pts, cr.width, cr.height));
+      if (container && !cardRefs.current.some(c => !c)) {
+        const cr = container.getBoundingClientRect();
+        setSvgDims({ w: cr.width, h: cr.height });
+        const pts = cardRefs.current.map((card, i) => {
+          const r = card!.getBoundingClientRect();
+          const y = r.top - cr.top + r.height / 2;
+          const x = steps[i].side === "left"
+            ? r.right - cr.left + 12
+            : r.left  - cr.left - 12;
+          return { x, y };
+        });
+        setWaypoints(pts);
+        setPathD(makePath(pts, cr.width, cr.height));
+      }
+
+      const mContainer = mobileContainerRef.current;
+      if (mContainer && !mobileCardRefs.current.some(c => !c)) {
+        const cr = mContainer.getBoundingClientRect();
+        setMobileSvgDims({ w: cr.width, h: cr.height });
+        const pts = mobileCardRefs.current.map((card, i) => {
+          const r = card!.getBoundingClientRect();
+          const y = r.top - cr.top + r.height / 2;
+          const x = steps[i].side === "left"
+            ? r.right - cr.left + 10
+            : r.left  - cr.left - 10;
+          return { x, y };
+        });
+        setMobileWaypoints(pts);
+        setMobilePathD(makePath(pts, cr.width, cr.height));
+      }
     };
     measure();
     window.addEventListener("resize", measure, { passive: true });
@@ -129,8 +154,10 @@ export default function Process() {
         const sH   = section.offsetHeight;
         const raw  = (winH * 0.55 - rect.top) / (sH - winH * 0.45);
         const p    = Math.max(0, Math.min(1, raw));
-        path.style.strokeDashoffset = `${L * (1 - p)}`;
-        if (glow) glow.style.strokeDashoffset = `${L * (1 - p)}`;
+        // Draw completes exactly when last card is revealed (THRESHOLDS[3])
+        const pDraw = Math.min(p / THRESHOLDS[3], 1);
+        path.style.strokeDashoffset = `${L * (1 - pDraw)}`;
+        if (glow) glow.style.strokeDashoffset = `${L * (1 - pDraw)}`;
         setRevealed(THRESHOLDS.map(t => p >= t));
         setActive  (THRESHOLDS.map(t => p >= t));
       };
@@ -147,19 +174,11 @@ export default function Process() {
       id="process"
       ref={sectionRef}
       data-theme="light"
-      style={{ backgroundColor: "var(--section-light)", height: "380vh", position: "relative" }}
+      className="relative md:h-[380vh]"
+      style={{ backgroundColor: "var(--section-light)" }}
     >
       <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "0 24px",
-          overflow: "hidden",
-        }}
+        className="md:sticky md:top-0 md:h-screen md:overflow-hidden flex flex-col justify-center px-6 py-20 md:py-0"
       >
         <div className="max-w-6xl mx-auto w-full">
 
@@ -184,9 +203,8 @@ export default function Process() {
               >
                 <defs>
                   <linearGradient id="pg" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%"   stopColor="#1E3A8A" />
-                    <stop offset="55%"  stopColor="#0F172A" />
-                    <stop offset="100%" stopColor="#000000" />
+                    <stop offset="0%"   stopColor="#60A5FA" />
+                    <stop offset="100%" stopColor="#1D4ED8" />
                   </linearGradient>
                   <filter id="glow4">
                     <feGaussianBlur stdDeviation="4" result="b" />
@@ -197,18 +215,16 @@ export default function Process() {
                     <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
                   </filter>
                 </defs>
-                {/* Guide track */}
-                <path d={pathD} fill="none" stroke="#D1D9E4" strokeWidth="1.5" strokeLinecap="round" />
                 {/* Glow halo */}
                 <path ref={glowRef} d={pathD} fill="none" stroke="url(#pg)" strokeWidth="12" strokeLinecap="round" opacity={0.2} filter="url(#glow8)" />
                 {/* Animated draw line */}
                 <path ref={pathRef} d={pathD} fill="none" stroke="url(#pg)" strokeWidth="2" strokeLinecap="round" filter="url(#glow4)" />
-                {/* Waypoint dots */}
+                {/* Waypoint dots — invisible until active */}
                 {waypoints.map((pt, i) => (
-                  <g key={i}>
-                    <circle cx={pt.x} cy={pt.y} r={20} fill="none" stroke="#1E3A8A" strokeWidth="1" opacity={active[i] ? 0.15 : 0} style={{ transition: "opacity 600ms ease" }} />
-                    <circle cx={pt.x} cy={pt.y} r={active[i] ? 10 : 5} fill="none" stroke={active[i] ? "#1E3A8A" : "#D1D9E4"} strokeWidth="1.5" style={{ transition: "all 500ms ease" }} />
-                    <circle cx={pt.x} cy={pt.y} r={active[i] ? 5 : 3} fill={active[i] ? "#1E40AF" : "#D1D9E4"} filter={active[i] ? "url(#glow4)" : undefined} style={{ transition: "all 500ms ease" }} />
+                  <g key={i} style={{ opacity: active[i] ? 1 : 0, transition: "opacity 600ms ease" }}>
+                    <circle cx={pt.x} cy={pt.y} r={20} fill="none" stroke="#3B82F6" strokeWidth="1" opacity={0.15} />
+                    <circle cx={pt.x} cy={pt.y} r={10} fill="none" stroke="#60A5FA" strokeWidth="1.5" />
+                    <circle cx={pt.x} cy={pt.y} r={5} fill="#2563EB" filter="url(#glow4)" />
                   </g>
                 ))}
               </svg>
@@ -225,6 +241,7 @@ export default function Process() {
                   right: s.side === "right" ? 0         : undefined,
                   width: "44%",
                   zIndex: 2,
+                  backgroundColor: "var(--section-light)",
                 }}
               >
                 <div
@@ -258,22 +275,78 @@ export default function Process() {
             ))}
           </div>
 
-          {/* ── Mobile fallback ── */}
-          <div className="flex flex-col gap-5 md:hidden">
+          {/* ── Mobile: same staircase + path, fully visible immediately (no scroll reveal) ── */}
+          <div
+            ref={mobileContainerRef}
+            className="relative block md:hidden"
+            style={{ height: MOBILE_CONTAINER_H }}
+          >
+            {mobilePathD && (
+              <svg
+                style={{ position: "absolute", top: 0, left: 0, width: mobileSvgDims.w, height: mobileSvgDims.h, overflow: "visible", pointerEvents: "none", zIndex: 1 }}
+              >
+                <defs>
+                  <filter id="glow4m">
+                    <feGaussianBlur stdDeviation="3" result="b" />
+                    <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                  <filter id="glow8m">
+                    <feGaussianBlur stdDeviation="7" result="b" />
+                    <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                </defs>
+                {/* Glow halo — blue, fully drawn */}
+                <path d={mobilePathD} fill="none" stroke="#3B82F6" strokeWidth="10" strokeLinecap="round" opacity={0.18} filter="url(#glow8m)" />
+                {/* Main line — blue */}
+                <path d={mobilePathD} fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round" filter="url(#glow4m)" />
+                {/* Waypoint dots — blue, final active state */}
+                {mobileWaypoints.map((pt, i) => (
+                  <g key={i}>
+                    <circle cx={pt.x} cy={pt.y} r={14} fill="none" stroke="#3B82F6" strokeWidth="1" opacity={0.15} />
+                    <circle cx={pt.x} cy={pt.y} r={7} fill="none" stroke="#1E3A8A" strokeWidth="1.5" />
+                    <circle cx={pt.x} cy={pt.y} r={3.5} fill="#2563EB" filter="url(#glow4m)" />
+                  </g>
+                ))}
+              </svg>
+            )}
+
+            {/* Staircase — same step pattern as desktop, fully visible */}
             {steps.map((s, i) => (
               <div
                 key={s.step}
-                style={{ background: "#EEF2F7", border: "1px solid #CBD5E1", borderLeft: "3px solid #1E3A8A", padding: "18px 20px" }}
+                style={{
+                  position: "absolute",
+                  top: i * MOBILE_STEP,
+                  left:  s.side === "left"  ? 0 : undefined,
+                  right: s.side === "right" ? 0 : undefined,
+                  width: "70%",
+                  zIndex: 2,
+                }}
               >
-                <span className="font-heading font-black" style={{ display: "block", fontSize: 36, lineHeight: 1, color: "#B8C7D9", marginBottom: 12, letterSpacing: "-2px" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-heading font-black" style={{ fontSize: 17, color: "var(--section-light-text)", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 8 }}>
-                  {s.title}
-                </h3>
-                <p className="font-body" style={{ fontSize: 13, color: "#64748B", lineHeight: 1.7 }}>
-                  {s.desc}
-                </p>
+                <div
+                  ref={el => { mobileCardRefs.current[i] = el; }}
+                  style={{
+                    background: "#EEF2F7",
+                    border: "1px solid #CBD5E1",
+                    padding: "18px 20px",
+                  }}
+                >
+                  <span
+                    className="font-heading font-black"
+                    style={{ display: "block", fontSize: 32, lineHeight: 1, color: "#B8C7D9", marginBottom: 12, letterSpacing: "-2px" }}
+                  >
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <h3
+                    className="font-heading font-black"
+                    style={{ fontSize: 16, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
+                  >
+                    {s.title}
+                  </h3>
+                  <p className="font-body" style={{ fontSize: 12.5, color: "#64748B", lineHeight: 1.7 }}>
+                    {s.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
