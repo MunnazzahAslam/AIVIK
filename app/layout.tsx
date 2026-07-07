@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import CursorEffect from "./components/CursorEffect";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -93,7 +94,10 @@ export default function RootLayout({
       lang="en"
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="font-body">{children}</body>
+      <body className="font-body">
+        <CursorEffect />
+        {children}
+      </body>
     </html>
   );
 }

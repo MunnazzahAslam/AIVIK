@@ -69,6 +69,7 @@ const BORDER_CLASSES = [
 export default function WhyAivik() {
   const headingRef                        = useRef<HTMLHeadingElement>(null);
   const gridRef                           = useRef<HTMLDivElement>(null);
+  const overlayRef                        = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex]   = useState<number | null>(null);
   const [isVisible,    setIsVisible]      = useState(false);
   const [isTouch,      setIsTouch]        = useState(false);
@@ -104,14 +105,43 @@ export default function WhyAivik() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  const handleSpotlightMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const el = overlayRef.current;
+    if (!el || isTouch) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
+    const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
+    el.style.opacity    = "1";
+    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.16) 0%, rgba(37,99,235,0.05) 50%, transparent 75%)`;
+  };
+
+  const handleSpotlightLeave = () => {
+    const el = overlayRef.current;
+    if (el) el.style.opacity = "0";
+  };
+
   return (
     <section
       id="why-aivik"
       data-theme="dark"
       className="py-[120px] px-6"
-      style={{ backgroundColor: "var(--section-dark)" }}
+      style={{ backgroundColor: "var(--section-dark)", position: "relative" }}
+      onMouseMove={handleSpotlightMove}
+      onMouseLeave={handleSpotlightLeave}
     >
-      <div className="max-w-6xl mx-auto">
+      {/* Spotlight — covers the whole section, not just the grid */}
+      <div
+        ref={overlayRef}
+        style={{
+          position:      "absolute",
+          inset:         0,
+          pointerEvents: "none",
+          zIndex:        0,
+          opacity:       0,
+          transition:    "opacity 400ms ease",
+        }}
+      />
+      <div className="max-w-6xl mx-auto" style={{ position: "relative", zIndex: 1 }}>
 
         <div className="mb-16">
           <h2
@@ -151,7 +181,6 @@ export default function WhyAivik() {
                   display:  "flex",
                   position: "relative",
                   zIndex:   isHovered ? 1 : 0,
-                  cursor:   "default",
                 }}
               >
                 {/* ── Inner: owns scroll-reveal + borders + padding.
