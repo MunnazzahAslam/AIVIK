@@ -97,7 +97,7 @@ export default function GetAQuote() {
     <section
       id="contact"
       data-theme="dark"
-      className="py-20 md:py-[120px] px-6"
+      className="py-[120px] px-6"
       style={{ backgroundColor: "var(--section-dark)" }}
     >
       <div className="max-w-6xl mx-auto">

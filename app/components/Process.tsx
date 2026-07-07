@@ -54,74 +54,88 @@ const steps = [
   },
 ];
 
-const THRESHOLDS = [0.12, 0.35, 0.58, 0.80];
+const THRESHOLDS    = [0.12, 0.35, 0.58, 0.80];
+const STEP          = 110;
+const CONTAINER_H   = STEP * 3 + 220;
+// Alternating x positions for mobile dots — gives makeSegment different start/end x
+// values so the cubic bezier produces a genuine S-curve (same as desktop logic).
+const MOBILE_DOT_XA = 10; // even-indexed dots (left)
+const MOBILE_DOT_XB = 38; // odd-indexed dots (right)
 
-/* step=110px so same-side cards (0→2, 1→3) clear each other's ~200px height */
-const STEP = 110;
-const CONTAINER_H = STEP * 3 + 220; /* ~550px */
-
-function makePath(pts: { x: number; y: number }[], W: number, H: number): string {
-  if (!pts.length) return "";
-  const cx = W / 2;
-  let d = `M ${cx} 0`;
-  d += ` C ${cx} ${pts[0].y * 0.45}, ${pts[0].x} ${pts[0].y * 0.55}, ${pts[0].x} ${pts[0].y}`;
-  for (let i = 0; i < pts.length - 1; i++) {
-    const a = pts[i], b = pts[i + 1];
-    const mid = (a.y + b.y) / 2;
-    d += ` C ${a.x} ${mid}, ${b.x} ${mid}, ${b.x} ${b.y}`;
-  }
-  const last = pts[pts.length - 1];
-  d += ` C ${last.x} ${(last.y + H) * 0.6}, ${cx} ${H * 0.82}, ${cx} ${H}`;
-  return d;
+// Smooth S-curve between two points — shared by desktop and mobile
+function makeSegment(a: { x: number; y: number }, b: { x: number; y: number }): string {
+  const midY = (a.y + b.y) / 2;
+  return `M ${a.x} ${a.y} C ${a.x} ${midY}, ${b.x} ${midY}, ${b.x} ${b.y}`;
 }
 
 export default function Process() {
-  const sectionRef   = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const pathRef      = useRef<SVGPathElement>(null);
-  const glowRef      = useRef<SVGPathElement>(null);
-  const cardRefs     = useRef<(HTMLDivElement | null)[]>([]);
 
-  const [pathD,     setPathD]     = useState("");
+  // ── Desktop refs ──────────────────────────────────────────────────────────
+  const desktopScrollRef = useRef<HTMLDivElement>(null); // the 380vh div
+  const containerRef     = useRef<HTMLDivElement>(null); // staircase container
+  const cardRefs         = useRef<(HTMLDivElement | null)[]>([]);
+  const segRefs          = useRef<(SVGPathElement | null)[]>([null, null, null]);
+  const segGlowRefs      = useRef<(SVGPathElement | null)[]>([null, null, null]);
+  const segLengths       = useRef<number[]>([]);
+
   const [waypoints, setWaypoints] = useState<{ x: number; y: number }[]>([]);
   const [svgDims,   setSvgDims]   = useState({ w: 1000, h: CONTAINER_H });
   const [revealed,  setRevealed]  = useState([false, false, false, false]);
   const [active,    setActive]    = useState([false, false, false, false]);
 
+  // ── Mobile refs ───────────────────────────────────────────────────────────
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const mobileCardRefs     = useRef<(HTMLDivElement | null)[]>([]);
+  const mobileSegRefs      = useRef<(SVGPathElement | null)[]>([null, null, null]);
+  const mobileSegGlowRefs  = useRef<(SVGPathElement | null)[]>([null, null, null]);
+  const mobileSegLengths   = useRef<number[]>([]);
+
+  const [mobileWaypoints, setMobileWaypoints] = useState<{ x: number; y: number }[]>([]);
+  const [mobileSvgH,      setMobileSvgH]      = useState(900);
+  const [mobileActive,    setMobileActive]    = useState([false, false, false, false]);
+
+  // ── Desktop: measure card positions → waypoints ───────────────────────────
   useLayoutEffect(() => {
     const measure = () => {
       const container = containerRef.current;
-      if (!container) return;
-      if (cardRefs.current.some(c => !c)) return;
+      if (!container || cardRefs.current.some(c => !c)) return;
       const cr = container.getBoundingClientRect();
+      if (cr.height === 0) return; // hidden on mobile
       setSvgDims({ w: cr.width, h: cr.height });
       const pts = cardRefs.current.map((card, i) => {
         const r = card!.getBoundingClientRect();
-        const y = r.top - cr.top + r.height / 2;
-        const x = steps[i].side === "left"
-          ? r.right - cr.left + 12
-          : r.left  - cr.left - 12;
-        return { x, y };
+        return {
+          y: r.top  - cr.top  + r.height / 2,
+          x: steps[i].side === "left"
+            ? r.right - cr.left + 12
+            : r.left  - cr.left - 12,
+        };
       });
       setWaypoints(pts);
-      setPathD(makePath(pts, cr.width, cr.height));
     };
     measure();
     window.addEventListener("resize", measure, { passive: true });
     return () => window.removeEventListener("resize", measure);
   }, []);
 
+  // ── Desktop: scroll listener + segment init ───────────────────────────────
   useEffect(() => {
-    const section = sectionRef.current;
-    if (!section || !pathD) return;
-    const frame = requestAnimationFrame(() => {
-      const path = pathRef.current;
-      const glow = glowRef.current;
-      if (!path) return;
-      const L = path.getTotalLength();
-      path.style.strokeDasharray  = `${L}`;
-      path.style.strokeDashoffset = `${L}`;
-      if (glow) { glow.style.strokeDasharray = `${L}`; glow.style.strokeDashoffset = `${L}`; }
+    if (waypoints.length < 4) return;
+    const section = desktopScrollRef.current;
+    if (!section) return;
+
+    let removeScroll: (() => void) | undefined;
+
+    const raf = requestAnimationFrame(() => {
+      segRefs.current.forEach((seg, i) => {
+        const glow = segGlowRefs.current[i];
+        if (!seg) return;
+        const L = seg.getTotalLength();
+        segLengths.current[i] = L;
+        seg.style.strokeDasharray  = `${L}`;
+        seg.style.strokeDashoffset = `${L}`;
+        if (glow) { glow.style.strokeDasharray = `${L}`; glow.style.strokeDashoffset = `${L}`; }
+      });
 
       const tick = () => {
         const rect = section.getBoundingClientRect();
@@ -129,128 +143,385 @@ export default function Process() {
         const sH   = section.offsetHeight;
         const raw  = (winH * 0.55 - rect.top) / (sH - winH * 0.45);
         const p    = Math.max(0, Math.min(1, raw));
-        path.style.strokeDashoffset = `${L * (1 - p)}`;
-        if (glow) glow.style.strokeDashoffset = `${L * (1 - p)}`;
         setRevealed(THRESHOLDS.map(t => p >= t));
         setActive  (THRESHOLDS.map(t => p >= t));
       };
 
       window.addEventListener("scroll", tick, { passive: true });
       tick();
-      (section as any)._cleanup = () => window.removeEventListener("scroll", tick);
+      removeScroll = () => window.removeEventListener("scroll", tick);
     });
-    return () => { cancelAnimationFrame(frame); (section as any)._cleanup?.(); };
-  }, [pathD]);
+
+    return () => { cancelAnimationFrame(raf); removeScroll?.(); };
+  }, [waypoints]);
+
+  // ── Desktop: animate segments when active changes ─────────────────────────
+  useEffect(() => {
+    segRefs.current.forEach((seg, i) => {
+      const glow = segGlowRefs.current[i];
+      const L    = segLengths.current[i];
+      if (!seg || !L) return;
+      const show = active[i] && active[i + 1];
+      seg.style.strokeDashoffset  = show ? "0" : `${L}`;
+      if (glow) glow.style.strokeDashoffset = show ? "0" : `${L}`;
+    });
+  }, [active]);
+
+  // ── Mobile: measure card positions ────────────────────────────────────────
+  useLayoutEffect(() => {
+    const measure = () => {
+      const container = mobileContainerRef.current;
+      if (!container || mobileCardRefs.current.some(c => !c)) return;
+      const cr = container.getBoundingClientRect();
+      if (cr.height === 0) return; // hidden on desktop
+      setMobileSvgH(cr.height);
+      const pts = mobileCardRefs.current.map((card, i) => {
+        const r = card!.getBoundingClientRect();
+        return {
+          x: i % 2 === 0 ? MOBILE_DOT_XA : MOBILE_DOT_XB,
+          y: r.top - cr.top + r.height / 2,
+        };
+      });
+      setMobileWaypoints(pts);
+    };
+    measure();
+    window.addEventListener("resize", measure, { passive: true });
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  // ── Mobile: init segment paths once waypoints are ready ───────────────────
+  useEffect(() => {
+    if (mobileWaypoints.length < 4) return;
+    const raf = requestAnimationFrame(() => {
+      mobileSegRefs.current.forEach((seg, i) => {
+        const glow = mobileSegGlowRefs.current[i];
+        if (!seg) return;
+        const L = seg.getTotalLength();
+        mobileSegLengths.current[i] = L;
+        seg.style.strokeDasharray  = `${L}`;
+        seg.style.strokeDashoffset = `${L}`;
+        if (glow) { glow.style.strokeDasharray = `${L}`; glow.style.strokeDashoffset = `${L}`; }
+      });
+    });
+    return () => cancelAnimationFrame(raf);
+  }, [mobileWaypoints]);
+
+  // ── Mobile: IntersectionObserver — each card triggers its own dot ─────────
+  useEffect(() => {
+    const observers: IntersectionObserver[] = [];
+    mobileCardRefs.current.forEach((card, i) => {
+      if (!card) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setMobileActive(prev => {
+              if (prev[i]) return prev; // already active, skip
+              const next = [...prev] as [boolean, boolean, boolean, boolean];
+              next[i] = true;
+              return next;
+            });
+            obs.disconnect();
+          }
+        },
+        { threshold: 0.35 }
+      );
+      obs.observe(card);
+      observers.push(obs);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // run once — mobile cards are stable DOM nodes
+
+  // ── Mobile: animate segments when mobileActive changes ───────────────────
+  useEffect(() => {
+    mobileSegRefs.current.forEach((seg, i) => {
+      const glow = mobileSegGlowRefs.current[i];
+      const L    = mobileSegLengths.current[i];
+      if (!seg || !L) return;
+      const show = mobileActive[i] && mobileActive[i + 1];
+      seg.style.strokeDashoffset  = show ? "0" : `${L}`;
+      if (glow) glow.style.strokeDashoffset = show ? "0" : `${L}`;
+    });
+  }, [mobileActive]);
+
+  // ── Derived segment paths ─────────────────────────────────────────────────
+  const segments = waypoints.length === 4
+    ? [
+        makeSegment(waypoints[0], waypoints[1]),
+        makeSegment(waypoints[1], waypoints[2]),
+        makeSegment(waypoints[2], waypoints[3]),
+      ]
+    : [];
+
+  const mobileSegments = mobileWaypoints.length === 4
+    ? [
+        makeSegment(mobileWaypoints[0], mobileWaypoints[1]),
+        makeSegment(mobileWaypoints[1], mobileWaypoints[2]),
+        makeSegment(mobileWaypoints[2], mobileWaypoints[3]),
+      ]
+    : [];
 
   return (
     <section
       id="process"
-      ref={sectionRef}
       data-theme="light"
-      style={{ backgroundColor: "var(--section-light)", height: "380vh", position: "relative" }}
+      style={{ backgroundColor: "var(--section-light)" }}
     >
-      <div
-        style={{
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          padding: "0 24px",
-          overflow: "hidden",
-        }}
-      >
-        <div className="max-w-6xl mx-auto w-full">
 
-          <div style={{ marginBottom: 36 }}>
+      {/* ── DESKTOP (≥1024px): sticky scroll with zigzag ── */}
+      <div
+        ref={desktopScrollRef}
+        className="hidden lg:block"
+        style={{ height: "380vh", position: "relative" }}
+      >
+        <div
+          style={{
+            position: "sticky",
+            top: 0,
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            padding: "0 24px",
+            overflow: "hidden",
+          }}
+        >
+          <div className="max-w-6xl mx-auto w-full">
+
+            <div style={{ marginBottom: 36 }}>
+              <h2
+                className="font-heading font-black"
+                style={{ fontSize: "clamp(48px, 6vw, 72px)", letterSpacing: "-2px", lineHeight: 1, color: "var(--section-light-text)" }}
+              >
+                OUR PROCESS
+              </h2>
+            </div>
+
+            <div
+              ref={containerRef}
+              className="relative"
+              style={{ height: CONTAINER_H }}
+            >
+              {segments.length > 0 && (
+                <svg
+                  style={{ position: "absolute", top: 0, left: 0, width: svgDims.w, height: svgDims.h, overflow: "visible", pointerEvents: "none", zIndex: 1 }}
+                >
+                  <defs>
+                    <filter id="d-lineGlow">
+                      <feGaussianBlur stdDeviation="3" result="b" />
+                      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                    <filter id="d-dotGlow">
+                      <feGaussianBlur stdDeviation="5" result="b" />
+                      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                  </defs>
+                  <style>{`
+                    @keyframes dDotPulse {
+                      0%   { r: 7;  opacity: 0.6; }
+                      100% { r: 20; opacity: 0;   }
+                    }
+                    .d-dot-pulse { animation: dDotPulse 1.8s ease-out infinite; }
+                  `}</style>
+
+                  {segments.map((d, i) => (
+                    <path key={`d-glow-${i}`} ref={el => { segGlowRefs.current[i] = el; }}
+                      d={d} fill="none" stroke="#2563EB" strokeWidth="8" strokeLinecap="round"
+                      opacity={0.18} filter="url(#d-lineGlow)"
+                      style={{ transition: "stroke-dashoffset 700ms cubic-bezier(0.16,1,0.3,1)" }}
+                    />
+                  ))}
+                  {segments.map((d, i) => (
+                    <path key={`d-line-${i}`} ref={el => { segRefs.current[i] = el; }}
+                      d={d} fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round"
+                      style={{ transition: "stroke-dashoffset 700ms cubic-bezier(0.16,1,0.3,1)" }}
+                    />
+                  ))}
+                  {waypoints.map((pt, i) => (
+                    <g key={`d-dot-${i}`}>
+                      <circle cx={pt.x} cy={pt.y} r={7} fill="none" stroke="#2563EB" strokeWidth="1.5"
+                        opacity={active[i] ? 1 : 0}
+                        className={active[i] ? "d-dot-pulse" : undefined}
+                      />
+                      <circle cx={pt.x} cy={pt.y} r={5} fill="#2563EB"
+                        filter={active[i] ? "url(#d-dotGlow)" : undefined}
+                        style={{
+                          transformBox: "fill-box", transformOrigin: "center",
+                          transform:  active[i] ? "scale(1)"  : "scale(0)",
+                          opacity:    active[i] ? 1           : 0,
+                          transition: "transform 500ms cubic-bezier(0.16,1,0.3,1), opacity 400ms ease",
+                        }}
+                      />
+                    </g>
+                  ))}
+                </svg>
+              )}
+
+              {steps.map((s, i) => (
+                <div
+                  key={s.step}
+                  style={{
+                    position: "absolute",
+                    top:   i * STEP,
+                    left:  s.side === "left"  ? 0         : undefined,
+                    right: s.side === "right" ? 0         : undefined,
+                    width: "44%",
+                    zIndex: 2,
+                  }}
+                >
+                  <div
+                    ref={el => { cardRefs.current[i] = el; }}
+                    style={{
+                      opacity:    revealed[i] ? 1 : 0,
+                      transform:  revealed[i] ? "translateY(0)" : "translateY(18px)",
+                      transition: "opacity 700ms ease, transform 700ms cubic-bezier(0.16,1,0.3,1)",
+                      background: "var(--section-light-surface)",
+                      border:     "1px solid var(--section-light-border)",
+                      padding:    "20px 24px",
+                    }}
+                  >
+                    <span className="font-heading font-black"
+                      style={{ display: "block", fontSize: 38, lineHeight: 1, color: "var(--section-light-border)", marginBottom: 12, letterSpacing: "-2px" }}
+                    >
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <h3 className="font-heading font-black"
+                      style={{ fontSize: 17, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
+                    >
+                      <ScrambleText text={s.title} triggered={revealed[i]} />
+                    </h3>
+                    <p className="font-body"
+                      style={{ fontSize: 13, color: "var(--section-light-muted)", lineHeight: 1.75 }}
+                    >
+                      {s.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* ── MOBILE / TABLET (<1024px): single column with vertical line ── */}
+      <div
+        className="block lg:hidden"
+        style={{ padding: "80px 24px" }}
+      >
+        <div className="max-w-2xl mx-auto">
+
+          <div style={{ marginBottom: 48 }}>
             <h2
               className="font-heading font-black"
-              style={{ fontSize: "clamp(40px, 5vw, 64px)", letterSpacing: "-2px", lineHeight: 1, color: "var(--section-light-text)" }}
+              style={{ fontSize: "clamp(36px, 8vw, 52px)", letterSpacing: "-1.5px", lineHeight: 1, color: "var(--section-light-text)" }}
             >
               OUR PROCESS
             </h2>
           </div>
 
-          {/* ── Desktop: staircase + SVG path ── */}
+          {/* Relative wrapper: SVG dot/line column lives here absolutely */}
           <div
-            ref={containerRef}
-            className="relative hidden md:block"
-            style={{ height: CONTAINER_H }}
+            ref={mobileContainerRef}
+            style={{ position: "relative", paddingLeft: 48 }}
           >
-            {pathD && (
+            {/* Vertical SVG line + dots */}
+            {mobileSegments.length > 0 && (
               <svg
-                style={{ position: "absolute", top: 0, left: 0, width: svgDims.w, height: svgDims.h, overflow: "visible", pointerEvents: "none", zIndex: 1 }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: 48,
+                  height: mobileSvgH,
+                  overflow: "visible",
+                  pointerEvents: "none",
+                }}
               >
                 <defs>
-                  <linearGradient id="pg" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%"   stopColor="#1E3A8A" />
-                    <stop offset="55%"  stopColor="#0F172A" />
-                    <stop offset="100%" stopColor="#000000" />
-                  </linearGradient>
-                  <filter id="glow4">
+                  <filter id="m-lineGlow">
+                    <feGaussianBlur stdDeviation="2.5" result="b" />
+                    <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                  </filter>
+                  <filter id="m-dotGlow">
                     <feGaussianBlur stdDeviation="4" result="b" />
                     <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
                   </filter>
-                  <filter id="glow8">
-                    <feGaussianBlur stdDeviation="9" result="b" />
-                    <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-                  </filter>
                 </defs>
-                {/* Guide track */}
-                <path d={pathD} fill="none" stroke="#D1D9E4" strokeWidth="1.5" strokeLinecap="round" />
-                {/* Glow halo */}
-                <path ref={glowRef} d={pathD} fill="none" stroke="url(#pg)" strokeWidth="12" strokeLinecap="round" opacity={0.2} filter="url(#glow8)" />
-                {/* Animated draw line */}
-                <path ref={pathRef} d={pathD} fill="none" stroke="url(#pg)" strokeWidth="2" strokeLinecap="round" filter="url(#glow4)" />
-                {/* Waypoint dots */}
-                {waypoints.map((pt, i) => (
-                  <g key={i}>
-                    <circle cx={pt.x} cy={pt.y} r={20} fill="none" stroke="#1E3A8A" strokeWidth="1" opacity={active[i] ? 0.15 : 0} style={{ transition: "opacity 600ms ease" }} />
-                    <circle cx={pt.x} cy={pt.y} r={active[i] ? 10 : 5} fill="none" stroke={active[i] ? "#1E3A8A" : "#D1D9E4"} strokeWidth="1.5" style={{ transition: "all 500ms ease" }} />
-                    <circle cx={pt.x} cy={pt.y} r={active[i] ? 5 : 3} fill={active[i] ? "#1E40AF" : "#D1D9E4"} filter={active[i] ? "url(#glow4)" : undefined} style={{ transition: "all 500ms ease" }} />
+                <style>{`
+                  @keyframes mDotPulse {
+                    0%   { r: 7;  opacity: 0.6; }
+                    100% { r: 18; opacity: 0;   }
+                  }
+                  .m-dot-pulse { animation: mDotPulse 1.8s ease-out infinite; }
+                `}</style>
+
+                {/* Glow halos */}
+                {mobileSegments.map((d, i) => (
+                  <path key={`m-glow-${i}`} ref={el => { mobileSegGlowRefs.current[i] = el; }}
+                    d={d} fill="none" stroke="#2563EB" strokeWidth="6" strokeLinecap="round"
+                    opacity={0.2} filter="url(#m-lineGlow)"
+                    style={{ transition: "stroke-dashoffset 600ms cubic-bezier(0.16,1,0.3,1)" }}
+                  />
+                ))}
+                {/* Draw lines */}
+                {mobileSegments.map((d, i) => (
+                  <path key={`m-line-${i}`} ref={el => { mobileSegRefs.current[i] = el; }}
+                    d={d} fill="none" stroke="#2563EB" strokeWidth="2" strokeLinecap="round"
+                    style={{ transition: "stroke-dashoffset 600ms cubic-bezier(0.16,1,0.3,1)" }}
+                  />
+                ))}
+                {/* Dots */}
+                {mobileWaypoints.map((pt, i) => (
+                  <g key={`m-dot-${i}`}>
+                    <circle cx={pt.x} cy={pt.y} r={7} fill="none" stroke="#2563EB" strokeWidth="1.5"
+                      opacity={mobileActive[i] ? 1 : 0}
+                      className={mobileActive[i] ? "m-dot-pulse" : undefined}
+                    />
+                    <circle cx={pt.x} cy={pt.y} r={5} fill="#2563EB"
+                      filter={mobileActive[i] ? "url(#m-dotGlow)" : undefined}
+                      style={{
+                        transformBox: "fill-box", transformOrigin: "center",
+                        transform:  mobileActive[i] ? "scale(1)"  : "scale(0)",
+                        opacity:    mobileActive[i] ? 1           : 0,
+                        transition: "transform 450ms cubic-bezier(0.16,1,0.3,1), opacity 350ms ease",
+                      }}
+                    />
                   </g>
                 ))}
               </svg>
             )}
 
-            {/* Staircase — each card steps 110px lower */}
+            {/* Stacked cards */}
             {steps.map((s, i) => (
               <div
                 key={s.step}
-                style={{
-                  position: "absolute",
-                  top: i * STEP,
-                  left:  s.side === "left"  ? 0         : undefined,
-                  right: s.side === "right" ? 0         : undefined,
-                  width: "44%",
-                  zIndex: 2,
-                }}
+                ref={el => { mobileCardRefs.current[i] = el; }}
+                style={{ marginBottom: i < steps.length - 1 ? 32 : 0 }}
               >
                 <div
-                  ref={el => { cardRefs.current[i] = el; }}
                   style={{
-                    opacity:   revealed[i] ? 1 : 0,
-                    transform: revealed[i] ? "translateY(0)" : "translateY(18px)",
-                    transition: "opacity 700ms ease, transform 700ms cubic-bezier(0.16,1,0.3,1)",
-                    background: "#EEF2F7",
-                    border: "1px solid #CBD5E1",
-                    padding: "20px 24px",
+                    background: "var(--section-light-surface)",
+                    border:     "1px solid var(--section-light-border)",
+                    padding:    "18px 20px",
+                    opacity:    mobileActive[i] ? 1 : 0,
+                    transform:  mobileActive[i] ? "translateY(0)" : "translateY(16px)",
+                    transition: "opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1)",
                   }}
                 >
-                  <span
-                    className="font-heading font-black"
-                    style={{ display: "block", fontSize: 38, lineHeight: 1, color: "#B8C7D9", marginBottom: 12, letterSpacing: "-2px" }}
+                  <span className="font-heading font-black"
+                    style={{ display: "block", fontSize: 28, lineHeight: 1, color: "var(--section-light-border)", marginBottom: 10, letterSpacing: "-1.5px" }}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <h3
-                    className="font-heading font-black"
-                    style={{ fontSize: 17, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
+                  <h3 className="font-heading font-black"
+                    style={{ fontSize: 16, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.4px", marginBottom: 8 }}
                   >
-                    <ScrambleText text={s.title} triggered={revealed[i]} />
+                    <ScrambleText text={s.title} triggered={mobileActive[i]} />
                   </h3>
-                  <p className="font-body" style={{ fontSize: 13, color: "#64748B", lineHeight: 1.75 }}>
+                  <p className="font-body"
+                    style={{ fontSize: 13, color: "var(--section-light-muted)", lineHeight: 1.75 }}
+                  >
                     {s.desc}
                   </p>
                 </div>
@@ -258,28 +529,9 @@ export default function Process() {
             ))}
           </div>
 
-          {/* ── Mobile fallback ── */}
-          <div className="flex flex-col gap-5 md:hidden">
-            {steps.map((s, i) => (
-              <div
-                key={s.step}
-                style={{ background: "#EEF2F7", border: "1px solid #CBD5E1", borderLeft: "3px solid #1E3A8A", padding: "18px 20px" }}
-              >
-                <span className="font-heading font-black" style={{ display: "block", fontSize: 36, lineHeight: 1, color: "#B8C7D9", marginBottom: 12, letterSpacing: "-2px" }}>
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h3 className="font-heading font-black" style={{ fontSize: 17, color: "var(--section-light-text)", lineHeight: 1.2, letterSpacing: "-0.5px", marginBottom: 8 }}>
-                  {s.title}
-                </h3>
-                <p className="font-body" style={{ fontSize: 13, color: "#64748B", lineHeight: 1.7 }}>
-                  {s.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-
         </div>
       </div>
+
     </section>
   );
 }

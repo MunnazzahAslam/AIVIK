@@ -1,7 +1,7 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
-import WhyChooseUs from "./components/WhyChooseUs";
+import WhyAivik from "./components/WhyAivik";
 import Process from "./components/Process";
 import GetAQuote from "./components/GetAQuote";
 import Footer from "./components/Footer";
@@ -12,7 +12,7 @@ export default function Home() {
       <Nav />
       <Hero />
       <Services />
-      <WhyChooseUs />
+      <WhyAivik />
       <Process />
       <GetAQuote />
       <Footer />

@@ -1,116 +1,210 @@
-import FadeIn from "./FadeIn";
-import SectionReveal from "./SectionReveal";
+"use client";
+import { useEffect, useRef, useState } from "react";
 
-const reasons = [
+const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
+function scrambleText(el: HTMLElement, text: string, duration: number): () => void {
+  let iter = 0;
+  const total = duration / 40;
+  const resolveRate = text.length / (total * 0.5);
+  const id = setInterval(() => {
+    el.textContent = text
+      .split("")
+      .map((ch, idx) => {
+        if (ch === " ") return ch;
+        if (idx < Math.floor(iter * resolveRate)) return text[idx];
+        return CHARS[Math.floor(Math.random() * CHARS.length)];
+      })
+      .join("");
+    if (iter >= total) { el.textContent = text; clearInterval(id); }
+    iter++;
+  }, 40);
+  return () => clearInterval(id);
+}
+
+const REASONS = [
   {
-    iconBg: "from-[#2563EB]/20 to-[#1D4ED8]/5",
-    iconColor: "#3B82F6",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-    title: "Senior engineers only",
-    desc: "No juniors learning on your project. Everyone on your work has shipped production systems at scale.",
+    number: "01",
+    title: "You Own Everything, Always",
+    desc: "Full source code, documentation, and IP transferred on day one. No lock-in, no hostage situations, no surprises.",
   },
   {
-    iconBg: "from-[#7C3AED]/20 to-[#5B21B6]/5",
-    iconColor: "#8B5CF6",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M3 21l1.9-5.7a8.5 8.5 0 113.8 3.8z" />
-      </svg>
-    ),
-    title: "Germany registered",
-    desc: "AIVIK is a registered German company. GDPR compliant by default. Built for clients who care about compliance.",
+    number: "02",
+    title: "Germany Registered, GDPR Native",
+    desc: "Not retrofitted compliance. Every system is built European-grade from the first line of code. Your data stays yours.",
   },
   {
-    iconBg: "from-[#2563EB]/20 to-[#7C3AED]/10",
-    iconColor: "#60A5FA",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-      </svg>
-    ),
-    title: "Fixed price always",
-    desc: "We agree the price before we start. No open ended retainers, no invoice surprises at the end of the month.",
+    number: "03",
+    title: "One Point of Contact, Full Accountability",
+    desc: "No account managers playing telephone. The person you speak to is the person building your product.",
   },
   {
-    iconBg: "from-[#7C3AED]/20 to-[#2563EB]/10",
-    iconColor: "#A78BFA",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-      </svg>
-    ),
-    title: "Full stack capability",
-    desc: "Frontend, backend, AI, hardware. One team for the whole scope. No coordination overhead between agencies.",
+    number: "04",
+    title: "Working Software in Week One",
+    desc: "Discovery doesn't last months here. You see real deployed output within days of signing, not decks and promises.",
   },
   {
-    iconBg: "from-[#2563EB]/20 to-[#1D4ED8]/5",
-    iconColor: "#93C5FD",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 6v6l4 2" />
-      </svg>
-    ),
-    title: "EU timezone aligned",
-    desc: "We work remotely and overlap with European business hours. Async by default, available when it matters.",
+    number: "05",
+    title: "AI-Native by Default",
+    desc: "We don't bolt AI on at the end. Automation, intelligence, and efficiency are designed into every system from the start.",
   },
   {
-    iconBg: "from-[#7C3AED]/20 to-[#5B21B6]/5",
-    iconColor: "#C4B5FD",
-    icon: (
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    ),
-    title: "Fast to start",
-    desc: "Most projects kick off within one week of signing. No months of discovery phases before a line of code is written.",
+    number: "06",
+    title: "We Stay After Launch",
+    desc: "Monitoring, iterations, scaling. We treat launch as the beginning, not the finish line. Long-term partners, not project vendors.",
   },
 ];
 
-export default function WhyAivik() {
-  return (
-    <section className="py-28 px-6">
-      <div className="max-w-6xl mx-auto">
-        <FadeIn className="mb-16">
-          <span className="inline-flex items-center gap-2 text-xs text-[#3B82F6] font-semibold tracking-widest uppercase bg-[#2563EB]/10 border border-[#2563EB]/20 px-3.5 py-1.5 rounded-full mb-5">
-            Why AIVIK
-          </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-[#F1F5F9] leading-tight mb-4">
-            Why companies choose us
-          </h2>
-          <p className="text-[#64748B] text-lg max-w-xl">
-            We're built differently. Here's what that means in practice.
-          </p>
-        </FadeIn>
+// Per-card border classes for each breakpoint (1-col mobile → 2-col tablet → 3-col desktop).
+// Static strings so Tailwind JIT includes them all.
+// Logic: mobile i<5 gets bottom; tablet col=(i%2)!==1 gets right, i<4 gets bottom; desktop col=(i%3)!==2 gets right, i<3 gets bottom.
+const BORDER_CLASSES = [
+  "border-b md:border-r",                         // i=0: all bottom, md+ right
+  "border-b lg:border-r",                         // i=1: all bottom, lg+ right
+  "border-b md:border-r lg:border-r-0",           // i=2: all bottom, md right, lg removes right
+  "border-b lg:border-r lg:border-b-0",           // i=3: mob+tablet bottom, lg right+no-bottom
+  "border-b md:border-r md:border-b-0",           // i=4: mob bottom, md+ right+no-bottom
+  "",                                              // i=5: no borders
+] as const;
 
-        <SectionReveal className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {reasons.map(({ iconBg, iconColor, icon, title, desc }) => (
-            <div
-              key={title}
-              className="group card-hover rounded-2xl p-7 flex flex-col gap-5"
-              style={{
-                backgroundColor: "color-mix(in srgb, var(--section-dark-surface) 30%, transparent)",
-                border: "1px solid var(--section-dark-border)",
-              }}
-            >
-              {/* Icon */}
+export default function WhyAivik() {
+  const headingRef                        = useRef<HTMLHeadingElement>(null);
+  const gridRef                           = useRef<HTMLDivElement>(null);
+  const [hoveredIndex, setHoveredIndex]   = useState<number | null>(null);
+  const [isVisible,    setIsVisible]      = useState(false);
+  const [isTouch,      setIsTouch]        = useState(false);
+
+  useEffect(() => {
+    const el = headingRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { obs.disconnect(); scrambleText(el, "WHY AIVIK", 1200); } },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const el = gridRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  // Disable hover scale on touch devices (no real hover capability)
+  useEffect(() => {
+    const mq = window.matchMedia("(hover: hover)");
+    const update = () => setIsTouch(!mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return (
+    <section
+      id="why-aivik"
+      data-theme="dark"
+      className="py-[120px] px-6"
+      style={{ backgroundColor: "var(--section-dark)" }}
+    >
+      <div className="max-w-6xl mx-auto">
+
+        <div className="mb-16">
+          <h2
+            ref={headingRef}
+            className="font-heading font-black"
+            style={{
+              fontSize: "clamp(48px, 6vw, 72px)",
+              letterSpacing: "-2px",
+              lineHeight: 1,
+              color: "var(--section-dark-text)",
+            }}
+          >
+            WHY AIVIK
+          </h2>
+        </div>
+
+        {/* overflow:visible so scale(1.04) isn't clipped; items-stretch is CSS grid default but explicit here */}
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-stretch"
+          style={{ overflow: "visible" }}
+        >
+          {REASONS.map((reason, i) => {
+            const isHovered = !isTouch && hoveredIndex === i;
+
+            return (
+              /* ── Outer: owns ONLY the hover scale transform.
+                 display:flex passes the grid cell's full height down to the inner div.
+                 CSS animation fill-mode conflict explained: keeping scale and the
+                 scroll-reveal translateY on separate elements prevents the animation
+                 from locking transform on the element receiving hover.              */
               <div
-                className={`w-11 h-11 rounded-xl bg-gradient-to-br ${iconBg} flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110`}
-                style={{ color: iconColor, border: "1px solid var(--section-dark-border)" }}
+                key={reason.number}
+                onMouseEnter={() => !isTouch && setHoveredIndex(i)}
+                onMouseLeave={() => !isTouch && setHoveredIndex(null)}
+                style={{
+                  display:    "flex",
+                  transform:  isHovered ? "scale(1.04)" : "scale(1)",
+                  transition: "transform 300ms ease",
+                  position:   "relative",
+                  zIndex:     isHovered ? 1 : 0,
+                  cursor:     "default",
+                  overflow:   "visible",
+                }}
               >
-                {icon}
+                {/* ── Inner: owns scroll-reveal + borders + padding.
+                    flex:1 stretches to fill the outer div (= grid cell height),
+                    making all cards in a row equal height.                      */}
+                <div
+                  className={`py-5 px-4 md:py-7 md:px-6 lg:py-9 lg:px-8 ${BORDER_CLASSES[i]}`}
+                  style={{
+                    flex:          1,
+                    display:       "flex",
+                    flexDirection: "column",
+                    borderColor:   "var(--section-dark-border)",
+                    opacity:       isVisible ? 1 : 0,
+                    transform:     isVisible ? "translateY(0)" : "translateY(40px)",
+                    transition:    `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms,
+                                    transform 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms`,
+                  }}
+                >
+                  {/* minHeight reserves space for 2 wrapped lines, equalising card heights
+                      within each row regardless of which title happens to wrap.          */}
+                  <h3
+                    className="font-heading font-bold"
+                    style={{
+                      fontSize:      "clamp(14px, 2vw, 17px)",
+                      lineHeight:    1.3,
+                      letterSpacing: "-0.3px",
+                      color:         "var(--section-dark-text)",
+                      marginBottom:  12,
+                      minHeight:     "2.6em",
+                    }}
+                  >
+                    {reason.title}
+                  </h3>
+
+                  <p
+                    className="font-body"
+                    style={{
+                      fontSize:   13,
+                      lineHeight: 1.75,
+                      color:      "var(--section-dark-muted)",
+                    }}
+                  >
+                    {reason.desc}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-[#F1F5F9] font-semibold mb-2 group-hover:text-white transition-colors">{title}</h3>
-                <p className="text-[#64748B] text-sm leading-relaxed">{desc}</p>
-              </div>
-            </div>
-          ))}
-        </SectionReveal>
+            );
+          })}
+        </div>
+
       </div>
     </section>
   );

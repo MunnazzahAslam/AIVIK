@@ -99,7 +99,7 @@ export default function Nav() {
           {/* Desktop CTA — far right */}
           <button
             onClick={scrollToContact}
-            className="hidden md:block ml-auto font-heading font-bold text-[13px] px-6 py-[10px] transition-colors duration-200 shrink-0"
+            className="hidden md:block ml-auto font-body font-bold text-[13px] px-6 py-[10px] transition-colors duration-200 shrink-0"
             style={{
               backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
               color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",

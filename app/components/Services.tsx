@@ -68,7 +68,7 @@ export default function Services() {
     <section
       id="services"
       data-theme="light"
-      className="py-20 md:py-[120px] px-6"
+      className="py-[120px] px-6"
       style={{ backgroundColor: "var(--section-light)" }}
     >
       <div className="max-w-6xl mx-auto">
