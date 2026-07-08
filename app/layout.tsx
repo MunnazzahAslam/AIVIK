@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CursorEffect from "./components/CursorEffect";
+import { Analytics } from "@vercel/analytics/next";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -97,6 +98,7 @@ export default function RootLayout({
       <body className="font-body">
         <CursorEffect />
         {children}
+        <Analytics />
       </body>
     </html>
   );
