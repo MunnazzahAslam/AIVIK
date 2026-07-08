@@ -272,7 +272,7 @@ export default function Process() {
       <div
         ref={desktopScrollRef}
         className="hidden lg:block"
-        style={{ height: "380vh", position: "relative" }}
+        style={{ height: "240vh", position: "relative" }}
       >
         <div
           style={{
