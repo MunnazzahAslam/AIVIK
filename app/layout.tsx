@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import CursorEffect from "./components/CursorEffect";
 import { Analytics } from "@vercel/analytics/next";
 import Script from "next/script";
 
@@ -97,7 +96,6 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-body">
-        <CursorEffect />
         {children}
         <Analytics />
         <Script
