@@ -112,7 +112,7 @@ export default function WhyAivik() {
     const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
     const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
     el.style.opacity    = "1";
-    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.16) 0%, rgba(37,99,235,0.05) 50%, transparent 75%)`;
+    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.015) 50%, transparent 75%)`;
   };
 
   const handleSpotlightLeave = () => {
@@ -123,9 +123,9 @@ export default function WhyAivik() {
   return (
     <section
       id="why-aivik"
-      data-theme="dark"
+      data-theme="light"
       className="py-[120px] px-6"
-      style={{ backgroundColor: "var(--section-dark)", position: "relative" }}
+      style={{ backgroundColor: "var(--section-light)", position: "relative" }}
       onMouseMove={handleSpotlightMove}
       onMouseLeave={handleSpotlightLeave}
     >
@@ -151,7 +151,7 @@ export default function WhyAivik() {
               fontSize: "clamp(48px, 6vw, 72px)",
               letterSpacing: "-2px",
               lineHeight: 1,
-              color: "var(--section-dark-text)",
+              color: "var(--section-light-text)",
             }}
           >
             WHY AIVIK
@@ -191,7 +191,7 @@ export default function WhyAivik() {
                     flex:          1,
                     display:       "flex",
                     flexDirection: "column",
-                    borderColor:   "var(--section-dark-border)",
+                    borderColor:   "var(--section-light-border)",
                     opacity:       isVisible ? 1 : 0,
                     transform:     isVisible ? "translateY(0)" : "translateY(40px)",
                     transition:    `opacity 0.6s cubic-bezier(0.16,1,0.3,1) ${i * 100}ms,
@@ -213,7 +213,7 @@ export default function WhyAivik() {
                         fontSize:      "clamp(14px, 2vw, 17px)",
                         lineHeight:    1.3,
                         letterSpacing: "-0.3px",
-                        color:         "var(--section-dark-text)",
+                        color:         "var(--section-light-text)",
                         marginBottom:  12,
                         minHeight:     "2.6em",
                       }}
@@ -226,7 +226,7 @@ export default function WhyAivik() {
                       style={{
                         fontSize:   13,
                         lineHeight: 1.75,
-                        color:      "var(--section-dark-muted)",
+                        color:      "var(--section-light-muted)",
                       }}
                     >
                       {reason.desc}

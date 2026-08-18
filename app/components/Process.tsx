@@ -264,8 +264,8 @@ export default function Process() {
   return (
     <section
       id="process"
-      data-theme="light"
-      style={{ backgroundColor: "var(--section-light)" }}
+      data-theme="dark"
+      style={{ backgroundColor: "var(--section-dark)" }}
     >
 
       {/* ── DESKTOP (≥1024px): sticky scroll with zigzag ── */}
@@ -291,7 +291,7 @@ export default function Process() {
             <div style={{ marginBottom: 36 }}>
               <h2
                 className="font-heading font-black"
-                style={{ fontSize: "clamp(48px, 6vw, 72px)", letterSpacing: "-2px", lineHeight: 1, color: "var(--section-light-text)" }}
+                style={{ fontSize: "clamp(48px, 6vw, 72px)", letterSpacing: "-2px", lineHeight: 1, color: "var(--section-dark-text)" }}
               >
                 OUR PROCESS
               </h2>
@@ -375,23 +375,23 @@ export default function Process() {
                       opacity:    revealed[i] ? 1 : 0,
                       transform:  revealed[i] ? "translateY(0)" : "translateY(18px)",
                       transition: "opacity 700ms ease, transform 700ms cubic-bezier(0.16,1,0.3,1)",
-                      background: "var(--section-light-surface)",
-                      border:     "1px solid var(--section-light-border)",
+                      background: "var(--section-dark-surface)",
+                      border:     "1px solid var(--section-dark-border)",
                       padding:    "20px 24px",
                     }}
                   >
                     <span className="font-heading font-black"
-                      style={{ display: "block", fontSize: 38, lineHeight: 1, color: "var(--section-light-border)", marginBottom: 12, letterSpacing: "-2px" }}
+                      style={{ display: "block", fontSize: 38, lineHeight: 1, color: "var(--section-dark-border)", marginBottom: 12, letterSpacing: "-2px" }}
                     >
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <h3 className="font-heading font-black"
-                      style={{ fontSize: 17, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
+                      style={{ fontSize: 17, color: "var(--section-dark-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
                     >
                       <ScrambleText text={s.title} triggered={revealed[i]} />
                     </h3>
                     <p className="font-body"
-                      style={{ fontSize: 13, color: "var(--section-light-muted)", lineHeight: 1.75 }}
+                      style={{ fontSize: 13, color: "var(--section-dark-muted)", lineHeight: 1.75 }}
                     >
                       {s.desc}
                     </p>
@@ -414,7 +414,7 @@ export default function Process() {
           <div style={{ marginBottom: 48 }}>
             <h2
               className="font-heading font-black"
-              style={{ fontSize: "clamp(36px, 8vw, 52px)", letterSpacing: "-1.5px", lineHeight: 1, color: "var(--section-light-text)" }}
+              style={{ fontSize: "clamp(36px, 8vw, 52px)", letterSpacing: "-1.5px", lineHeight: 1, color: "var(--section-dark-text)" }}
             >
               OUR PROCESS
             </h2>
@@ -501,8 +501,8 @@ export default function Process() {
               >
                 <div
                   style={{
-                    background: "var(--section-light-surface)",
-                    border:     "1px solid var(--section-light-border)",
+                    background: "var(--section-dark-surface)",
+                    border:     "1px solid var(--section-dark-border)",
                     padding:    "18px 20px",
                     opacity:    mobileActive[i] ? 1 : 0,
                     transform:  mobileActive[i] ? "translateY(0)" : "translateY(16px)",
@@ -510,17 +510,17 @@ export default function Process() {
                   }}
                 >
                   <span className="font-heading font-black"
-                    style={{ display: "block", fontSize: 28, lineHeight: 1, color: "var(--section-light-border)", marginBottom: 10, letterSpacing: "-1.5px" }}
+                    style={{ display: "block", fontSize: 28, lineHeight: 1, color: "var(--section-dark-border)", marginBottom: 10, letterSpacing: "-1.5px" }}
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="font-heading font-black"
-                    style={{ fontSize: 16, color: "var(--section-light-text)", lineHeight: 1.25, letterSpacing: "-0.4px", marginBottom: 8 }}
+                    style={{ fontSize: 16, color: "var(--section-dark-text)", lineHeight: 1.25, letterSpacing: "-0.4px", marginBottom: 8 }}
                   >
                     <ScrambleText text={s.title} triggered={mobileActive[i]} />
                   </h3>
                   <p className="font-body"
-                    style={{ fontSize: 13, color: "var(--section-light-muted)", lineHeight: 1.75 }}
+                    style={{ fontSize: 13, color: "var(--section-dark-muted)", lineHeight: 1.75 }}
                   >
                     {s.desc}
                   </p>

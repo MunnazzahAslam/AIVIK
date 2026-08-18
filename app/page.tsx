@@ -12,8 +12,8 @@ export default function Home() {
       <Nav />
       <Hero />
       <Services />
-      <WhyAivik />
       <Process />
+      <WhyAivik />
       <GetAQuote />
       <Footer />
     </main>
