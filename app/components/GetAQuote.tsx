@@ -30,22 +30,36 @@ const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
 
 const labelClass = "block font-body text-xs text-on-dark-muted mb-1.5";
 
-function validateForm(form: FormState): string | null {
-  if (!form.name.trim()) return "Name is required.";
+const errorTextClass = "font-body text-xs text-red-400 mt-1.5";
+
+type FieldErrors = Partial<Record<keyof FormState, string>>;
+
+function validateForm(form: FormState): FieldErrors {
+  const errors: FieldErrors = {};
+  if (!form.name.trim()) errors.name = "Name is required.";
   if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-    return "A valid email is required.";
-  if (!form.company.trim()) return "Company name is required.";
-  if (!form.service) return "Please select a service.";
-  if (!form.message.trim()) return "Please tell us about your project.";
+    errors.email = "A valid email is required.";
+  if (!form.company.trim()) errors.company = "Company name is required.";
+  if (!form.service) errors.service = "Please select a service.";
   if (form.phone && !/^[\d\s\+\-\(\)]{7,20}$/.test(form.phone))
-    return "Phone number format is invalid.";
-  return null;
+    errors.phone = "Phone number format is invalid.";
+  return errors;
+}
+
+function RequiredMark() {
+  return (
+    <span aria-hidden="true" style={{ color: "var(--accent-primary)" }}>
+      {" "}
+      *
+    </span>
+  );
 }
 
 export default function GetAQuote() {
   const [form, setForm] = useState<FormState>(initialForm);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [submitHovered, setSubmitHovered] = useState(false);
 
   const handleChange = (
@@ -53,18 +67,38 @@ export default function GetAQuote() {
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    // Re-validate live once a field has been touched, so errors clear as the user fixes them.
+    if (touched[name as keyof FormState]) {
+      setErrors(validateForm({ ...form, [name]: value }));
+    }
+  };
+
+  const handleBlur = (
+    e: React.FocusEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name } = e.target;
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors(validateForm(form));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationError = validateForm(form);
-    if (validationError) {
-      setErrorMsg(validationError);
+    const validationErrors = validateForm(form);
+    setErrors(validationErrors);
+    setTouched({
+      name: true,
+      email: true,
+      company: true,
+      phone: true,
+      service: true,
+      message: true,
+    });
+    if (Object.keys(validationErrors).length > 0) {
       return;
     }
-    setErrorMsg("");
     setStatus("submitting");
 
     try {
@@ -167,6 +201,7 @@ export default function GetAQuote() {
 
           {/* Right column — form */}
           <FadeIn delay={150}>
+            <div aria-live="polite">
             {status === "success" ? (
               <div
                 className="border p-10 md:p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[400px]"
@@ -218,6 +253,7 @@ export default function GetAQuote() {
                 <div>
                   <label htmlFor="name" className={labelClass}>
                     Your name
+                    <RequiredMark />
                   </label>
                   <input
                     id="name"
@@ -226,16 +262,25 @@ export default function GetAQuote() {
                     required
                     value={form.name}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Your name"
                     className={inputClass}
                     autoComplete="name"
+                    aria-invalid={!!(touched.name && errors.name)}
+                    aria-describedby={errors.name ? "name-error" : undefined}
                   />
+                  {touched.name && errors.name && (
+                    <p id="name-error" className={errorTextClass}>
+                      {errors.name}
+                    </p>
+                  )}
                 </div>
 
                 {/* Email */}
                 <div>
                   <label htmlFor="email" className={labelClass}>
-                    Work email
+                    Your email
+                    <RequiredMark />
                   </label>
                   <input
                     id="email"
@@ -244,16 +289,25 @@ export default function GetAQuote() {
                     required
                     value={form.email}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="you@company.com"
                     className={inputClass}
                     autoComplete="email"
+                    aria-invalid={!!(touched.email && errors.email)}
+                    aria-describedby={errors.email ? "email-error" : undefined}
                   />
+                  {touched.email && errors.email && (
+                    <p id="email-error" className={errorTextClass}>
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
 
                 {/* Company */}
                 <div>
                   <label htmlFor="company" className={labelClass}>
                     Company name
+                    <RequiredMark />
                   </label>
                   <input
                     id="company"
@@ -262,10 +316,18 @@ export default function GetAQuote() {
                     required
                     value={form.company}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Your company"
                     className={inputClass}
                     autoComplete="organization"
+                    aria-invalid={!!(touched.company && errors.company)}
+                    aria-describedby={errors.company ? "company-error" : undefined}
                   />
+                  {touched.company && errors.company && (
+                    <p id="company-error" className={errorTextClass}>
+                      {errors.company}
+                    </p>
+                  )}
                 </div>
 
                 {/* Phone (optional) */}
@@ -280,16 +342,25 @@ export default function GetAQuote() {
                     type="tel"
                     value={form.phone}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="+49 123 456 7890"
                     className={inputClass}
                     autoComplete="tel"
+                    aria-invalid={!!(touched.phone && errors.phone)}
+                    aria-describedby={errors.phone ? "phone-error" : undefined}
                   />
+                  {touched.phone && errors.phone && (
+                    <p id="phone-error" className={errorTextClass}>
+                      {errors.phone}
+                    </p>
+                  )}
                 </div>
 
                 {/* Service */}
                 <div>
                   <label htmlFor="service" className={labelClass}>
                     What do you need?
+                    <RequiredMark />
                   </label>
                   <div className="relative">
                     <select
@@ -298,7 +369,10 @@ export default function GetAQuote() {
                       required
                       value={form.service}
                       onChange={handleChange}
+                      onBlur={handleBlur}
                       className={`${inputClass} appearance-none cursor-pointer pr-10`}
+                      aria-invalid={!!(touched.service && errors.service)}
+                      aria-describedby={errors.service ? "service-error" : undefined}
                     >
                       <option value="" disabled>
                         Select a service
@@ -329,33 +403,34 @@ export default function GetAQuote() {
                       </svg>
                     </div>
                   </div>
+                  {touched.service && errors.service && (
+                    <p id="service-error" className={errorTextClass}>
+                      {errors.service}
+                    </p>
+                  )}
                 </div>
 
-                {/* Message */}
+                {/* Message (optional) */}
                 <div>
                   <label htmlFor="message" className={labelClass}>
-                    Tell us about your project
+                    Tell us about your project{" "}
+                    <span className="text-on-dark-muted">(optional)</span>
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    required
                     rows={4}
                     value={form.message}
                     onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="What are you building and what do you need help with?"
                     className={`${inputClass} resize-none`}
                   />
                 </div>
 
-                {/* Validation error */}
-                {errorMsg && (
-                  <p className="font-body text-xs text-red-400">{errorMsg}</p>
-                )}
-
                 {/* API error */}
                 {status === "error" && (
-                  <p className="font-body text-xs text-red-400">
+                  <p className="font-body text-xs text-red-400" role="alert">
                     Something went wrong. Please email us at{" "}
                     <a
                       href="mailto:info@aivik.eu"
@@ -382,6 +457,7 @@ export default function GetAQuote() {
                 </button>
               </form>
             )}
+            </div>
           </FadeIn>
         </div>
       </div>
