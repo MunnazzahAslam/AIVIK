@@ -64,21 +64,12 @@ export const metadata: Metadata = {
     title: "AIVIK — Software Engineering & AI Automation",
     description:
       "Custom software, AI automation, and cloud infrastructure for companies ready to move faster. Germany registered. GDPR compliant.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "AIVIK — Software Engineering & AI Automation",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "AIVIK — Software Engineering & AI Automation",
     description:
       "Custom software, AI automation, and cloud infrastructure for European companies.",
-    images: ["/og-image.jpg"],
   },
   alternates: {
     canonical: "https://aivik.eu",

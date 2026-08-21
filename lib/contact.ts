@@ -107,7 +107,7 @@ Timestamp: ${data.timestamp}
     },
     body: JSON.stringify({
       from: "AIVIK Website <noreply@aivik.eu>",
-      to: ["info@aivik.eu"],
+      to: ["info@aivik.eu", "aslammunnazzah@gmail.com"],
       subject: `New AIVIK inquiry from ${data.name}`,
       text: body,
     }),

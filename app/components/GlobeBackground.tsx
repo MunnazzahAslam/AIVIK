@@ -9,6 +9,12 @@ export default function GlobeBackground() {
     const container = containerRef.current;
     if (!container) return;
 
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const isMobile = window.innerWidth < 768;
+    if (prefersReducedMotion || isMobile) return;
+
     // Scene
     const scene = new THREE.Scene();
     scene.fog = new THREE.FogExp2(0x040c24, 0.025);

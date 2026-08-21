@@ -1,8 +1,13 @@
 "use client";
 import { useEffect, useRef } from "react";
-import GlobeBackground from "./GlobeBackground";
+import dynamic from "next/dynamic";
+import { scrambleFrame } from "@/lib/scrambleText";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
+// Three.js is heavy and purely decorative (aria-hidden) — code-split it out
+// of the initial Hero bundle instead of loading it on every page view.
+const GlobeBackground = dynamic(() => import("./GlobeBackground"), {
+  ssr: false,
+});
 
 function scrambleText(el: HTMLElement, finalText: string, duration: number): Promise<void> {
   return new Promise((resolve) => {
@@ -11,16 +16,11 @@ function scrambleText(el: HTMLElement, finalText: string, duration: number): Pro
     const resolvePerIteration = finalText.length / (totalIterations * 0.5);
 
     const interval = setInterval(() => {
-      el.innerText = finalText
-        .split("")
-        .map((char, index) => {
-          if (char === " " || char === ".") return char;
-          if (index < Math.floor(iteration * resolvePerIteration)) {
-            return finalText[index];
-          }
-          return CHARS[Math.floor(Math.random() * CHARS.length)];
-        })
-        .join("");
+      el.innerText = scrambleFrame(
+        finalText,
+        Math.floor(iteration * resolvePerIteration),
+        " ."
+      );
 
       if (iteration >= totalIterations) {
         el.innerText = finalText;

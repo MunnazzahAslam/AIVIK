@@ -1,20 +1,13 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { scrambleFrame } from "@/lib/scrambleText";
 
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
 function scrambleText(el: HTMLElement, text: string, duration: number): () => void {
   let iter = 0;
   const total = duration / 40;
   const resolveRate = text.length / (total * 0.5);
   const id = setInterval(() => {
-    el.textContent = text
-      .split("")
-      .map((ch, idx) => {
-        if (ch === " ") return ch;
-        if (idx < Math.floor(iter * resolveRate)) return text[idx];
-        return CHARS[Math.floor(Math.random() * CHARS.length)];
-      })
-      .join("");
+    el.textContent = scrambleFrame(text, Math.floor(iter * resolveRate), " ");
     if (iter >= total) { el.textContent = text; clearInterval(id); }
     iter++;
   }, 40);
