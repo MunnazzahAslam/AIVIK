@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "How AIVIK collects, uses, and protects personal data submitted through this website, in line with GDPR.",
+  alternates: {
+    canonical: "https://aivik.eu/privacy",
+  },
+};
+
 export default function Privacy() {
   return (
     <main className="min-h-screen px-6 py-24" style={{ backgroundColor: "var(--section-dark)" }}>

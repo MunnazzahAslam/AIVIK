@@ -173,37 +173,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Stats bar */}
-      <div className="relative z-10" style={{ borderTop: "1px solid var(--section-dark-border)" }}>
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-3 py-8">
-            {[
-              { to: 5, suffix: "+", label: "Years of engineering excellence" },
-              { to: 6, suffix: "", label: "Industries transformed" },
-              { to: 20, suffix: "+", label: "Solutions delivered to scale" },
-            ].map(({ to, suffix, label }, i) => (
-              <div
-                key={label}
-                className="text-center px-4 md:px-8"
-                style={{
-                  borderRight: i < 2 ? "1px solid var(--section-dark-border)" : "none",
-                }}
-              >
-                <div className="font-heading text-[28px] md:text-[48px] font-bold text-white leading-none mb-2">
-                  <CountUp to={to} suffix={suffix} />
-                </div>
-                <p
-                  className="font-body text-[11px] md:text-[13px] leading-snug"
-                  style={{ color: "var(--section-dark-muted)" }}
-                >
-                  {label}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </section>
   );
 }

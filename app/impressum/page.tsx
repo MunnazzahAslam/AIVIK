@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Impressum",
+  description: "Legal notice for AIVIK, a Germany-registered software engineering and AI automation company, per §5 TMG.",
+  alternates: {
+    canonical: "https://aivik.eu/impressum",
+  },
+};
+
 export default function Impressum() {
   return (
     <main className="min-h-screen px-6 py-24" style={{ backgroundColor: "var(--section-dark)" }}>
