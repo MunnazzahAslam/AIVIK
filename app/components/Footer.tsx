@@ -118,9 +118,6 @@ export default function Footer() {
               >
                 linkedin.com/company/aivik
               </a>
-              <p className="font-body text-sm text-on-dark-muted">
-                Munich, Germany
-              </p>
             </div>
           </div>
         </div>

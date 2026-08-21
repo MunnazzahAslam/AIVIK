@@ -37,7 +37,6 @@ export const metadata: Metadata = {
     "software engineering Germany",
     "AI automation Europe",
     "custom software development",
-    "tech consultancy Munich",
     "web application development",
     "AI workflow automation",
     "cloud infrastructure",
@@ -76,6 +75,27 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: "AIVIK",
+  url: "https://aivik.eu",
+  email: "info@aivik.eu",
+  description:
+    "AIVIK is a Germany-registered tech consultancy delivering custom software development, AI automation, cloud infrastructure, and data analysis for European startups and growing companies.",
+  areaServed: "Europe",
+  address: {
+    "@type": "PostalAddress",
+    addressCountry: "DE",
+  },
+  serviceType: [
+    "Custom Software Development",
+    "AI and Automation",
+    "Cloud Infrastructure",
+    "Data Analysis",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -87,6 +107,10 @@ export default function RootLayout({
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-body">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
         {children}
         <Analytics />
         <Script

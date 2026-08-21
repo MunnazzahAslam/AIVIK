@@ -48,7 +48,7 @@ export default function OGImage() {
             letterSpacing: "2px",
           }}
         >
-          AIVIK.EU · MUNICH, GERMANY
+          AIVIK.EU · GERMANY
         </div>
       </div>
     ),

@@ -1,18 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { scrambleFrame } from "@/lib/scrambleText";
-
-function scrambleText(el: HTMLElement, text: string, duration: number): () => void {
-  let iter = 0;
-  const total = duration / 40;
-  const resolveRate = text.length / (total * 0.5);
-  const id = setInterval(() => {
-    el.textContent = scrambleFrame(text, Math.floor(iter * resolveRate), " ");
-    if (iter >= total) { el.textContent = text; clearInterval(id); }
-    iter++;
-  }, 40);
-  return () => clearInterval(id);
-}
 
 const REASONS = [
   {
@@ -60,23 +47,11 @@ const BORDER_CLASSES = [
 ] as const;
 
 export default function WhyAivik() {
-  const headingRef                        = useRef<HTMLHeadingElement>(null);
   const gridRef                           = useRef<HTMLDivElement>(null);
   const overlayRef                        = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex]   = useState<number | null>(null);
   const [isVisible,    setIsVisible]      = useState(false);
   const [isTouch,      setIsTouch]        = useState(false);
-
-  useEffect(() => {
-    const el = headingRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { obs.disconnect(); scrambleText(el, "WHY AIVIK", 1200); } },
-      { threshold: 0.5 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   useEffect(() => {
     const el = gridRef.current;
@@ -105,7 +80,7 @@ export default function WhyAivik() {
     const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
     const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
     el.style.opacity    = "1";
-    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(0,0,0,0.04) 0%, rgba(0,0,0,0.015) 50%, transparent 75%)`;
+    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.08) 0%, rgba(37,99,235,0.03) 50%, transparent 75%)`;
   };
 
   const handleSpotlightLeave = () => {
@@ -138,7 +113,6 @@ export default function WhyAivik() {
 
         <div className="mb-16">
           <h2
-            ref={headingRef}
             className="font-heading font-black"
             style={{
               fontSize: "clamp(48px, 6vw, 72px)",
