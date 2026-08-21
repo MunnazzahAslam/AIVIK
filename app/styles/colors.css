@@ -8,11 +8,7 @@
 --section-dark-text:    #FFFFFF;
 --section-dark-muted:   #8499B8;
 
-/* Optional: NymCard-inspired accent upgrade */
---accent-primary:  #00B4D8;   /* cyan replaces blue */
---accent-hover:    #0096B4;
---accent-light:    #90E0EF;
---accent-purple:   #6D28D9;   /* headline punch */
+--accent-primary:  #00B4D8;
   /* Light sections */
   --section-light: #FFFFFF;
   --section-light-surface: #F8FAFC;

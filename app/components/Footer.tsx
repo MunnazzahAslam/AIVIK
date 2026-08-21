@@ -1,5 +1,7 @@
 import AIVIKLogo from "./AIVIKLogo";
 
+const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com";
+
 export default function Footer() {
   return (
     <footer
@@ -101,7 +103,7 @@ export default function Footer() {
                 info@aivik.eu
               </a>
               <a
-                href="https://calendly.com"
+                href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body text-sm link-on-dark"
@@ -129,7 +131,7 @@ export default function Footer() {
           style={{ borderColor: "var(--section-dark-border)" }}
         >
           <p className="font-body text-xs text-on-dark-muted">
-            © 2026 AIVIK. All rights reserved.
+            © {new Date().getFullYear()} AIVIK. All rights reserved.
           </p>
           <p className="font-body text-xs text-on-dark-muted">
             Built by engineers. Delivered with precision.

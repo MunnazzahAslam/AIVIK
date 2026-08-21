@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-
-const CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
+import { scrambleFrame } from "@/lib/scrambleText";
 
 function ScrambleText({ text, triggered }: { text: string; triggered: boolean }) {
   const [display, setDisplay] = useState(text);
@@ -13,13 +12,7 @@ function ScrambleText({ text, triggered }: { text: string; triggered: boolean })
     const total = 480 / 40;
     const resolve = text.length / (total * 0.55);
     const id = setInterval(() => {
-      setDisplay(
-        text.split("").map((ch, idx) => {
-          if (" ,.-—".includes(ch)) return ch;
-          if (idx < Math.floor(iter * resolve)) return ch;
-          return CHARS[Math.floor(Math.random() * CHARS.length)];
-        }).join("")
-      );
+      setDisplay(scrambleFrame(text, Math.floor(iter * resolve), " ,.-—"));
       if (iter++ >= total) { setDisplay(text); clearInterval(id); }
     }, 40);
     return () => clearInterval(id);
