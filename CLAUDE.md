@@ -120,6 +120,23 @@ No environment variables are needed for the current site.
 
 ---
 
+## Git workflow (standing instruction)
+
+For every feature or fix requested in a session, follow this workflow end-to-end without stopping to ask permission at each step — unless something fails, in which case stop and report before continuing:
+
+1. **Branch.** Create a new branch off `main` before touching any files: `feature/<kebab-case-description>` for new functionality, `fix/<kebab-case-description>` for bug fixes.
+2. **Describe.** Before implementing, write a short name and description of the feature/fix. Reuse this as the commit message and the PR description — don't write three different summaries of the same change.
+3. **Implement.**
+4. **Test.** Run `npm run build` at minimum. For anything touching UI, verify the actual behavior (dev server + browser, or Playwright) rather than trusting the build alone — a clean build doesn't confirm the feature works. If the build or a test fails, stop here: do not push, open a PR, or merge. Fix it first.
+5. **Push** the branch to `origin`.
+6. **Open a PR** via `gh pr create`, using the description from step 2.
+7. **Merge** the PR (squash merge) once it's confirmed working.
+8. **Clean up.** Delete the branch both locally and on `origin`, then switch back to `main` and pull.
+
+**This repo auto-deploys to production on every push to `main`** (Vercel's GitHub integration is connected here — confirmed via `vercel ls` showing a new Production deployment on every push). Merging under this workflow means the change goes live immediately, with no separate deploy step or staging gate. If a given task should NOT go live immediately (e.g. something that needs your manual review first), say so explicitly and this workflow will be skipped for that task — branch and PR only, no merge.
+
+---
+
 ## Before going live — required placeholders
 
 These are placeholder values in the current codebase that must be replaced:
