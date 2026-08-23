@@ -80,7 +80,7 @@ export default function WhyAivik() {
     const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
     const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
     el.style.opacity    = "1";
-    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.08) 0%, rgba(37,99,235,0.03) 50%, transparent 75%)`;
+    el.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(96,165,250,0.12) 0%, rgba(96,165,250,0.04) 50%, transparent 75%)`;
   };
 
   const handleSpotlightLeave = () => {
@@ -168,7 +168,7 @@ export default function WhyAivik() {
                   {/* Content wrapper: scale lives here so borders never move */}
                   <div
                     style={{
-                      transform:       isHovered ? "scale(1.04)" : "scale(1)",
+                      transform:       isHovered ? "scale(1.08)" : "scale(1)",
                       transition:      "transform 300ms ease",
                       transformOrigin: "top left",
                     }}
