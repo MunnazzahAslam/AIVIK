@@ -1,6 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FadeIn from "./FadeIn";
+
+// Staggered flow-in for each field, same easing/feel as the Hero's word reveal.
+const fieldStyle = (visible: boolean, i: number): React.CSSProperties => ({
+  opacity: visible ? 1 : 0,
+  transform: visible ? "translateY(0)" : "translateY(20px)",
+  transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms`,
+});
 
 // reCAPTCHA v3 placeholder:
 // 1. npm install react-google-recaptcha-v3
@@ -61,6 +68,19 @@ export default function GetAQuote() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [submitHovered, setSubmitHovered] = useState(false);
+  const [formVisible, setFormVisible] = useState(false);
+  const formWrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = formWrapRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setFormVisible(true); obs.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -200,7 +220,7 @@ export default function GetAQuote() {
           </FadeIn>
 
           {/* Right column — form */}
-          <FadeIn delay={150}>
+          <div ref={formWrapRef}>
             <div aria-live="polite">
             {status === "success" ? (
               <div
@@ -250,7 +270,7 @@ export default function GetAQuote() {
                 aria-label="Project inquiry form"
               >
                 {/* Name */}
-                <div>
+                <div style={fieldStyle(formVisible, 0)}>
                   <label htmlFor="name" className={labelClass}>
                     Your name
                     <RequiredMark />
@@ -277,7 +297,7 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Email */}
-                <div>
+                <div style={fieldStyle(formVisible, 1)}>
                   <label htmlFor="email" className={labelClass}>
                     Your email
                     <RequiredMark />
@@ -304,7 +324,7 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Company */}
-                <div>
+                <div style={fieldStyle(formVisible, 2)}>
                   <label htmlFor="company" className={labelClass}>
                     Company name
                     <RequiredMark />
@@ -331,7 +351,7 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Phone (optional) */}
-                <div>
+                <div style={fieldStyle(formVisible, 3)}>
                   <label htmlFor="phone" className={labelClass}>
                     Phone number{" "}
                     <span className="text-on-dark-muted">(optional)</span>
@@ -357,7 +377,7 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Service */}
-                <div>
+                <div style={fieldStyle(formVisible, 4)}>
                   <label htmlFor="service" className={labelClass}>
                     What do you need?
                     <RequiredMark />
@@ -411,7 +431,7 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Message (optional) */}
-                <div>
+                <div style={fieldStyle(formVisible, 5)}>
                   <label htmlFor="message" className={labelClass}>
                     Tell us about your project{" "}
                     <span className="text-on-dark-muted">(optional)</span>
@@ -442,23 +462,25 @@ export default function GetAQuote() {
                 )}
 
                 {/* Submit */}
-                <button
-                  type="submit"
-                  disabled={status === "submitting"}
-                  className="w-full font-body text-sm font-semibold py-4 transition-colors duration-200 mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                  style={{
-                    backgroundColor: submitHovered ? "var(--section-light-surface)" : "var(--section-light)",
-                    color: "var(--section-light-text)",
-                  }}
-                  onMouseEnter={() => setSubmitHovered(true)}
-                  onMouseLeave={() => setSubmitHovered(false)}
-                >
-                  {status === "submitting" ? "Sending..." : "Book a discovery call"}
-                </button>
+                <div className="mt-2" style={fieldStyle(formVisible, 6)}>
+                  <button
+                    type="submit"
+                    disabled={status === "submitting"}
+                    className="w-full font-body text-sm font-semibold py-4 transition-colors duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                    style={{
+                      backgroundColor: submitHovered ? "var(--section-light-surface)" : "var(--section-light)",
+                      color: "var(--section-light-text)",
+                    }}
+                    onMouseEnter={() => setSubmitHovered(true)}
+                    onMouseLeave={() => setSubmitHovered(false)}
+                  >
+                    {status === "submitting" ? "Sending..." : "Book a discovery call"}
+                  </button>
+                </div>
               </form>
             )}
             </div>
-          </FadeIn>
+          </div>
         </div>
       </div>
     </section>
