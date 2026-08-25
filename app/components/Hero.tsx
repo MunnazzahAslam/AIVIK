@@ -91,7 +91,7 @@ export default function Hero() {
 
     scrambleText(w1, "Build.", 600)
       .then(() => { if (!cancelled) return scrambleText(w2, "Scale.", 600); })
-      .then(() => { if (!cancelled) return scrambleText(w3, "Automate.", 600); });
+      .then(() => { if (!cancelled) return scrambleText(w3, "Automate", 600); });
 
     return () => { cancelled = true; };
   }, []);
@@ -135,11 +135,15 @@ export default function Hero() {
               >
                 Scale.
               </span>
-              <span
-                ref={word3Ref}
-                className="block text-[48px] md:text-[64px] lg:text-[96px]"
-              >
-                Automate.
+              <span className="block text-[48px] md:text-[64px] lg:text-[96px]">
+                <span ref={word3Ref}>Automate</span>
+                <span
+                  className="aivik-cursor"
+                  aria-hidden="true"
+                  style={{ color: "#2563EB" }}
+                >
+                  _
+                </span>
               </span>
             </h1>
           </div>
