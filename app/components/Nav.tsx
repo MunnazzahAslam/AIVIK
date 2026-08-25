@@ -90,19 +90,17 @@ export default function Nav() {
                 style={{
                   color: textColor,
                   opacity: 0.5,
-                  paddingBottom: 4,
-                  borderBottom: "2px solid transparent",
-                  transition: "opacity 200ms ease, border-color 200ms ease",
+                  transition: "opacity 200ms ease, color 200ms ease",
                 }}
                 onMouseEnter={(e) => {
                   const el = e.currentTarget as HTMLElement;
                   el.style.opacity = "1";
-                  el.style.borderBottomColor = "#2563EB";
+                  el.style.color = "#2563EB";
                 }}
                 onMouseLeave={(e) => {
                   const el = e.currentTarget as HTMLElement;
                   el.style.opacity = "0.5";
-                  el.style.borderBottomColor = "transparent";
+                  el.style.color = textColor;
                 }}
               >
                 {label}
