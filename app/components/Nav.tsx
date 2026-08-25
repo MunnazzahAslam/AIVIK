@@ -86,10 +86,24 @@ export default function Nav() {
                 key={label}
                 href={href}
                 role="listitem"
-                className="font-body font-medium text-[15px] transition-opacity duration-200"
-                style={{ color: textColor, opacity: 0.5 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.5"; }}
+                className="font-body font-medium text-[15px]"
+                style={{
+                  color: textColor,
+                  opacity: 0.5,
+                  paddingBottom: 4,
+                  borderBottom: "2px solid transparent",
+                  transition: "opacity 200ms ease, border-color 200ms ease",
+                }}
+                onMouseEnter={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.opacity = "1";
+                  el.style.borderBottomColor = "#2563EB";
+                }}
+                onMouseLeave={(e) => {
+                  const el = e.currentTarget as HTMLElement;
+                  el.style.opacity = "0.5";
+                  el.style.borderBottomColor = "transparent";
+                }}
               >
                 {label}
               </a>
