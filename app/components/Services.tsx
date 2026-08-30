@@ -5,7 +5,7 @@ import FadeIn from "./FadeIn";
 const services = [
   {
     number: "01",
-    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000",
+    image: "/services-software.png",
     title: "Custom Software Development",
     description: "End-to-end web and application engineering",
     items: [
@@ -17,7 +17,7 @@ const services = [
   },
   {
     number: "02",
-    image: "/cloud-bg.jpeg",
+    image: "/services-cloud.png",
     title: "Cloud Infrastructure",
     description: "Scalable, secure cloud foundations",
     items: [
@@ -29,7 +29,7 @@ const services = [
   },
   {
     number: "03",
-    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000",
+    image: "/services-ai.png",
     title: "AI Workflow Automation",
     description: "Intelligent systems that work for you",
     items: [
@@ -41,7 +41,7 @@ const services = [
   },
   {
     number: "04",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=1000",
+    image: "/services-data.png",
     title: "Data Analysis",
     description: "Turn data into decisions",
     items: [
@@ -53,7 +53,7 @@ const services = [
   },
   {
     number: "05",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000",
+    image: "/services-marketing.png",
     title: "Digital Marketing",
     description: "Reach and convert the right audience",
     items: [
