@@ -122,18 +122,21 @@ No environment variables are needed for the current site.
 
 ## Git workflow (standing instruction)
 
-For every feature or fix requested in a session, follow this workflow end-to-end without stopping to ask permission at each step — unless something fails, in which case stop and report before continuing:
+**Do not commit, push, open a PR, or merge anything without the user's explicit confirmation first.** Implement and test freely, then show the result (screenshot/description) and wait for a go-ahead before touching git. This overrides the fully-autonomous version of this workflow used earlier in the project's history — confirmation is required at the commit step now.
+
+Once confirmed, follow this workflow end-to-end:
 
 1. **Branch.** Create a new branch off `main` before touching any files: `feature/<kebab-case-description>` for new functionality, `fix/<kebab-case-description>` for bug fixes.
 2. **Describe.** Before implementing, write a short name and description of the feature/fix. Reuse this as the commit message and the PR description — don't write three different summaries of the same change.
 3. **Implement.**
 4. **Test.** Run `npm run build` at minimum. For anything touching UI, verify the actual behavior (dev server + browser, or Playwright) rather than trusting the build alone — a clean build doesn't confirm the feature works. If the build or a test fails, stop here: do not push, open a PR, or merge. Fix it first.
-5. **Push** the branch to `origin`.
-6. **Open a PR** via `gh pr create`, using the description from step 2.
-7. **Merge** the PR (squash merge) once it's confirmed working.
-8. **Clean up.** Delete the branch both locally and on `origin`, then switch back to `main` and pull.
+5. **Confirm.** Show the user the result and get explicit confirmation before proceeding to commit.
+6. **Push** the branch to `origin`.
+7. **Open a PR** via `gh pr create`, using the description from step 2.
+8. **Merge** the PR (squash merge) once it's confirmed working.
+9. **Clean up.** Delete the branch both locally and on `origin`, then switch back to `main` and pull.
 
-**This repo auto-deploys to production on every push to `main`** (Vercel's GitHub integration is connected here — confirmed via `vercel ls` showing a new Production deployment on every push). Merging under this workflow means the change goes live immediately, with no separate deploy step or staging gate. If a given task should NOT go live immediately (e.g. something that needs your manual review first), say so explicitly and this workflow will be skipped for that task — branch and PR only, no merge.
+**This repo auto-deploys to production on every push to `main`** (Vercel's GitHub integration is connected here — confirmed via `vercel ls` showing a new Production deployment on every push). Merging under this workflow means the change goes live immediately, with no separate deploy step or staging gate.
 
 **`gh` CLI setup note:** `gh` isn't on the default PATH available to tool calls in this environment (no Homebrew here either). It's installed at `~/.local/bin/gh`, added to `PATH` in `~/.zshenv`/`~/.zshrc` for interactive terminal use, but tool-call shells don't source those — invoke it by full path. It's also not run through `gh auth login` (the stored git credential lacks the `read:org` scope that command insists on validating); instead, pull the token straight from git's own credential helper and pass it via `GH_TOKEN`:
 
