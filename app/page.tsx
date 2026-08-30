@@ -1,6 +1,7 @@
 import Nav from "./components/Nav";
 import Hero from "./components/Hero";
-import Services from "./components/Services";
+// import Services from "./components/Services"; // "What we build." — disabled for now, kept for later use
+import CloserLook from "./components/CloserLook";
 import WhyAivik from "./components/WhyAivik";
 import Process from "./components/Process";
 import GetAQuote from "./components/GetAQuote";
@@ -11,7 +12,8 @@ export default function Home() {
     <main>
       <Nav />
       <Hero />
-      <Services />
+      {/* <Services /> */}
+      <CloserLook />
       <Process />
       <WhyAivik />
       <GetAQuote />

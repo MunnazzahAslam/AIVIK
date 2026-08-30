@@ -144,17 +144,20 @@ h6 {
 /* ─── Form inputs / selects / textareas ─── */
 
 .aivik-input {
-  color: var(--section-dark-text);
-  background-color: var(--section-dark);
-  border: 1px solid var(--section-dark-border);
-  transition: border-color 200ms ease;
+  color: #f5f5f7;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: border-color 250ms ease, box-shadow 250ms ease, background-color 250ms ease;
 }
 .aivik-input::placeholder {
-  color: var(--section-dark-muted);
+  color: #6b7280;
 }
 .aivik-input:focus {
   outline: none;
-  border-color: var(--section-dark-text);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* ─── Primary button ─── */
@@ -182,9 +185,244 @@ h6 {
   animation-play-state: paused;
 }
 
+/* ─── Services: Apple-style highlights carousel — horizontal scroll-snap track with peek ─── */
+
+.services-viewport {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 48px;
+  padding: 0 48px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.services-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.services-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  width: min(1080px, calc(100vw - 112px));
+  height: 640px;
+  border-radius: 32px;
+  background: #080e1a;
+  border: 0.5px solid rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  scroll-snap-align: start;
+  padding: 56px;
+  box-sizing: border-box;
+}
+
+.services-text {
+  flex-shrink: 0;
+}
+
+.services-visual {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+  .services-card {
+    width: calc(100vw - 88px);
+    height: 560px;
+    border-radius: 26px;
+    padding: 40px;
+  }
+}
+
+@media (max-width: 640px) {
+  .services-viewport {
+    padding: 0 20px;
+    gap: 12px;
+    scroll-padding-left: 20px;
+  }
+  .services-card {
+    width: calc(100vw - 40px);
+    height: 520px;
+    border-radius: 22px;
+    padding: 32px 28px;
+  }
+}
+
+/* ─── CloserLook: full-bleed cinematic background, crossfades per selection ─── */
+
+.closer-look-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.closer-look-bg canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.9s ease;
+}
+
+.closer-look-scrim {
+  position: absolute;
+  inset: 0;
+  /* Heavier right at the seam with Hero above so bright bloom elements (constellation
+     nodes, funnel particles) don't pop in abruptly on scroll — eases off quickly so the
+     scene still reads clearly once the section is in view, then darkens again toward the
+     bottom for text legibility over the detail panel. */
+  background: linear-gradient(
+    180deg,
+    rgba(3, 6, 13, 0.65) 0%,
+    rgba(3, 6, 13, 0.25) 16%,
+    rgba(3, 6, 13, 0.4) 45%,
+    rgba(3, 6, 13, 0.97) 100%
+  );
+  pointer-events: none;
+}
+
+.closer-look-content {
+  position: relative;
+  z-index: 1;
+}
+
+.closer-look-row {
+  display: flex;
+  gap: 48px;
+  align-items: flex-start;
+}
+
+.closer-look-list {
+  width: 300px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.closer-look-detail {
+  flex: 1;
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 44px;
+  box-sizing: border-box;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.closer-look-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 16px 22px;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.closer-look-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.closer-look-pill.active {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: rgba(37, 99, 235, 0.4);
+}
+
+.closer-look-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 15px;
+  line-height: 1;
+  color: #f5f5f7;
+  transition: transform 0.3s ease;
+}
+
+.closer-look-icon.open {
+  transform: rotate(45deg);
+}
+
+.closer-look-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 28px;
+  padding: 14px 26px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #050b14;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.closer-look-cta:hover {
+  background: #d9dbe0;
+  transform: translateX(2px);
+}
+
+@media (max-width: 900px) {
+  .closer-look-row {
+    flex-direction: column;
+  }
+  .closer-look-list {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .closer-look-list .closer-look-pill {
+    width: auto;
+  }
+  .closer-look-detail {
+    max-width: 100%;
+    padding: 32px;
+  }
+}
+
+/* ─── Chatbase widget bubble — restrained branded glow, not a redesign ─── */
+
+#chatbase-bubble-button {
+  animation: chatbase-pulse 3.6s ease-in-out infinite;
+  transition: transform 0.25s ease;
+}
+
+#chatbase-bubble-button:hover {
+  transform: scale(1.06);
+}
+
+@keyframes chatbase-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.35); }
+  50%      { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+}
+
 /* ─── Reduced motion ─── */
 
 @media (prefers-reduced-motion: reduce) {
+  #chatbase-bubble-button {
+    animation: none !important;
+  }
+
   .animate-fade-in-up,
   .hero-word-1,
   .hero-word-2,
@@ -209,4 +447,5 @@ h6 {
     animation: none !important;
     opacity: 1 !important;
   }
+
 }
