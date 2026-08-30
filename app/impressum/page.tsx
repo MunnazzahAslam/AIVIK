@@ -32,9 +32,7 @@ export default function Impressum() {
             <p className="font-body text-sm text-on-dark-muted leading-relaxed">
               AIVIK
               <br />
-              [Your registered address in Germany]
-              <br />
-              Germany
+              Munich, Germany
             </p>
           </div>
 
@@ -54,7 +52,7 @@ export default function Impressum() {
               Responsible for content
             </p>
             <p className="font-body text-sm text-on-dark-muted">
-              Munnazzah Aslam
+              Team AIVIK
             </p>
           </div>
         </div>
