@@ -122,6 +122,13 @@ export default function WhyAivik() {
             }}
           >
             WHY AIVIK
+            <span
+              className="aivik-cursor"
+              aria-hidden="true"
+              style={{ color: "#2563EB" }}
+            >
+              _
+            </span>
           </h2>
         </div>
 

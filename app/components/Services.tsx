@@ -38,6 +38,18 @@ const SERVICES: Service[] = [
     headline: "Growth,\ndriven by data.",
     animation: "marketing",
   },
+  {
+    number: "05",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1000",
+    title: "Digital Marketing",
+    description: "Reach and convert the right audience",
+    items: [
+      "SEO and Content Strategy",
+      "Paid Advertising Campaigns",
+      "Social Media Management",
+      "Marketing Analytics and Reporting",
+    ],
+  },
 ];
 
 

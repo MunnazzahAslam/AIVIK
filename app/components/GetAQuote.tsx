@@ -1,6 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import FadeIn from "./FadeIn";
+
+// Staggered flow-in for each field, same easing/feel as the Hero's word reveal.
+const fieldStyle = (visible: boolean, i: number): React.CSSProperties => ({
+  opacity: visible ? 1 : 0,
+  transform: visible ? "translateY(0)" : "translateY(20px)",
+  transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms`,
+});
 
 // reCAPTCHA v3 placeholder:
 // 1. npm install react-google-recaptcha-v3
@@ -76,6 +83,19 @@ export default function GetAQuote() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [submitHovered, setSubmitHovered] = useState(false);
+  const [formVisible, setFormVisible] = useState(false);
+  const formWrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = formWrapRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setFormVisible(true); obs.disconnect(); } },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -265,7 +285,7 @@ export default function GetAQuote() {
           </FadeIn>
 
           {/* Right column — form */}
-          <FadeIn delay={150}>
+          <div ref={formWrapRef}>
             <div aria-live="polite">
             {status === "success" ? (
               <div
@@ -536,7 +556,7 @@ export default function GetAQuote() {
               </form>
             )}
             </div>
-          </FadeIn>
+          </div>
         </div>
       </div>
     </section>
