@@ -17,12 +17,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           {/* Column 1 — Brand */}
           <div>
-            <a href="/" className="block mb-4">
+            <a href="/" className="block mb-2">
               <AIVIKLogo size="sm" variant="dark" />
             </a>
-            <p className="font-mono text-[11px] text-on-dark-muted mb-4">
-              Think it. Build it. AIVIK.
-            </p>
             <p className="font-mono text-[10px] text-on-dark-muted leading-relaxed">
               Registered in Germany · GDPR Compliant
             </p>
@@ -39,6 +36,7 @@ export default function Footer() {
                 "AI and Automation",
                 "Cloud Infrastructure",
                 "Data Analysis",
+                "Digital Marketing",
               ].map((label) => (
                 <a
                   key={label}
