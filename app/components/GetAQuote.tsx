@@ -1,13 +1,6 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import FadeIn from "./FadeIn";
-
-// Staggered flow-in for each field, same easing/feel as the Hero's word reveal.
-const fieldStyle = (visible: boolean, i: number): React.CSSProperties => ({
-  opacity: visible ? 1 : 0,
-  transform: visible ? "translateY(0)" : "translateY(20px)",
-  transition: `opacity 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms, transform 0.5s cubic-bezier(0.16,1,0.3,1) ${i * 70}ms`,
-});
 
 // reCAPTCHA v3 placeholder:
 // 1. npm install react-google-recaptcha-v3
@@ -19,7 +12,8 @@ type FormState = {
   email: string;
   company: string;
   phone: string;
-  service: string;
+  services: string[];
+  otherService: string;
   message: string;
 };
 
@@ -28,14 +22,28 @@ const initialForm: FormState = {
   email: "",
   company: "",
   phone: "",
-  service: "",
+  services: [],
+  otherService: "",
   message: "",
 };
 
-// Color classes (.aivik-input, .text-on-dark-muted) are defined in globals.css
+// Value doubles as the label — the API just joins selected values into one
+// human-readable string, so there's no separate code-to-label map to keep in sync.
+const SERVICE_OPTIONS = [
+  "Custom Software Development",
+  "AI and Automation",
+  "Cloud Infrastructure",
+  "Data Analysis",
+  "Other",
+  "Not sure yet",
+];
+
+// Color classes (.aivik-input) are defined in globals.css
 const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
 
-const labelClass = "block font-body text-xs text-on-dark-muted mb-1.5";
+const labelClass = "block font-body text-xs mb-1.5";
+const labelColor = "#F5F5F7";
+const mutedColor = "#A1A1A6";
 
 const errorTextClass = "font-body text-xs text-red-400 mt-1.5";
 
@@ -47,7 +55,7 @@ function validateForm(form: FormState): FieldErrors {
   if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
     errors.email = "A valid email is required.";
   if (!form.company.trim()) errors.company = "Company name is required.";
-  if (!form.service) errors.service = "Please select a service.";
+  if (form.services.length === 0) errors.services = "Please select at least one option.";
   if (form.phone && !/^[\d\s\+\-\(\)]{7,20}$/.test(form.phone))
     errors.phone = "Phone number format is invalid.";
   return errors;
@@ -55,7 +63,7 @@ function validateForm(form: FormState): FieldErrors {
 
 function RequiredMark() {
   return (
-    <span aria-hidden="true" style={{ color: "var(--accent-primary)" }}>
+    <span aria-hidden="true" style={{ color: mutedColor }}>
       {" "}
       *
     </span>
@@ -68,19 +76,6 @@ export default function GetAQuote() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});
   const [submitHovered, setSubmitHovered] = useState(false);
-  const [formVisible, setFormVisible] = useState(false);
-  const formWrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const el = formWrapRef.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setFormVisible(true); obs.disconnect(); } },
-      { threshold: 0.15 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -103,6 +98,17 @@ export default function GetAQuote() {
     setErrors(validateForm(form));
   };
 
+  const toggleService = (value: string) => {
+    const nextServices = form.services.includes(value)
+      ? form.services.filter((v) => v !== value)
+      : [...form.services, value];
+    setForm((prev) => ({ ...prev, services: nextServices }));
+    if (touched.services) {
+      setErrors(validateForm({ ...form, services: nextServices }));
+    }
+    setTouched((prev) => ({ ...prev, services: true }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -113,7 +119,7 @@ export default function GetAQuote() {
       email: true,
       company: true,
       phone: true,
-      service: true,
+      services: true,
       message: true,
     });
     if (Object.keys(validationErrors).length > 0) {
@@ -126,10 +132,16 @@ export default function GetAQuote() {
       // const token = await executeRecaptcha("contact_form");
       const recaptchaToken = undefined; // replace with token once CAPTCHA key is configured
 
+      // Fold the free-text "Other" detail into the services list the API expects,
+      // rather than sending it as a separate field.
+      const services = form.services.map((s) =>
+        s === "Other" && form.otherService.trim() ? `Other: ${form.otherService.trim()}` : s
+      );
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, recaptchaToken }),
+        body: JSON.stringify({ ...form, services, recaptchaToken }),
       });
 
       if (!res.ok) throw new Error("API error");
@@ -151,10 +163,36 @@ export default function GetAQuote() {
     <section
       id="contact"
       data-theme="dark"
-      className="py-[120px] px-6"
-      style={{ backgroundColor: "var(--section-dark)" }}
+      className="py-20 px-6"
+      style={{ backgroundColor: "var(--section-dark)", position: "relative", overflow: "hidden" }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "-10%",
+          left: "-10%",
+          width: "50%",
+          height: "70%",
+          background: "radial-gradient(circle, rgba(37,99,235,0.16), transparent 65%)",
+          filter: "blur(20px)",
+          pointerEvents: "none",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: "-10%",
+          right: "-10%",
+          width: "50%",
+          height: "70%",
+          background: "radial-gradient(circle, rgba(37,99,235,0.16), transparent 65%)",
+          filter: "blur(20px)",
+          pointerEvents: "none",
+        }}
+      />
+      <div className="max-w-6xl mx-auto" style={{ position: "relative" }}>
         <div className="grid grid-cols-1 md:grid-cols-[45fr_55fr] gap-16 md:gap-24 items-start">
           {/* Left column */}
           <FadeIn className="flex flex-col justify-center">
@@ -171,7 +209,7 @@ export default function GetAQuote() {
             </h2>
             <p
               className="font-body text-base leading-relaxed max-w-[480px]"
-              style={{ color: "var(--section-dark-muted)" }}
+              style={{ color: "#A1A1A6" }}
             >
               Whether you have a defined project or an early idea, we are here
               to listen. Tell us where you are and we will tell you honestly how
@@ -180,7 +218,7 @@ export default function GetAQuote() {
 
             <div
               className="h-px my-8"
-              style={{ backgroundColor: "var(--section-dark-border)" }}
+              style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
             />
 
             <div className="flex flex-col gap-4">
@@ -190,10 +228,16 @@ export default function GetAQuote() {
                 "Long-term partnership beyond project delivery",
               ].map((text) => (
                 <div key={text} className="flex items-start gap-3">
-                  <span className="font-body text-sm shrink-0" style={{ color: "var(--section-dark-text)" }}>&#10003;</span>
+                  <span
+                    aria-hidden="true"
+                    className="font-mono"
+                    style={{ fontSize: 13, color: "#F5F5F7", display: "inline-block", transform: "scaleX(-1)" }}
+                  >
+                    ↵
+                  </span>
                   <p
                     className="font-body text-sm"
-                    style={{ color: "var(--section-dark-muted)" }}
+                    style={{ color: "#A1A1A6" }}
                   >
                     {text}
                   </p>
@@ -203,16 +247,17 @@ export default function GetAQuote() {
 
             <div
               className="h-px my-8"
-              style={{ backgroundColor: "var(--section-dark-border)" }}
+              style={{ backgroundColor: "rgba(255,255,255,0.08)" }}
             />
 
             <div>
-              <p className="font-mono text-[11px] text-on-dark-muted tracking-[2px] uppercase mb-2">
+              <p className="font-mono text-[11px] tracking-[2px] uppercase mb-2" style={{ color: labelColor }}>
                 Prefer email?
               </p>
               <a
                 href="mailto:info@aivik.eu"
-                className="font-body text-sm link-on-dark"
+                className="font-body text-sm"
+                style={{ color: mutedColor }}
               >
                 info@aivik.eu
               </a>
@@ -220,23 +265,32 @@ export default function GetAQuote() {
           </FadeIn>
 
           {/* Right column — form */}
-          <div ref={formWrapRef}>
+          <FadeIn delay={150}>
             <div aria-live="polite">
             {status === "success" ? (
               <div
-                className="border p-10 md:p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[400px]"
+                className="p-10 md:p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[400px]"
                 style={{
-                  backgroundColor: "var(--section-dark-surface)",
-                  borderColor: "var(--section-dark-border)",
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  border: "0.5px solid rgba(255,255,255,0.1)",
+                  borderRadius: 28,
                 }}
               >
-                <div className="w-12 h-12 border border-white flex items-center justify-center shrink-0">
+                <div
+                  style={{
+                    width: 48, height: 48, borderRadius: "50%",
+                    background: "rgba(37,99,235,0.15)",
+                    display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+                  }}
+                >
                   <svg
                     width="20"
                     height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="var(--section-dark-text)"
+                    stroke="#8CB4FF"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -247,13 +301,13 @@ export default function GetAQuote() {
                 </div>
                 <h3
                   className="font-heading text-2xl font-bold"
-                  style={{ color: "var(--section-dark-text)" }}
+                  style={{ color: "#F5F5F7" }}
                 >
                   Thank you.
                 </h3>
                 <p
                   className="font-body text-sm max-w-[320px]"
-                  style={{ color: "var(--section-dark-muted)" }}
+                  style={{ color: "#A1A1A6" }}
                 >
                   Redirecting you to book a call...
                 </p>
@@ -262,16 +316,19 @@ export default function GetAQuote() {
               <form
                 onSubmit={handleSubmit}
                 noValidate
-                className="border flex flex-col gap-5 p-10 md:p-12"
+                className="flex flex-col gap-4 p-8 md:p-10"
                 style={{
-                  backgroundColor: "var(--section-dark-surface)",
-                  borderColor: "var(--section-dark-border)",
+                  background: "rgba(255,255,255,0.04)",
+                  backdropFilter: "blur(24px)",
+                  WebkitBackdropFilter: "blur(24px)",
+                  border: "0.5px solid rgba(255,255,255,0.1)",
+                  borderRadius: 28,
                 }}
                 aria-label="Project inquiry form"
               >
                 {/* Name */}
-                <div style={fieldStyle(formVisible, 0)}>
-                  <label htmlFor="name" className={labelClass}>
+                <div>
+                  <label htmlFor="name" className={labelClass} style={{ color: labelColor }}>
                     Your name
                     <RequiredMark />
                   </label>
@@ -297,8 +354,8 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Email */}
-                <div style={fieldStyle(formVisible, 1)}>
-                  <label htmlFor="email" className={labelClass}>
+                <div>
+                  <label htmlFor="email" className={labelClass} style={{ color: labelColor }}>
                     Your email
                     <RequiredMark />
                   </label>
@@ -324,8 +381,8 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Company */}
-                <div style={fieldStyle(formVisible, 2)}>
-                  <label htmlFor="company" className={labelClass}>
+                <div>
+                  <label htmlFor="company" className={labelClass} style={{ color: labelColor }}>
                     Company name
                     <RequiredMark />
                   </label>
@@ -351,10 +408,10 @@ export default function GetAQuote() {
                 </div>
 
                 {/* Phone (optional) */}
-                <div style={fieldStyle(formVisible, 3)}>
-                  <label htmlFor="phone" className={labelClass}>
+                <div>
+                  <label htmlFor="phone" className={labelClass} style={{ color: labelColor }}>
                     Phone number{" "}
-                    <span className="text-on-dark-muted">(optional)</span>
+                    <span style={{ color: mutedColor }}>(optional)</span>
                   </label>
                   <input
                     id="phone"
@@ -376,70 +433,70 @@ export default function GetAQuote() {
                   )}
                 </div>
 
-                {/* Service */}
-                <div style={fieldStyle(formVisible, 4)}>
-                  <label htmlFor="service" className={labelClass}>
-                    What do you need?
+                {/* Services */}
+                <div>
+                  <p id="services-label" className={labelClass} style={{ color: labelColor }}>
+                    What can we help you with?
                     <RequiredMark />
-                  </label>
-                  <div className="relative">
-                    <select
-                      id="service"
-                      name="service"
-                      required
-                      value={form.service}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      className={`${inputClass} appearance-none cursor-pointer pr-10`}
-                      aria-invalid={!!(touched.service && errors.service)}
-                      aria-describedby={errors.service ? "service-error" : undefined}
-                    >
-                      <option value="" disabled>
-                        Select a service
-                      </option>
-                      <option value="software">
-                        Custom Software Development
-                      </option>
-                      <option value="ai">AI and Automation</option>
-                      <option value="cloud">Cloud Infrastructure</option>
-                      <option value="data">Data Analysis</option>
-                      <option value="unsure">Not sure yet</option>
-                    </select>
-                    <div
-                      className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"
-                      aria-hidden="true"
-                    >
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="var(--section-dark-muted)"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path d="M6 9l6 6 6-6" />
-                      </svg>
-                    </div>
+                  </p>
+                  <div
+                    role="group"
+                    aria-labelledby="services-label"
+                    aria-invalid={!!(touched.services && errors.services)}
+                    aria-describedby={errors.services ? "services-error" : undefined}
+                    className="flex flex-wrap gap-2"
+                  >
+                    {SERVICE_OPTIONS.map((option) => {
+                      const checked = form.services.includes(option);
+                      return (
+                        <button
+                          key={option}
+                          type="button"
+                          aria-pressed={checked}
+                          onClick={() => toggleService(option)}
+                          className="font-body text-sm transition-colors duration-150"
+                          style={{
+                            padding: "8px 14px",
+                            borderRadius: 999,
+                            border: `1px solid ${checked ? "#2563EB" : "rgba(255,255,255,0.16)"}`,
+                            background: checked ? "rgba(37,99,235,0.16)" : "transparent",
+                            color: checked ? labelColor : mutedColor,
+                            cursor: "pointer",
+                          }}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
                   </div>
-                  {touched.service && errors.service && (
-                    <p id="service-error" className={errorTextClass}>
-                      {errors.service}
+                  {form.services.includes("Other") && (
+                    <input
+                      type="text"
+                      name="otherService"
+                      value={form.otherService}
+                      onChange={handleChange}
+                      placeholder="Please specify"
+                      aria-label="Please specify the other service"
+                      className={`${inputClass} mt-3`}
+                    />
+                  )}
+                  {touched.services && errors.services && (
+                    <p id="services-error" className={errorTextClass}>
+                      {errors.services}
                     </p>
                   )}
                 </div>
 
                 {/* Message (optional) */}
-                <div style={fieldStyle(formVisible, 5)}>
-                  <label htmlFor="message" className={labelClass}>
-                    Tell us about your project{" "}
-                    <span className="text-on-dark-muted">(optional)</span>
+                <div>
+                  <label htmlFor="message" className={labelClass} style={{ color: labelColor }}>
+                    Give us a brief description of what you need{" "}
+                    <span style={{ color: mutedColor }}>(optional)</span>
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    rows={4}
+                    rows={3}
                     value={form.message}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -462,25 +519,24 @@ export default function GetAQuote() {
                 )}
 
                 {/* Submit */}
-                <div className="mt-2" style={fieldStyle(formVisible, 6)}>
-                  <button
-                    type="submit"
-                    disabled={status === "submitting"}
-                    className="w-full font-body text-sm font-semibold py-4 transition-colors duration-200 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
-                    style={{
-                      backgroundColor: submitHovered ? "var(--section-light-surface)" : "var(--section-light)",
-                      color: "var(--section-light-text)",
-                    }}
-                    onMouseEnter={() => setSubmitHovered(true)}
-                    onMouseLeave={() => setSubmitHovered(false)}
-                  >
-                    {status === "submitting" ? "Sending..." : "Book a discovery call"}
-                  </button>
-                </div>
+                <button
+                  type="submit"
+                  disabled={status === "submitting"}
+                  className="w-full font-body text-sm font-semibold py-4 transition-colors duration-200 mt-2 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                  style={{
+                    backgroundColor: submitHovered ? "var(--section-light-surface)" : "var(--section-light)",
+                    color: "var(--section-light-text)",
+                    borderRadius: 12,
+                  }}
+                  onMouseEnter={() => setSubmitHovered(true)}
+                  onMouseLeave={() => setSubmitHovered(false)}
+                >
+                  {status === "submitting" ? "Sending..." : "Book a discovery call"}
+                </button>
               </form>
             )}
             </div>
-          </div>
+          </FadeIn>
         </div>
       </div>
     </section>
