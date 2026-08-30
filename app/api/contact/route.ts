@@ -9,10 +9,10 @@ import {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, company, phone, service, message, recaptchaToken } =
+    const { name, email, company, phone, services, message, recaptchaToken } =
       body;
 
-    if (!name || !email || !company || !service) {
+    if (!name || !email || !company || !Array.isArray(services) || services.length === 0) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -25,7 +25,10 @@ export async function POST(req: NextRequest) {
       email,
       company,
       phone: phone || "",
-      service,
+      // The submissions table has a single NOT NULL `service` text column —
+      // join the (now multi-select) services into one readable string rather
+      // than migrating the schema for this.
+      service: services.join(", "),
       message: message || "",
       recaptchaToken,
     };

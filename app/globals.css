@@ -144,17 +144,20 @@ h6 {
 /* ─── Form inputs / selects / textareas ─── */
 
 .aivik-input {
-  color: var(--section-dark-text);
-  background-color: var(--section-dark);
-  border: 1px solid var(--section-dark-border);
-  transition: border-color 200ms ease;
+  color: #f5f5f7;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: border-color 250ms ease, box-shadow 250ms ease, background-color 250ms ease;
 }
 .aivik-input::placeholder {
-  color: var(--section-dark-muted);
+  color: #6b7280;
 }
 .aivik-input:focus {
   outline: none;
-  border-color: var(--section-dark-text);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: rgba(37, 99, 235, 0.6);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
 
 /* ─── Primary button ─── */

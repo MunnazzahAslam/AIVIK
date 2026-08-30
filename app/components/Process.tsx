@@ -22,25 +22,25 @@ function ScrambleText({ text, triggered }: { text: string; triggered: boolean })
 
 const steps = [
   {
-    step: "STEP 01",
+    label: "DISCOVERY",
     title: "Discovery and Alignment",
     desc: "A structured session to map your business objectives, technical constraints, and success criteria — so every decision is grounded in your goals, not assumptions.",
     side: "left" as const,
   },
   {
-    step: "STEP 02",
+    label: "ARCHITECTURE",
     title: "Solution Architecture",
     desc: "A detailed technical blueprint: system architecture, technology selection, timeline, and resource plan — full visibility before a single line of code is written.",
     side: "right" as const,
   },
   {
-    step: "STEP 03",
+    label: "DELIVERY",
     title: "Agile Delivery",
     desc: "Focused sprints with regular milestones. Continuous visibility through live demos, progress updates, and direct access to the engineering team throughout.",
     side: "left" as const,
   },
   {
-    step: "STEP 04",
+    label: "LAUNCH",
     title: "Launch and Continuous Support",
     desc: "Deployment is the beginning, not the end. We manage go-live, monitor performance, and remain your long-term engineering partner as your product scales.",
     side: "right" as const,
@@ -50,6 +50,12 @@ const steps = [
 const THRESHOLDS    = [0.12, 0.35, 0.58, 0.80];
 const STEP          = 110;
 const CONTAINER_H   = STEP * 3 + 220;
+// Waypoints anchor to the title's vertical center, not the full text block —
+// with the card chrome gone, centering on the whole block (title + variable-length
+// paragraph) made the connector dot drift depending on how long each description was.
+const TITLE_ANCHOR_Y_DESKTOP = 41;
+const TITLE_ANCHOR_Y_MOBILE  = 38;
+const LINE_GAP_DESKTOP       = 30; // gap between text edge and connector line start
 // Alternating x positions for mobile dots — gives makeSegment different start/end x
 // values so the cubic bezier produces a genuine S-curve (same as desktop logic).
 const MOBILE_DOT_XA = 10; // even-indexed dots (left)
@@ -98,10 +104,10 @@ export default function Process() {
       const pts = cardRefs.current.map((card, i) => {
         const r = card!.getBoundingClientRect();
         return {
-          y: r.top  - cr.top  + r.height / 2,
+          y: r.top  - cr.top  + TITLE_ANCHOR_Y_DESKTOP,
           x: steps[i].side === "left"
-            ? r.right - cr.left + 12
-            : r.left  - cr.left - 12,
+            ? r.right - cr.left + LINE_GAP_DESKTOP
+            : r.left  - cr.left - LINE_GAP_DESKTOP,
         };
       });
       setWaypoints(pts);
@@ -172,7 +178,7 @@ export default function Process() {
         const r = card!.getBoundingClientRect();
         return {
           x: i % 2 === 0 ? MOBILE_DOT_XA : MOBILE_DOT_XB,
-          y: r.top - cr.top + r.height / 2,
+          y: r.top - cr.top + TITLE_ANCHOR_Y_MOBILE,
         };
       });
       setMobileWaypoints(pts);
@@ -330,6 +336,13 @@ export default function Process() {
                       style={{ transition: "stroke-dashoffset 700ms cubic-bezier(0.16,1,0.3,1)" }}
                     />
                   ))}
+                  {segments.map((d, i) => (
+                    active[i] && active[i + 1] && (
+                      <circle key={`d-flow-${i}`} r={4} fill="#BCD4FF" filter="url(#d-dotGlow)">
+                        <animateMotion dur="2.2s" repeatCount="indefinite" path={d} rotate="auto" />
+                      </circle>
+                    )
+                  ))}
                   {waypoints.map((pt, i) => (
                     <g key={`d-dot-${i}`}>
                       <circle cx={pt.x} cy={pt.y} r={7} fill="none" stroke="#2563EB" strokeWidth="1.5"
@@ -352,13 +365,13 @@ export default function Process() {
 
               {steps.map((s, i) => (
                 <div
-                  key={s.step}
+                  key={s.label}
                   style={{
                     position: "absolute",
                     top:   i * STEP,
                     left:  s.side === "left"  ? 0         : undefined,
                     right: s.side === "right" ? 0         : undefined,
-                    width: "44%",
+                    width: "40%",
                     zIndex: 2,
                   }}
                 >
@@ -368,23 +381,39 @@ export default function Process() {
                       opacity:    revealed[i] ? 1 : 0,
                       transform:  revealed[i] ? "translateY(0)" : "translateY(18px)",
                       transition: "opacity 700ms ease, transform 700ms cubic-bezier(0.16,1,0.3,1)",
-                      background: "var(--section-dark-surface)",
-                      border:     "1px solid var(--section-dark-border)",
-                      padding:    "20px 24px",
                     }}
                   >
-                    <span className="font-heading font-black"
-                      style={{ display: "block", fontSize: 38, lineHeight: 1, color: "var(--section-dark-border)", marginBottom: 12, letterSpacing: "-2px" }}
+                    <span className="font-mono font-semibold"
+                      style={{
+                        display: "block",
+                        fontSize: 24,
+                        color: active[i] ? "#2563EB" : "#3A506E",
+                        letterSpacing: "0.02em",
+                        marginBottom: 14,
+                        transition: "color 600ms ease",
+                      }}
                     >
-                      {String(i + 1).padStart(2, "0")}
+                      0{i + 1}
                     </span>
-                    <h3 className="font-heading font-black"
-                      style={{ fontSize: 17, color: "var(--section-dark-text)", lineHeight: 1.25, letterSpacing: "-0.5px", marginBottom: 8 }}
+                    <h3 className="font-heading font-bold"
+                      style={{
+                        fontSize: 22,
+                        color: revealed[i] ? "#F5F5F7" : "rgba(245,245,247,0.3)",
+                        lineHeight: 1.2,
+                        letterSpacing: "-0.01em",
+                        marginBottom: 10,
+                        transition: "color 600ms ease",
+                      }}
                     >
                       <ScrambleText text={s.title} triggered={revealed[i]} />
                     </h3>
                     <p className="font-body"
-                      style={{ fontSize: 13, color: "var(--section-dark-muted)", lineHeight: 1.75 }}
+                      style={{
+                        fontSize: 14.5,
+                        color: revealed[i] ? "#A1A1A6" : "rgba(161,161,166,0.35)",
+                        lineHeight: 1.65,
+                        transition: "color 600ms ease",
+                      }}
                     >
                       {s.desc}
                     </p>
@@ -464,6 +493,14 @@ export default function Process() {
                     style={{ transition: "stroke-dashoffset 600ms cubic-bezier(0.16,1,0.3,1)" }}
                   />
                 ))}
+                {/* Traveling flow pulse — only once the segment is fully drawn */}
+                {mobileSegments.map((d, i) => (
+                  mobileActive[i] && mobileActive[i + 1] && (
+                    <circle key={`m-flow-${i}`} r={3.5} fill="#BCD4FF" filter="url(#m-dotGlow)">
+                      <animateMotion dur="2s" repeatCount="indefinite" path={d} rotate="auto" />
+                    </circle>
+                  )
+                ))}
                 {/* Dots */}
                 {mobileWaypoints.map((pt, i) => (
                   <g key={`m-dot-${i}`}>
@@ -488,32 +525,36 @@ export default function Process() {
             {/* Stacked cards */}
             {steps.map((s, i) => (
               <div
-                key={s.step}
+                key={s.label}
                 ref={el => { mobileCardRefs.current[i] = el; }}
                 style={{ marginBottom: i < steps.length - 1 ? 32 : 0 }}
               >
                 <div
                   style={{
-                    background: "var(--section-dark-surface)",
-                    border:     "1px solid var(--section-dark-border)",
-                    padding:    "18px 20px",
                     opacity:    mobileActive[i] ? 1 : 0,
                     transform:  mobileActive[i] ? "translateY(0)" : "translateY(16px)",
                     transition: "opacity 600ms ease, transform 600ms cubic-bezier(0.16,1,0.3,1)",
                   }}
                 >
-                  <span className="font-heading font-black"
-                    style={{ display: "block", fontSize: 28, lineHeight: 1, color: "var(--section-dark-border)", marginBottom: 10, letterSpacing: "-1.5px" }}
+                  <span className="font-mono font-semibold"
+                    style={{
+                      display: "block",
+                      fontSize: 20,
+                      color: mobileActive[i] ? "#2563EB" : "#3A506E",
+                      letterSpacing: "0.02em",
+                      marginBottom: 10,
+                      transition: "color 600ms ease",
+                    }}
                   >
-                    {String(i + 1).padStart(2, "0")}
+                    0{i + 1}
                   </span>
-                  <h3 className="font-heading font-black"
-                    style={{ fontSize: 16, color: "var(--section-dark-text)", lineHeight: 1.25, letterSpacing: "-0.4px", marginBottom: 8 }}
+                  <h3 className="font-heading font-bold"
+                    style={{ fontSize: 20, color: "#F5F5F7", lineHeight: 1.25, letterSpacing: "-0.01em", marginBottom: 8 }}
                   >
                     <ScrambleText text={s.title} triggered={mobileActive[i]} />
                   </h3>
                   <p className="font-body"
-                    style={{ fontSize: 13, color: "var(--section-dark-muted)", lineHeight: 1.75 }}
+                    style={{ fontSize: 14.5, color: "#A1A1A6", lineHeight: 1.65 }}
                   >
                     {s.desc}
                   </p>
