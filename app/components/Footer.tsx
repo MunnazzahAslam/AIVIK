@@ -18,7 +18,7 @@ export default function Footer() {
           {/* Column 1 — Brand */}
           <div>
             <a href="/" className="block mb-4">
-              <AIVIKLogo size="sm" variant="dark" animate={false} />
+              <AIVIKLogo size="sm" variant="dark" />
             </a>
             <p className="font-mono text-[11px] text-on-dark-muted mb-4">
               Think it. Build it. AIVIK.

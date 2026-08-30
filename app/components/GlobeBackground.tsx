@@ -12,8 +12,7 @@ export default function GlobeBackground() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    const isMobile = window.innerWidth < 768;
-    if (prefersReducedMotion || isMobile) return;
+    if (prefersReducedMotion) return;
 
     // Scene
     const scene = new THREE.Scene();
