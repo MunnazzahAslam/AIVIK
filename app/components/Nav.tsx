@@ -1,11 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import AIVIKLogo from "./AIVIKLogo";
 
 const links = [
   ["Services", "#services"],
+  ["Case Studies", "/case-studies"],
   ["Process", "#process"],
   ["About", "#about"],
+  ["Thinking", "/thinking"],
   ["Contact", "#contact"],
 ] as const;
 
@@ -14,6 +17,10 @@ type NavTheme = "hero-dark" | "dark" | "light";
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const [navTheme, setNavTheme] = useState<NavTheme>("hero-dark");
+  const pathname = usePathname();
+  const isHome = pathname === "/";
+  // Anchor links only resolve on the homepage — from any other page, route home first.
+  const resolveHref = (href: string) => (href.startsWith("#") && !isHome ? `/${href}` : href);
 
   useEffect(() => {
     const sections = document.querySelectorAll<HTMLElement>("[data-theme]");
@@ -57,6 +64,10 @@ export default function Nav() {
       : "var(--nav-border-on-light)";
 
   const scrollToContact = () => {
+    if (!isHome) {
+      window.location.href = "/#contact";
+      return;
+    }
     document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -84,7 +95,7 @@ export default function Nav() {
             {links.map(([label, href]) => (
               <a
                 key={label}
-                href={href}
+                href={resolveHref(href)}
                 role="listitem"
                 className="font-body font-medium text-[15px] transition-opacity duration-200"
                 style={{ color: textColor, opacity: 0.5 }}
@@ -142,7 +153,7 @@ export default function Nav() {
           {links.map(([label, href]) => (
             <a
               key={label}
-              href={href}
+              href={resolveHref(href)}
               className="font-heading text-4xl font-bold transition-colors duration-200"
               style={{ color: "var(--section-dark-text)" }}
               onMouseEnter={(e) => {
