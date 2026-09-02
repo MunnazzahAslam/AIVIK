@@ -40,7 +40,7 @@ export default function Footer() {
               ].map((label) => (
                 <a
                   key={label}
-                  href="#services"
+                  href="/#services"
                   className="font-body text-sm link-on-dark"
                 >
                   {label}
@@ -56,19 +56,19 @@ export default function Footer() {
             </p>
             <div className="flex flex-col gap-2.5">
               <a
-                href="#about"
+                href="/about"
                 className="font-body text-sm link-on-dark"
               >
                 About
               </a>
               <a
-                href="#process"
+                href="/#process"
                 className="font-body text-sm link-on-dark"
               >
                 Process
               </a>
               <a
-                href="#contact"
+                href="/#contact"
                 className="font-body text-sm link-on-dark"
               >
                 Contact

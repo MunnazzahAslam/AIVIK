@@ -17,7 +17,15 @@
       "Bash(sudo npm install three @types/three --save)",
       "Read(//Users/munnazzahaslam/Downloads/**)",
       "Bash(grep -iE '\\\\.\\(jpg|jpeg|png|webp|avif\\)$')",
-      "Bash(cp \"/Users/munnazzahaslam/Downloads/WhatsApp Image 2026-06-27 at 2.47.26 PM.jpeg\" \"/Users/munnazzahaslam/Downloads/aivik/public/cloud-bg.jpeg\")"
+      "Bash(cp \"/Users/munnazzahaslam/Downloads/WhatsApp Image 2026-06-27 at 2.47.26 PM.jpeg\" \"/Users/munnazzahaslam/Downloads/aivik/public/cloud-bg.jpeg\")",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git pull *)",
+      "Bash(git branch *)",
+      "Bash(pkill -f \"next dev\")",
+      "Bash(rm -f /tmp/aivik-hover-check.log)"
     ],
     "additionalDirectories": [
       "/Users/munnazzahaslam/Downloads/aivik/app",

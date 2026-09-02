@@ -27,4 +27,21 @@
 
   /* Animations */
   --dot-pulse-peak: rgba(79, 140, 255, 0.75);
+
+  /* Services card scale (reuses --section-dark-surface/-border for the
+     card's own surface/hairline so it stays inside the existing token set) */
+  --radius-card: 12px;
+  --card-gap: 8px;
+
+  /* Service card accents — each a hue rotation of the brand blue used in
+     the nav logo's underscore (#2563EB, ≈HSL 221° 83% 53%) at the same
+     saturation/lightness, so all five read as one family rather than
+     unrelated "rainbow" colors. Used on graphic/decorative elements
+     (lines, dots, bars), not body text, so WCAG's 3:1 non-text contrast
+     bar applies — all five clear it against --section-dark. */
+  --accent-code: #2563EB;       /* blue      H221 */
+  --accent-workflow: #7C3CEB;   /* violet    H265 */
+  --accent-cloud: #24DBCB;      /* teal      H178 */
+  --accent-data: #EBA224;       /* amber     H38  */
+  --accent-marketing: #EB2464;  /* pink/coral H345 */
 }

@@ -153,11 +153,36 @@ h6 {
 .aivik-input::placeholder {
   color: #6b7280;
 }
+.aivik-input:hover:not(:focus) {
+  border-color: rgba(37, 99, 235, 0.75);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
 .aivik-input:focus {
   outline: none;
   background-color: rgba(255, 255, 255, 0.05);
   border-color: rgba(37, 99, 235, 0.6);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ─── Service pill toggle buttons ─── */
+
+.aivik-pill {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: transparent;
+  transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease;
+}
+.aivik-pill.is-checked {
+  border-color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.16);
+}
+.aivik-pill:hover {
+  border-color: rgba(37, 99, 235, 0.75);
+  background-color: rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.08);
+}
+.aivik-pill.is-checked:hover {
+  border-color: #3b82f6;
+  background-color: rgba(37, 99, 235, 0.24);
 }
 
 /* ─── Primary button ─── */
@@ -183,6 +208,859 @@ h6 {
 
 .aivik-logo:hover .aivik-cursor {
   animation-play-state: paused;
+}
+
+/* ─── Services: equal-width single row ─── */
+
+.services-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--card-gap);
+}
+
+.services-grid > div {
+  height: 360px;
+}
+
+@media (min-width: 1024px) {
+  .services-grid {
+    flex-direction: row;
+    height: 400px;
+  }
+
+  .services-grid > div {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 100%;
+  }
+
+  /* Full-bleed means the first/last card's outer edge sits flush against
+     the true viewport edge — squaring just that outer corner pair (not
+     the inner ones facing a neighbor) reads as intentional rather than a
+     rounded corner floating in the middle of the screen edge. */
+  .services-grid > div:first-child .service-card {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .services-grid > div:last-child .service-card {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+
+/* ─── Services: card shell ─── */
+
+.service-card {
+  height: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  background-color: var(--section-dark-surface);
+  border: 0.5px solid var(--section-dark-border);
+  border-radius: var(--radius-card);
+}
+
+.service-card-art {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* Safety net: no artifact's animation — however it positions or scales
+     content — can ever visually escape the card, regardless of any SVG's
+     own overflow:visible (which stays, since some artifacts rely on it for
+     legitimate small bleed like glow filters right at their own edges). */
+  overflow: hidden;
+}
+
+.service-card-art svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Dims the animation so it reads as ambient texture rather than the main
+   focus, and recedes further on hover so the detail overlay stays legible
+   over it. */
+.service-card-art > :not(.service-card-details) {
+  opacity: 0.55;
+  transition: opacity 400ms ease;
+}
+
+.service-card:hover .service-card-art > :not(.service-card-details) {
+  opacity: 0.16;
+}
+
+.service-card-details {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4px 2px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 300ms ease, transform 300ms ease;
+  pointer-events: none;
+}
+
+.service-card:hover .service-card-details {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card-details-desc {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--section-dark-muted);
+  margin-bottom: 10px;
+}
+
+.service-card-details-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+  margin-bottom: 10px;
+}
+
+.service-card-details-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.service-card-details-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--section-dark-muted);
+}
+
+.service-card-details-list li span {
+  flex-shrink: 0;
+  color: var(--section-dark-text);
+}
+
+.service-card-title {
+  margin-top: 16px;
+  font-size: clamp(14px, 1.4vw, 17px);
+  line-height: 1.3;
+  letter-spacing: -0.2px;
+  color: var(--section-dark-text);
+}
+
+/* ─── Services: shared artifact primitives ───
+   Reused across all five cards so status pings / signal dots / checkmarks
+   read as one design family (same size, weight, easing) even though each
+   card's sequence is otherwise bespoke. */
+
+/* Hovering the card pauses every CSS-driven artifact animation tagged with
+   this class (on top of the opacity dim in the .service-card-art rule
+   above), so nothing keeps moving silently behind the detail overlay. */
+.service-card:hover .svc-anim {
+  animation-play-state: paused;
+}
+
+.svc-status-dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.svc-check {
+  color: #4ADE80;
+  font-weight: 700;
+}
+
+.svc-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--section-dark-muted);
+}
+
+/* ─── Services: software artifact (mini product build) ─── */
+
+.sw-art {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sw-frame {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.sw-frame-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.sw-frame-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  opacity: 0.7;
+}
+
+.sw-frame-url {
+  margin-left: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  color: var(--section-dark-muted);
+}
+
+/* Root cause of the reported stutter: dash-nav, both metric values, and all
+   5 chart bars each independently faded/shrank out in their own narrow
+   95-100% tail window, via different properties (opacity vs. transform) —
+   several unrelated motions colliding in the same ~350ms instant reads as
+   a messy jump-cut rather than a transition. Fixed by removing every
+   element's own end-of-cycle collapse (each now just holds its appeared
+   state through 100%) and adding ONE shared fade on the whole content
+   area instead, so the scene clears as a single clean motion before the
+   next loop's boot tag appears. */
+.sw-frame-body {
+  position: relative;
+  /* Extra bottom padding reserves dedicated room for the absolutely-
+     positioned status line — the dashboard's own flow content (nav +
+     metric cards + chart) actually runs ~120px tall, taller than the old
+     108px min-height allowed for, so the status text was overlapping the
+     bottom of the chart. */
+  padding: 12px 12px 34px;
+  min-height: 142px;
+  animation: swCycleFade 7s ease-out infinite;
+}
+
+@keyframes swCycleFade {
+  0%, 92% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+.sw-boot-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  color: var(--accent-code);
+  opacity: 0;
+  animation: swBootTag 7s ease-out infinite;
+}
+
+@keyframes swBootTag {
+  0%, 14%   { opacity: 1; }
+  20%, 100% { opacity: 0; }
+}
+
+.sw-dash-nav {
+  height: 6px;
+  width: 55%;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: swDashShell 7s ease-out infinite;
+}
+
+@keyframes swDashShell {
+  0%, 16%   { opacity: 0; transform: translateY(4px); }
+  22%, 100% { opacity: 1; transform: translateY(0); }
+}
+
+.sw-dash-cards {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sw-metric {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sw-metric-shell {
+  opacity: 0;
+  transform: translateY(4px);
+  animation: swDashShell 7s ease-out infinite;
+}
+
+.sw-metric-value {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--section-dark-text);
+  opacity: 0;
+}
+
+.sw-metric-up {
+  color: #4ADE80;
+}
+
+.sw-metric-1 { animation: swMetric1 7s ease-out infinite; }
+@keyframes swMetric1 {
+  0%, 24%   { opacity: 0; }
+  30%, 100% { opacity: 1; }
+}
+
+.sw-metric-2 { animation: swMetric2 7s ease-out infinite; }
+@keyframes swMetric2 {
+  0%, 32%   { opacity: 0; }
+  38%, 100% { opacity: 1; }
+}
+
+.sw-metric-label {
+  font-size: 9px;
+  color: var(--section-dark-muted);
+}
+
+.sw-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  height: 24px;
+}
+
+.sw-chart-bar {
+  flex: 1;
+  height: 100%;
+  border-radius: 1px;
+  background: var(--accent-code);
+  opacity: 0.7;
+  transform: scaleY(0);
+  transform-origin: bottom;
+}
+
+.sw-chart-bar-0 { animation: swBar0 7s ease-out infinite; }
+.sw-chart-bar-1 { animation: swBar1 7s ease-out infinite; }
+.sw-chart-bar-2 { animation: swBar2 7s ease-out infinite; }
+.sw-chart-bar-3 { animation: swBar3 7s ease-out infinite; }
+.sw-chart-bar-4 { animation: swBar4 7s ease-out infinite; }
+
+@keyframes swBar0 { 0%,40%{transform:scaleY(0);} 46%,100%{transform:scaleY(0.5);} }
+@keyframes swBar1 { 0%,43%{transform:scaleY(0);} 49%,100%{transform:scaleY(0.8);} }
+@keyframes swBar2 { 0%,46%{transform:scaleY(0);} 52%,100%{transform:scaleY(0.65);} }
+@keyframes swBar3 { 0%,49%{transform:scaleY(0);} 55%,100%{transform:scaleY(1);} }
+@keyframes swBar4 { 0%,52%{transform:scaleY(0);} 58%,100%{transform:scaleY(0.7);} }
+
+.sw-status {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--section-dark-muted);
+  opacity: 0;
+}
+
+.sw-status-connecting {
+  animation: swStatusConnecting 7s ease-out infinite;
+}
+@keyframes swStatusConnecting {
+  0%, 60%  { opacity: 0; }
+  64%, 74% { opacity: 1; }
+  79%, 100% { opacity: 0; }
+}
+
+.sw-status-deployed {
+  color: var(--section-dark-text);
+  animation: swStatusDeployed 7s ease-out infinite;
+}
+@keyframes swStatusDeployed {
+  0%, 84%   { opacity: 0; }
+  89%, 100% { opacity: 1; }
+}
+
+/* ─── Services: data artifact (raw data -> analysis -> insight) ───
+   Whole story shares one 7s cycle; animation-delay:2.4s (applied here,
+   uniformly, to every .svc-anim under .data-art) is this card's stagger
+   offset per the cross-card orchestration table — it shifts the story
+   later without disturbing the relative timing between its own phases. */
+
+.data-art {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 14px;
+}
+
+.data-art .svc-anim {
+  animation-delay: 2.4s;
+}
+
+.data-stage {
+  position: relative;
+  height: 72px;
+}
+
+.data-table {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 9px;
+  color: var(--section-dark-muted);
+  opacity: 0;
+  animation: dataTable 7s ease-out infinite;
+}
+
+@keyframes dataTable {
+  0%, 2%   { opacity: 0; }
+  10%, 60% { opacity: 1; }
+  66%, 100% { opacity: 0; }
+}
+
+.data-table th {
+  text-align: left;
+  font-weight: 600;
+  color: var(--section-dark-muted);
+  opacity: 0.6;
+  padding-bottom: 4px;
+}
+
+.data-table td {
+  padding: 2px 8px 2px 0;
+  color: var(--section-dark-text);
+}
+
+.data-row { opacity: 0; }
+.data-row-0 { animation: dataRow0 7s ease-out infinite; }
+.data-row-1 { animation: dataRow1 7s ease-out infinite; }
+.data-row-2 { animation: dataRow2 7s ease-out infinite; }
+.data-row-3 { animation: dataRow3 7s ease-out infinite; }
+
+@keyframes dataRow0 { 0%,2%{opacity:0;} 6%,58%{opacity:1;} 64%,100%{opacity:0;} }
+@keyframes dataRow1 { 0%,4%{opacity:0;} 8%,58%{opacity:1;} 64%,100%{opacity:0;} }
+@keyframes dataRow2 { 0%,6%{opacity:0;} 10%,58%{opacity:1;} 64%,100%{opacity:0;} }
+@keyframes dataRow3 { 0%,8%{opacity:0;} 12%,58%{opacity:1;} 64%,100%{opacity:0;} }
+
+.data-scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 12px;
+  height: 12px;
+  background: linear-gradient(to bottom, transparent, var(--accent-data-soft, rgba(235, 162, 36, 0.14)), transparent);
+  opacity: 0;
+  transform: translateY(0);
+  animation: dataScanline 7s ease-out infinite;
+}
+
+@keyframes dataScanline {
+  0%, 14%  { opacity: 0; transform: translateY(0); }
+  17%      { opacity: 1; }
+  34%      { opacity: 1; transform: translateY(48px); }
+  37%, 100% { opacity: 0; transform: translateY(0); }
+}
+
+.data-progress-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  opacity: 0;
+  animation: dataProgressWrap 7s ease-out infinite;
+}
+
+@keyframes dataProgressWrap {
+  0%, 40%  { opacity: 0; }
+  44%, 60% { opacity: 1; }
+  65%, 100% { opacity: 0; }
+}
+
+.data-progress-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--section-dark-muted);
+}
+
+.data-progress-track {
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.data-progress-bar {
+  height: 100%;
+  width: 100%;
+  background: var(--accent-data);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: dataProgressBar 7s ease-out infinite;
+}
+
+@keyframes dataProgressBar {
+  0%, 42%  { transform: scaleX(0); }
+  60%, 65% { transform: scaleX(1); }
+  100%     { transform: scaleX(0); }
+}
+
+.data-chart {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  animation: dataChart 7s ease-out infinite;
+}
+
+@keyframes dataChart {
+  0%, 64%  { opacity: 0; }
+  70%, 92% { opacity: 1; }
+  97%, 100% { opacity: 0; }
+}
+
+.data-chart-line {
+  stroke-dasharray: 140;
+  animation: dataChartLine 7s ease-out infinite;
+}
+
+@keyframes dataChartLine {
+  0%, 66%  { stroke-dashoffset: 140; }
+  82%, 92% { stroke-dashoffset: 0; }
+  100%     { stroke-dashoffset: 140; }
+}
+
+.data-insight {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: dataInsight 7s ease-out infinite;
+}
+
+@keyframes dataInsight {
+  0%, 82%  { opacity: 0; transform: translateY(4px); }
+  88%, 95% { opacity: 1; transform: translateY(0); }
+  100%     { opacity: 0; transform: translateY(0); }
+}
+
+.data-insight-trend {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-data);
+}
+
+/* ─── Services: marketing artifact (campaign -> optimization -> result) ───
+   Whole story shares one 7s cycle; animation-delay:3.2s (applied here,
+   uniformly, to every .svc-anim under .mkt-art) is this card's stagger
+   offset per the cross-card orchestration table. */
+
+.mkt-art {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mkt-art .svc-anim {
+  animation-delay: 3.2s;
+}
+
+.mkt-cycle {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: mktCycleFade 7s ease-out infinite;
+}
+
+@keyframes mktCycleFade {
+  0%, 92%   { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+.mkt-campaign {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--section-dark-muted);
+  opacity: 0;
+  animation: mktCampaign 7s ease-out infinite;
+}
+
+@keyframes mktCampaign {
+  0%, 3%   { opacity: 0; }
+  7%, 100% { opacity: 1; }
+}
+
+.mkt-live-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-marketing);
+  animation: mktLivePulse 1.4s ease-in-out infinite, mktCampaign 7s ease-out infinite;
+}
+
+@keyframes mktLivePulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.35; }
+}
+
+.mkt-funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mkt-funnel-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mkt-funnel-label {
+  width: 60px;
+  flex-shrink: 0;
+  font-size: 9px;
+  color: var(--section-dark-muted);
+  font-family: var(--font-jetbrains-mono), monospace;
+}
+
+.mkt-funnel-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.mkt-funnel-bar {
+  height: 100%;
+  border-radius: 3px;
+  background: var(--accent-marketing);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.mkt-funnel-value {
+  width: 34px;
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 9px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  color: var(--section-dark-text);
+  opacity: 0;
+}
+
+.mkt-stage-0 { animation: mktStage0 7s ease-out infinite; }
+.mkt-stage-1 { animation: mktStage1 7s ease-out infinite; }
+.mkt-stage-2 { animation: mktStage2 7s ease-out infinite; }
+.mkt-stage-3 { animation: mktStage3 7s ease-out infinite; }
+@keyframes mktStage0 { 0%,10%{transform:scaleX(0);} 18%,100%{transform:scaleX(1);} }
+@keyframes mktStage1 { 0%,26%{transform:scaleX(0);} 34%,100%{transform:scaleX(0.62);} }
+@keyframes mktStage2 { 0%,42%{transform:scaleX(0);} 50%,100%{transform:scaleX(0.34);} }
+@keyframes mktStage3 { 0%,58%{transform:scaleX(0);} 66%,100%{transform:scaleX(0.16);} }
+
+.mkt-value-0 { animation: mktValue0 7s ease-out infinite; }
+.mkt-value-1 { animation: mktValue1 7s ease-out infinite; }
+.mkt-value-2 { animation: mktValue2 7s ease-out infinite; }
+.mkt-value-3 { animation: mktValue3 7s ease-out infinite; }
+@keyframes mktValue0 { 0%,16%{opacity:0;} 20%,100%{opacity:1;} }
+@keyframes mktValue1 { 0%,32%{opacity:0;} 36%,100%{opacity:1;} }
+@keyframes mktValue2 { 0%,48%{opacity:0;} 52%,100%{opacity:1;} }
+@keyframes mktValue3 { 0%,64%{opacity:0;} 68%,100%{opacity:1;} }
+
+.mkt-optimizing {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 10px;
+  color: var(--section-dark-muted);
+  opacity: 0;
+  animation: mktOptimizing 7s ease-out infinite;
+}
+
+@keyframes mktOptimizing {
+  0%, 74%   { opacity: 0; }
+  78%, 88%  { opacity: 1; }
+  92%, 100% { opacity: 0; }
+}
+
+.mkt-outcome {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent-marketing);
+  opacity: 0;
+  animation: mktOutcome 7s ease-out infinite;
+}
+
+@keyframes mktOutcome {
+  0%, 86%   { opacity: 0; }
+  90%, 100% { opacity: 1; }
+}
+
+/* ─── Services: workflow artifact (event -> AI -> automated outcome) ───
+   Whole story shares one 7s cycle; animation-delay:0.8s (applied here,
+   uniformly, to every .svc-anim under .wf-art) is this card's stagger
+   offset per the cross-card orchestration table. */
+
+.wf-art .svc-anim {
+  animation-delay: 0.8s;
+}
+
+.wf-line {
+  stroke: var(--accent-workflow);
+  stroke-opacity: 0.28;
+  stroke-width: 1.4;
+}
+
+.wf-cycle {
+  animation: wfCycleFade 7s ease-out infinite;
+}
+
+@keyframes wfCycleFade {
+  0%, 92%   { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+.wf-svg-label {
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  fill: var(--section-dark-muted);
+  opacity: 0;
+}
+
+.wf-entry-node {
+  fill: var(--section-dark-surface);
+  stroke: var(--accent-workflow);
+  stroke-width: 1.3;
+  opacity: 0;
+  animation-name: wfEntryNode;
+  animation-duration: 7s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+}
+.wf-entry-label { animation: wfEntryNode 7s ease-out infinite; }
+@keyframes wfEntryNode {
+  0%, 4%    { opacity: 0; }
+  9%, 100%  { opacity: 1; }
+}
+
+.wf-signal {
+  fill: var(--accent-workflow);
+  animation: wfSignalMove 7s ease-out infinite, wfSignalShow 7s ease-out infinite;
+}
+@keyframes wfSignalMove {
+  0%, 12%  { transform: translateX(0); }
+  24%, 100% { transform: translateX(62px); }
+}
+@keyframes wfSignalShow {
+  0%, 11%  { opacity: 0; }
+  13%, 23% { opacity: 1; }
+  26%, 100% { opacity: 0; }
+}
+
+.wf-ai-node {
+  fill: var(--accent-workflow);
+  fill-opacity: 0.18;
+  stroke: var(--accent-workflow);
+  stroke-width: 1.4;
+  animation: wfAiNode 7s ease-out infinite;
+}
+@keyframes wfAiNode {
+  0%, 20%   { fill-opacity: 0.18; }
+  26%, 46%  { fill-opacity: 0.4; }
+  52%, 100% { fill-opacity: 0.18; }
+}
+
+.wf-processing { animation: wfProcessing 7s ease-out infinite; }
+@keyframes wfProcessing {
+  0%, 25%  { opacity: 0; }
+  29%, 43% { opacity: 1; }
+  47%, 100% { opacity: 0; }
+}
+
+.wf-dot {
+  fill: var(--accent-workflow);
+  animation: wfDotBounce 0.9s ease-in-out infinite, wfDotShow 7s ease-out infinite;
+}
+/* Scoped through .wf-art so these match (and, by source order, beat) the
+   generic ".wf-art .svc-anim" delay rule above — otherwise that rule's
+   single 0.8s value would apply to both of this element's animations,
+   losing the per-dot bounce stagger. */
+.wf-art .wf-dot-0 { animation-delay: 0s, 0.8s; }
+.wf-art .wf-dot-1 { animation-delay: 0.15s, 0.8s; }
+.wf-art .wf-dot-2 { animation-delay: 0.3s, 0.8s; }
+@keyframes wfDotBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50%      { transform: translateY(-1.5px); opacity: 1; }
+}
+@keyframes wfDotShow {
+  0%, 25%  { opacity: 0; }
+  29%, 43% { opacity: 1; }
+  47%, 100% { opacity: 0; }
+}
+
+.wf-branch-node {
+  fill: var(--section-dark-surface);
+  stroke: var(--accent-workflow);
+  stroke-width: 1.3;
+  opacity: 0;
+  animation: wfBranch 7s ease-out infinite;
+}
+.wf-branch-label { animation: wfBranch 7s ease-out infinite; }
+@keyframes wfBranch {
+  0%, 44%   { opacity: 0; }
+  50%, 100% { opacity: 1; }
+}
+
+.wf-svg-check {
+  font-size: 8px;
+  font-weight: 700;
+  fill: #4ADE80;
+  opacity: 0;
+}
+.wf-check-0 { animation: wfCheck0 7s ease-out infinite; }
+.wf-check-1 { animation: wfCheck1 7s ease-out infinite; }
+.wf-check-2 { animation: wfCheck2 7s ease-out infinite; }
+@keyframes wfCheck0 { 0%,58%{opacity:0;} 62%,100%{opacity:1;} }
+@keyframes wfCheck1 { 0%,64%{opacity:0;} 68%,100%{opacity:1;} }
+@keyframes wfCheck2 { 0%,70%{opacity:0;} 74%,100%{opacity:1;} }
+
+.wf-automated {
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  fill: var(--section-dark-text);
+  opacity: 0;
+  animation: wfAutomated 7s ease-out infinite;
+}
+@keyframes wfAutomated {
+  0%, 78%   { opacity: 0; }
+  84%, 100% { opacity: 1; }
 }
 
 /* ─── Reduced motion ─── */
@@ -212,4 +1090,46 @@ h6 {
     animation: none !important;
     opacity: 1 !important;
   }
+
+  /* Every CSS-keyframe-driven artifact element freezes on its finished,
+     most-informative state rather than a mid-story frame — e.g. Software
+     shows the fully-populated dashboard + "Deployed", not a half-built one. */
+  .svc-anim {
+    animation: none !important;
+  }
+
+  .sw-boot-tag { opacity: 0 !important; }
+  .sw-dash-nav,
+  .sw-metric-shell,
+  .sw-metric-1,
+  .sw-metric-2 { opacity: 1 !important; transform: none !important; }
+  .sw-chart-bar-0 { transform: scaleY(0.5) !important; }
+  .sw-chart-bar-1 { transform: scaleY(0.8) !important; }
+  .sw-chart-bar-2 { transform: scaleY(0.65) !important; }
+  .sw-chart-bar-3 { transform: scaleY(1) !important; }
+  .sw-chart-bar-4 { transform: scaleY(0.7) !important; }
+  .sw-status-connecting { opacity: 0 !important; }
+  .sw-status-deployed { opacity: 1 !important; }
+
+  .data-table,
+  .data-row-0, .data-row-1, .data-row-2, .data-row-3,
+  .data-scanline,
+  .data-progress-wrap { opacity: 0 !important; }
+  .data-chart { opacity: 1 !important; }
+  .data-chart-line { stroke-dashoffset: 0 !important; }
+  .data-insight { opacity: 1 !important; transform: none !important; }
+
+  .wf-signal { opacity: 0 !important; }
+  .wf-processing, .wf-dot { opacity: 0 !important; }
+  .wf-entry-node, .wf-entry-label,
+  .wf-branch-node, .wf-branch-label,
+  .wf-svg-check, .wf-automated { opacity: 1 !important; }
+  .wf-ai-node { fill-opacity: 0.18 !important; }
+
+  .mkt-campaign, .mkt-funnel-value, .mkt-outcome { opacity: 1 !important; }
+  .mkt-optimizing { opacity: 0 !important; }
+  .mkt-stage-0 { transform: scaleX(1) !important; }
+  .mkt-stage-1 { transform: scaleX(0.62) !important; }
+  .mkt-stage-2 { transform: scaleX(0.34) !important; }
+  .mkt-stage-3 { transform: scaleX(0.16) !important; }
 }

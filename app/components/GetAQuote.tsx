@@ -38,6 +38,10 @@ const SERVICE_OPTIONS = [
   "Not sure yet",
 ];
 
+// "Other" and "Not sure yet" are catch-alls — picking one doesn't make sense
+// alongside a specific service, so each clears every other selection.
+const EXCLUSIVE_OPTIONS = ["Other", "Not sure yet"];
+
 // Color classes (.aivik-input) are defined in globals.css
 const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
 
@@ -99,13 +103,26 @@ export default function GetAQuote() {
   };
 
   const toggleService = (value: string) => {
-    const nextServices = form.services.includes(value)
-      ? form.services.filter((v) => v !== value)
-      : [...form.services, value];
-    setForm((prev) => ({ ...prev, services: nextServices }));
-    if (touched.services) {
-      setErrors(validateForm({ ...form, services: nextServices }));
-    }
+    setForm((prev) => {
+      const isSelected = prev.services.includes(value);
+      let nextServices: string[];
+      if (isSelected) {
+        nextServices = prev.services.filter((v) => v !== value);
+      } else if (EXCLUSIVE_OPTIONS.includes(value)) {
+        // Selecting "Other" or "Not sure yet" clears every other selection.
+        nextServices = [value];
+      } else {
+        // Selecting a real service clears any exclusive catch-all option.
+        nextServices = [
+          ...prev.services.filter((v) => !EXCLUSIVE_OPTIONS.includes(v)),
+          value,
+        ];
+      }
+      if (touched.services) {
+        setErrors(validateForm({ ...prev, services: nextServices }));
+      }
+      return { ...prev, services: nextServices };
+    });
     setTouched((prev) => ({ ...prev, services: true }));
   };
 
@@ -164,7 +181,7 @@ export default function GetAQuote() {
       id="contact"
       data-theme="dark"
       className="py-20 px-6"
-      style={{ backgroundColor: "var(--section-dark)", position: "relative", overflow: "hidden" }}
+      style={{ backgroundColor: "var(--section-dark)", position: "relative", overflow: "hidden", zIndex: 0 }}
     >
       <div
         aria-hidden="true"
@@ -410,8 +427,7 @@ export default function GetAQuote() {
                 {/* Phone (optional) */}
                 <div>
                   <label htmlFor="phone" className={labelClass} style={{ color: labelColor }}>
-                    Phone number{" "}
-                    <span style={{ color: mutedColor }}>(optional)</span>
+                    Phone number
                   </label>
                   <input
                     id="phone"
@@ -454,12 +470,10 @@ export default function GetAQuote() {
                           type="button"
                           aria-pressed={checked}
                           onClick={() => toggleService(option)}
-                          className="font-body text-sm transition-colors duration-150"
+                          className={`font-body text-sm transition-colors duration-150 aivik-pill${checked ? " is-checked" : ""}`}
                           style={{
                             padding: "8px 14px",
                             borderRadius: 999,
-                            border: `1px solid ${checked ? "#2563EB" : "rgba(255,255,255,0.16)"}`,
-                            background: checked ? "rgba(37,99,235,0.16)" : "transparent",
                             color: checked ? labelColor : mutedColor,
                             cursor: "pointer",
                           }}
@@ -490,8 +504,7 @@ export default function GetAQuote() {
                 {/* Message (optional) */}
                 <div>
                   <label htmlFor="message" className={labelClass} style={{ color: labelColor }}>
-                    Give us a brief description of what you need{" "}
-                    <span style={{ color: mutedColor }}>(optional)</span>
+                    Give us a brief description of what you need
                   </label>
                   <textarea
                     id="message"
