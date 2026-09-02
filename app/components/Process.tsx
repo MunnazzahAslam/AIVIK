@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { scrambleFrame } from "@/lib/scrambleText";
+import SectionCurve from "./SectionCurve";
 
 function ScrambleText({ text, triggered }: { text: string; triggered: boolean }) {
   const [display, setDisplay] = useState(text);
@@ -92,6 +93,22 @@ export default function Process() {
   const [mobileWaypoints, setMobileWaypoints] = useState<{ x: number; y: number }[]>([]);
   const [mobileSvgH,      setMobileSvgH]      = useState(900);
   const [mobileActive,    setMobileActive]    = useState([false, false, false, false]);
+  const mobileActiveRef = useRef(mobileActive);
+  useEffect(() => { mobileActiveRef.current = mobileActive; }, [mobileActive]);
+
+  // Shared by both the re-init effect and the activation effect, so a waypoints
+  // remeasure (e.g. mobile browser chrome hiding/showing on scroll) can't leave
+  // an already-activated segment stuck hidden after it resets stroke-dashoffset.
+  const applyMobileSegmentState = (activeArr: boolean[]) => {
+    mobileSegRefs.current.forEach((seg, i) => {
+      const glow = mobileSegGlowRefs.current[i];
+      const L    = mobileSegLengths.current[i];
+      if (!seg || !L) return;
+      const show = activeArr[i] && activeArr[i + 1];
+      seg.style.strokeDashoffset  = show ? "0" : `${L}`;
+      if (glow) glow.style.strokeDashoffset = show ? "0" : `${L}`;
+    });
+  };
 
   // ── Desktop: measure card positions → waypoints ───────────────────────────
   useLayoutEffect(() => {
@@ -189,6 +206,11 @@ export default function Process() {
   }, []);
 
   // ── Mobile: init segment paths once waypoints are ready ───────────────────
+  // A remeasure (mobile browser chrome hiding/showing on scroll fires a resize
+  // event) recomputes mobileWaypoints and lands here, which resets every
+  // segment to hidden. Re-apply the already-known active state right after,
+  // so a segment that was already drawn doesn't get stuck hidden waiting for
+  // a mobileActive change that may never come again.
   useEffect(() => {
     if (mobileWaypoints.length < 4) return;
     const raf = requestAnimationFrame(() => {
@@ -201,6 +223,7 @@ export default function Process() {
         seg.style.strokeDashoffset = `${L}`;
         if (glow) { glow.style.strokeDasharray = `${L}`; glow.style.strokeDashoffset = `${L}`; }
       });
+      applyMobileSegmentState(mobileActiveRef.current);
     });
     return () => cancelAnimationFrame(raf);
   }, [mobileWaypoints]);
@@ -233,14 +256,7 @@ export default function Process() {
 
   // ── Mobile: animate segments when mobileActive changes ───────────────────
   useEffect(() => {
-    mobileSegRefs.current.forEach((seg, i) => {
-      const glow = mobileSegGlowRefs.current[i];
-      const L    = mobileSegLengths.current[i];
-      if (!seg || !L) return;
-      const show = mobileActive[i] && mobileActive[i + 1];
-      seg.style.strokeDashoffset  = show ? "0" : `${L}`;
-      if (glow) glow.style.strokeDashoffset = show ? "0" : `${L}`;
-    });
+    applyMobileSegmentState(mobileActive);
   }, [mobileActive]);
 
   // ── Derived segment paths ─────────────────────────────────────────────────
@@ -264,7 +280,12 @@ export default function Process() {
     <section
       id="process"
       data-theme="dark"
-      style={{ backgroundColor: "var(--section-dark)" }}
+      // z-index:0 gives this section its own stacking context, so its
+      // SectionCurve (z-index 3 internally) never competes with the
+      // z-indexed elements of neighboring sections — without this, a
+      // curve's fill can end up interleaved with a later section's own
+      // overlay in ways that leave a hairline seam at the boundary.
+      style={{ backgroundColor: "var(--section-dark)", position: "relative", zIndex: 0 }}
     >
 
       {/* ── DESKTOP (≥1024px): sticky scroll with zigzag ── */}
@@ -566,6 +587,7 @@ export default function Process() {
         </div>
       </div>
 
+      <SectionCurve fill="var(--section-light)" direction="dip" />
     </section>
   );
 }

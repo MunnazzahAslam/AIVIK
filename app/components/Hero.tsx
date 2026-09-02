@@ -2,6 +2,7 @@
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { scrambleFrame } from "@/lib/scrambleText";
+import SectionCurve from "./SectionCurve";
 
 // Three.js is heavy and purely decorative (aria-hidden) — code-split it out
 // of the initial Hero bundle instead of loading it on every page view.
@@ -108,13 +109,18 @@ export default function Hero() {
     <section
       id="hero"
       data-theme="dark"
-      className="relative min-h-screen flex flex-col pt-[72px]"
-      style={{ backgroundColor: "var(--section-dark)" }}
+      className="relative flex flex-col pt-[72px]"
+      style={{ backgroundColor: "var(--section-dark)", minHeight: "calc(100vh + 110px)", zIndex: 0 }}
     >
       <GlobeBackground />
 
-      {/* Two-column main content */}
-      <div className="relative z-10 flex-1 flex items-center px-6">
+      {/* Fixed to the first viewport (minus nav padding) so the curve at the
+          section's bottom stays below the fold instead of poking into view
+          on first load — only appears once the user scrolls past 100vh. */}
+      <div
+        className="relative z-10 flex items-center px-6"
+        style={{ height: "calc(100vh - 72px)" }}
+      >
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 py-16 lg:py-0">
 
           {/* LEFT COLUMN */}
@@ -173,6 +179,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      <SectionCurve fill="var(--section-light)" direction="dip" />
     </section>
   );
 }

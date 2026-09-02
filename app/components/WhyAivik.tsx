@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import SectionCurve, { CURVE_HEIGHT } from "./SectionCurve";
 
 const REASONS = [
   {
@@ -19,8 +20,8 @@ const REASONS = [
   },
   {
     number: "04",
-    title: "Working Software in Week One",
-    desc: "Discovery doesn't last months here. You see real deployed output within days of signing, not decks and promises.",
+    title: "Progress, Not Promises",
+    desc: "Discovery doesn't last months here. You see real, deployed progress within days of signing — not decks and promises.",
   },
   {
     number: "05",
@@ -57,7 +58,7 @@ export default function WhyAivik() {
     const el = gridRef.current;
     if (!el) return;
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { setIsVisible(true); obs.disconnect(); } },
+      ([entry]) => setIsVisible(entry.isIntersecting),
       { threshold: 0.1 }
     );
     obs.observe(el);
@@ -76,7 +77,7 @@ export default function WhyAivik() {
   const handleSpotlightMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const el = overlayRef.current;
     if (!el || isTouch) return;
-    const r = e.currentTarget.getBoundingClientRect();
+    const r = el.getBoundingClientRect();
     const x = ((e.clientX - r.left) / r.width  * 100).toFixed(2);
     const y = ((e.clientY - r.top)  / r.height * 100).toFixed(2);
     el.style.opacity    = "1";
@@ -88,16 +89,72 @@ export default function WhyAivik() {
     if (el) el.style.opacity = "0";
   };
 
+  // Touch devices have no hover state — tapping a card toggles the same
+  // zoom + spotlight glow instead, centered on the tapped card rather than
+  // a cursor position that doesn't exist on touch.
+  const handleCardTap = (e: React.MouseEvent<HTMLDivElement>, i: number) => {
+    if (!isTouch) return;
+    // Read the rect synchronously — e.currentTarget gets cleared once this
+    // handler returns, so it can't be read lazily inside the state updater.
+    const cardRect = e.currentTarget.getBoundingClientRect();
+    setHoveredIndex((prev) => {
+      const next = prev === i ? null : i;
+      const overlay = overlayRef.current;
+      if (overlay) {
+        if (next === null) {
+          overlay.style.opacity = "0";
+        } else {
+          const sectionRect = overlay.getBoundingClientRect();
+          const cx = cardRect.left + cardRect.width / 2 - sectionRect.left;
+          const cy = cardRect.top + cardRect.height / 2 - sectionRect.top;
+          const x = ((cx / sectionRect.width) * 100).toFixed(2);
+          const y = ((cy / sectionRect.height) * 100).toFixed(2);
+          overlay.style.opacity = "1";
+          overlay.style.background = `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.22) 0%, rgba(37,99,235,0.08) 50%, transparent 75%)`;
+        }
+      }
+      return next;
+    });
+  };
+
   return (
     <section
       id="why-aivik"
       data-theme="light"
-      className="py-[120px] px-6"
-      style={{ backgroundColor: "var(--section-light)", position: "relative" }}
+      className="px-6"
+      // Process paints a curve in THIS section's light color across its own
+      // last 110px (a curved entry instead of a flat seam) — so that strip
+      // is visually part of this section but structurally belongs to the
+      // one above it. Pulling this section's own box up by CURVE_HEIGHT
+      // (and padding it back down by the same amount) extends the section's
+      // real hit-box and overlay over that strip, so the hover glow and
+      // mouse tracking reach all the way into it with a single overlay —
+      // no seam between separate layers. z-index:0 gives this section its
+      // own stacking context so it reliably paints above Process's curve
+      // (also isolated) instead of the two competing via a shared z-index
+      // pool. Bottom padding gets the same +CURVE_HEIGHT so the clean gap
+      // before the next curve (this section's own, at its bottom) matches
+      // the clean gap at the top.
+      style={{
+        backgroundColor: "transparent",
+        position: "relative",
+        zIndex: 0,
+        marginTop: -CURVE_HEIGHT,
+        paddingTop: 120 + CURVE_HEIGHT,
+        paddingBottom: 120 + CURVE_HEIGHT,
+      }}
       onMouseMove={handleSpotlightMove}
       onMouseLeave={handleSpotlightLeave}
     >
-      {/* Spotlight — covers the whole section, not just the grid */}
+      {/* Real background starts right where Process's curve ends, leaving
+          the extended zone above it transparent so that curve shows through
+          untouched until the glow lights up on hover. */}
+      <div
+        aria-hidden="true"
+        style={{ position: "absolute", top: CURVE_HEIGHT, left: 0, right: 0, bottom: 0, backgroundColor: "var(--section-light)", zIndex: -1 }}
+      />
+
+      {/* Spotlight — covers the whole section including the extended strip above it */}
       <div
         ref={overlayRef}
         style={{
@@ -139,7 +196,7 @@ export default function WhyAivik() {
           style={{ overflow: "visible" }}
         >
           {REASONS.map((reason, i) => {
-            const isHovered = !isTouch && hoveredIndex === i;
+            const isHovered = hoveredIndex === i;
 
             return (
               /* ── Outer: owns ONLY the hover scale transform.
@@ -151,6 +208,7 @@ export default function WhyAivik() {
                 key={reason.number}
                 onMouseEnter={() => !isTouch && setHoveredIndex(i)}
                 onMouseLeave={() => !isTouch && setHoveredIndex(null)}
+                onClick={(e) => handleCardTap(e, i)}
                 style={{
                   display:  "flex",
                   position: "relative",
@@ -213,6 +271,7 @@ export default function WhyAivik() {
         </div>
 
       </div>
+      <SectionCurve fill="var(--section-dark)" direction="rise" />
     </section>
   );
 }

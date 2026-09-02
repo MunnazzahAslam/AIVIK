@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 import AIVIKLogo from "./AIVIKLogo";
 
 const links = [
-  ["Services", "#services"],
-  ["Process", "#process"],
-  ["About", "#about"],
-  ["Contact", "#contact"],
+  ["Services", "/#services"],
+  ["Process", "/#process"],
+  ["About", "/about"],
+  ["Contact", "/#contact"],
 ] as const;
 
 type NavTheme = "hero-dark" | "dark" | "light";
