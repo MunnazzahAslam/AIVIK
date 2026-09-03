@@ -11,26 +11,56 @@ const services = [
   {
     title: "Custom Software Development",
     description: "End-to-end web and application engineering",
+    items: [
+      "Mobile Application Development",
+      "Website Development and Maintenance",
+      "Legacy System Modernization",
+      "CRM and ERP Platform Development",
+    ],
     Artifact: SoftwareArtifact,
   },
   {
     title: "AI Workflow Automation",
     description: "Intelligent systems that work for you",
+    items: [
+      "Virtual Assistants and Chatbots",
+      "Agentic Workflows",
+      "Generative AI Solutions",
+      "AI-Powered Customer Support",
+    ],
     Artifact: WorkflowArtifact,
   },
   {
     title: "Cloud Infrastructure",
     description: "Scalable, secure cloud foundations",
+    items: [
+      "Hosting and Deployment",
+      "Database Management",
+      "Cloud Migration",
+      "Cloud Security Management and Analysis",
+    ],
     Artifact: CloudArtifact,
   },
   {
     title: "Data Analysis",
     description: "Turn data into decisions",
+    items: [
+      "Predictive Analytics",
+      "Data Infrastructure Setup",
+      "Data Governance and Access Control",
+      "Business Intelligence and Reporting",
+    ],
     Artifact: DataArtifact,
   },
   {
     title: "Digital Marketing",
     description: "Reach and convert the right audience",
+    items: [
+      "SEO and Content Strategy",
+      "Paid Advertising Campaigns",
+      "Social Media Management",
+      "Marketing Analytics and Reporting",
+    ],
     Artifact: MarketingArtifact,
   },
 ];
@@ -63,8 +93,8 @@ export default function Services() {
         </FadeIn>
 
         <div className="svc-grid">
-          {services.map(({ title, description, Artifact }, index) => (
-            <ServiceCard key={title} title={title} description={description} index={index}>
+          {services.map(({ title, description, items, Artifact }, index) => (
+            <ServiceCard key={title} title={title} description={description} items={items} index={index}>
               <Artifact />
             </ServiceCard>
           ))}
