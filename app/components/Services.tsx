@@ -8,11 +8,31 @@ import DataArtifact from "./services/DataArtifact";
 import MarketingArtifact from "./services/MarketingArtifact";
 
 const services = [
-  { title: "Custom Software Development", Artifact: SoftwareArtifact },
-  { title: "AI Workflow Automation", Artifact: WorkflowArtifact },
-  { title: "Cloud Infrastructure", Artifact: CloudArtifact },
-  { title: "Data Analysis", Artifact: DataArtifact },
-  { title: "Digital Marketing", Artifact: MarketingArtifact },
+  {
+    title: "Custom Software Development",
+    description: "End-to-end web and application engineering",
+    Artifact: SoftwareArtifact,
+  },
+  {
+    title: "AI Workflow Automation",
+    description: "Intelligent systems that work for you",
+    Artifact: WorkflowArtifact,
+  },
+  {
+    title: "Cloud Infrastructure",
+    description: "Scalable, secure cloud foundations",
+    Artifact: CloudArtifact,
+  },
+  {
+    title: "Data Analysis",
+    description: "Turn data into decisions",
+    Artifact: DataArtifact,
+  },
+  {
+    title: "Digital Marketing",
+    description: "Reach and convert the right audience",
+    Artifact: MarketingArtifact,
+  },
 ];
 
 export default function Services() {
@@ -43,8 +63,8 @@ export default function Services() {
         </FadeIn>
 
         <div className="svc-grid">
-          {services.map(({ title, Artifact }, index) => (
-            <ServiceCard key={title} title={title} index={index}>
+          {services.map(({ title, description, Artifact }, index) => (
+            <ServiceCard key={title} title={title} description={description} index={index}>
               <Artifact />
             </ServiceCard>
           ))}

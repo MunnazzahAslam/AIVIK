@@ -3,10 +3,12 @@ import { useInView } from "./useInView";
 
 export default function ServiceCard({
   title,
+  description,
   index,
   children,
 }: {
   title: string;
+  description: string;
   index: number;
   children: React.ReactNode;
 }) {
@@ -20,6 +22,7 @@ export default function ServiceCard({
     >
       <div className="svc-box">{children}</div>
       <div className="svc-title font-heading font-bold">{title}</div>
+      <p className="svc-description">{description}</p>
     </div>
   );
 }

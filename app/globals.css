@@ -227,20 +227,25 @@ h6 {
    Contained grid (not full-bleed) — every card keeps a uniform rounded
    corner. Entrance is a one-shot fade+rise gated by each card's own
    IntersectionObserver (ServiceCard's useInView), staggered by index via
-   an inline transition-delay. Hover zooms the whole card — nothing pauses
-   the idle animation underneath. The section itself stays the site's
-   light surface; each card is one self-contained dark unit (title
-   included inside its padding) rather than a dark box with the title
-   sitting directly on the light section background. */
+   an inline transition-delay. The section itself stays the site's light
+   surface; each card is one self-contained dark unit (title included
+   inside its padding) rather than a dark box with the title sitting
+   directly on the light section background.
+
+   Desktop hover: the row is a flex layout (not grid) so the hovered card
+   can grow to ~2.25x its default share of the row while its four
+   siblings shrink evenly to hold the row width constant — pure CSS via
+   :has(), no JS/state. Below the 1100px breakpoint this reverts to a
+   plain stacked grid (2 then 1 column) where hover-expand doesn't apply,
+   since touch has no persistent hover to drive it. */
 
 .svc-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
   gap: var(--card-gap);
 }
 
 @media (max-width: 1100px) {
-  .svc-grid { grid-template-columns: repeat(2, 1fr); }
+  .svc-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 560px) {
@@ -249,14 +254,15 @@ h6 {
 
 .svc-card {
   position: relative;
+  flex: 1 1 0%;
+  min-width: 0;
   border-radius: var(--radius-card);
   background: var(--section-dark-surface);
   border: 1px solid var(--section-dark-border);
   padding: 16px 16px 20px;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-  transform-origin: center;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), flex-grow 0.35s ease-in-out;
   cursor: pointer;
 }
 
@@ -265,15 +271,41 @@ h6 {
   transform: translateY(0);
 }
 
-.svc-card:hover {
-  transform: scale(1.045);
-  z-index: 2;
+/* Hovered card expands; its siblings (not themselves hovered) shrink to
+   keep the row's total width constant. */
+.svc-grid:has(> .svc-card:hover) > .svc-card:not(:hover) {
+  flex-grow: 0.6875;
+}
+
+.svc-grid > .svc-card:hover {
+  flex-grow: 2.25;
 }
 
 .svc-title {
   margin-top: 14px;
   font-size: 16px;
+  line-height: 1.3;
+  height: 2.6em;
+  overflow: hidden;
   color: var(--section-dark-text);
+}
+
+/* Reserved, invisible by default so the card's height never changes
+   between resting and hovered states — only opacity animates in. */
+.svc-description {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  height: 2.6em;
+  overflow: hidden;
+  color: var(--section-dark-muted);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.svc-card:hover .svc-description {
+  opacity: 1;
+  transition-delay: 150ms;
 }
 
 .svc-box {
@@ -627,11 +659,17 @@ h6 {
 
   /* Services: show every card fully settled immediately rather than
      waiting on scroll, and drop every continuous decorative loop —
-     including the hover zoom, since scale-on-hover is motion too. */
+     including the hover expand/shrink, since animating flex-grow is
+     motion too (the expand and description reveal still work on hover,
+     they just snap instead of transitioning). */
   .svc-card {
     transition: none !important;
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .svc-description {
+    transition: none !important;
   }
 
   .c1-cursor,
