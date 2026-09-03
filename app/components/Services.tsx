@@ -88,16 +88,11 @@ export default function Services() {
         </FadeIn>
       </div>
 
-      {/* Full-bleed: breaks out of the section's own px-6 padding so the
-          grid spans edge to edge — calc(50% - 50vw) margins are relative
-          to this grid's own parent (the section's padded content box) but
-          offset by an absolute viewport unit, so for any symmetric parent
-          padding P they resolve to exactly -P, landing the grid at the
-          true viewport edges regardless of nesting. */}
-      <div
-        className="services-grid"
-        style={{ width: "100vw", marginLeft: "calc(50% - 50vw)", marginRight: "calc(50% - 50vw)" }}
-      >
+      {/* Full-bleed only applies at the desktop row layout (see
+          .services-grid's 1024px media query in globals.css) — on mobile/
+          tablet, where cards stack in a column, this sits in the section's
+          normal px-6 margin like every other section on the site. */}
+      <div className="services-grid">
         {services.map(({ title, Artifact, description, items }) => (
           <div key={title}>
             <ServiceCard title={title} description={description} items={items}>
