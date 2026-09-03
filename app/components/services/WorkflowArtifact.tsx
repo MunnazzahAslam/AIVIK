@@ -1,70 +1,60 @@
-// Story: a new event enters -> a signal travels to the AI node, which
-// shows "Processing..." -> the flow branches to 3 destinations -> each
-// checks off in sequence -> "Automated". Reuses the node/connection visual
-// language from the previous version, but the intelligence now reads from
-// the workflow completing itself rather than an abstract graph. Pure CSS
-// (no SMIL) so the shared .svc-anim hover-pause rule covers it uniformly;
-// animation-delay:0.8s is this card's stagger offset in the cross-card
-// orchestration.
-const BRANCHES = [
+"use client";
+import { useReducedMotion } from "./useReducedMotion";
+
+const OUTPUTS = [
   { y: 32, label: "CRM" },
-  { y: 70, label: "EMAIL" },
-  { y: 108, label: "TEAM" },
+  { y: 78, label: "EMAIL" },
+  { y: 124, label: "TEAM" },
 ];
 
+// Continuous ambient node graph: a signal packet travels from the entry
+// node to the AI core and out along each branch on a loop, the core
+// pulses/ripples, and each destination's tick label blips periodically —
+// all always running (nothing pauses on hover in this design). SMIL
+// animateMotion drives the packets since the paths are simple straight
+// lines and SMIL doesn't need any hover-pause hook here.
 export default function WorkflowArtifact() {
+  const reduced = useReducedMotion();
+
   return (
-    <svg className="wf-art" viewBox="0 0 160 140" aria-hidden="true">
-      <g className="wf-cycle svc-anim">
-        {/* entry -> AI */}
-        <line x1={26} y1={70} x2={72} y2={70} className="wf-line" />
-        {/* AI -> branches */}
-        {BRANCHES.map((b) => (
-          <line key={b.label} x1={91} y1={70} x2={116} y2={b.y} className="wf-line" />
-        ))}
+    <svg className="c2-svg" viewBox="0 0 300 160" aria-hidden="true">
+      <path className="c2-edge" d="M 44 78 L 118 78" />
+      {OUTPUTS.map((o) => (
+        <path key={o.label} className="c2-edge" d={`M 118 78 L 214 ${o.y}`} />
+      ))}
 
-        <circle cx={18} cy={70} r={8} className="wf-entry-node svc-anim" />
-        <text x={18} y={54} textAnchor="middle" className="svc-label wf-svg-label wf-entry-label svc-anim">
-          NEW LEAD
+      {!reduced && <circle className="c2-ripple" cx={118} cy={78} r={16} />}
+      <circle className="c2-node-out" cx={44} cy={78} r={9} />
+      <circle className="c2-node-center" cx={118} cy={78} r={15} />
+      {OUTPUTS.map((o) => (
+        <circle key={o.label} className="c2-node-in" cx={214} cy={o.y} r={7} />
+      ))}
+
+      {!reduced && (
+        <>
+          <circle className="c2-packet" r={2.6}>
+            <animateMotion dur="1.6s" repeatCount="indefinite" path="M 44 78 L 118 78" />
+          </circle>
+          {OUTPUTS.map((o, i) => (
+            <circle key={o.label} className="c2-packet" r={2.6}>
+              <animateMotion dur="1.9s" begin={`${0.35 + i * 0.25}s`} repeatCount="indefinite" path={`M 118 78 L 214 ${o.y}`} />
+            </circle>
+          ))}
+        </>
+      )}
+
+      <text x={34} y={100} className="c2-label">LEAD</text>
+      {OUTPUTS.map((o, i) => (
+        <text
+          key={o.label}
+          x={228}
+          y={o.y + 3}
+          className="c2-tick"
+          style={reduced ? undefined : { animationDelay: `${0.35 + i * 0.25}s` }}
+        >
+          {o.label} ✓
         </text>
-
-        <circle cx={18} cy={70} r={3} className="wf-signal svc-anim" />
-
-        <circle cx={80} cy={70} r={11} className="wf-ai-node svc-anim" />
-        <text x={80} y={94} textAnchor="middle" className="svc-label wf-svg-label wf-processing svc-anim">
-          PROCESSING
-        </text>
-        {[0, 1, 2].map((i) => (
-          <circle key={i} cx={95 + i * 5} cy={94} r={1.3} className={`wf-dot wf-dot-${i} svc-anim`} />
-        ))}
-
-        {/* Checkmark sits at a fixed x (textAnchor="end") rather than one
-            computed from label width — the previous version placed labels
-            and checks past x=160, outside the viewBox, so they rendered
-            clipped or overflowing the card since the svg allows overflow
-            for legitimate small bleed (glow effects etc). Everything here
-            now stays within the 0-160 viewBox with margin to spare. */}
-        {BRANCHES.map((b, i) => (
-          <g key={b.label}>
-            <circle cx={116} cy={b.y} r={5} className="wf-branch-node svc-anim" />
-            <text x={124} y={b.y + 2.5} textAnchor="start" className="svc-label wf-svg-label wf-branch-label svc-anim">
-              {b.label}
-            </text>
-            <text
-              x={156}
-              y={b.y + 2.5}
-              textAnchor="end"
-              className={`svc-check wf-svg-check wf-check-${i} svc-anim`}
-            >
-              ✓
-            </text>
-          </g>
-        ))}
-
-        <text x={80} y={132} textAnchor="middle" className="svc-label wf-automated svc-anim">
-          AUTOMATED <tspan className="svc-check">✓</tspan>
-        </text>
-      </g>
+      ))}
     </svg>
   );
 }

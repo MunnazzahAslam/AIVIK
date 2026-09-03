@@ -179,7 +179,7 @@ export default function Hero() {
           </div>
         </div>
       </div>
-      <SectionCurve fill="var(--section-light)" direction="dip" />
+      <SectionCurve fill="#f7f7f7" direction="dip" />
     </section>
   );
 }

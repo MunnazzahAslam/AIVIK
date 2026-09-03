@@ -1,43 +1,59 @@
-// Story: "Campaign A · LIVE" -> 4 funnel stages fill in sequence
-// (Impressions -> Clicks -> Leads -> Conversions, each with an illustrative
-// number) -> a brief "Optimizing..." moment -> one outcome metric
-// (ROAS 4.2x). Replaces the old reach/clicks/convert + heart/share panel,
-// which read as social-post engagement stats rather than a campaign
-// result. Pure CSS keyframes, tagged .svc-anim throughout so the shared
-// hover-pause rule covers it; animation-delay:3.2s is this card's stagger
-// offset in the cross-card orchestration.
-const STAGES = [
-  { label: "Impressions", value: "124K" },
-  { label: "Clicks", value: "8.4K" },
-  { label: "Leads", value: "1,240" },
-  { label: "Conversions", value: "318" },
+"use client";
+import { useInView } from "./useInView";
+import { useCountUp } from "./useCountUp";
+import { useReducedMotion } from "./useReducedMotion";
+
+const METRICS = [
+  { label: "Impressions", target: 124, decimals: 0, suffix: "K", width: 85, delay: 0.15 },
+  { label: "Clicks", target: 18.2, decimals: 1, suffix: "K", width: 62, delay: 0.3 },
+  { label: "Conversions", target: 3.4, decimals: 1, suffix: "K", width: 40, delay: 0.45 },
 ];
 
+// Campaign readout: a live-pulsing dot, then 3 metrics that count up and
+// fill their bars once the card scrolls into view, each bar carrying a
+// continuous shimmer sweep. All 3 bars share the marketing accent at
+// different opacities rather than unrelated hues, keeping this card's own
+// single color identity.
 export default function MarketingArtifact() {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const reduced = useReducedMotion();
+  // METRICS has a fixed length (3) — called explicitly rather than inside
+  // .map() so the number/order of hook calls never varies between renders.
+  const values = [
+    useCountUp(METRICS[0].target, inView, { decimals: METRICS[0].decimals, reduced }),
+    useCountUp(METRICS[1].target, inView, { decimals: METRICS[1].decimals, reduced }),
+    useCountUp(METRICS[2].target, inView, { decimals: METRICS[2].decimals, reduced }),
+  ];
+
   return (
-    <div className="mkt-art" aria-hidden="true">
-      <div className="mkt-cycle svc-anim">
-        <div className="mkt-campaign svc-anim">
-          <span className="mkt-live-dot svc-anim" />
-          Campaign A · LIVE
-        </div>
-
-        <div className="mkt-funnel">
-          {STAGES.map((s, i) => (
-            <div className="mkt-funnel-row" key={s.label}>
-              <span className="mkt-funnel-label">{s.label}</span>
-              <div className="mkt-funnel-track">
-                <div className={`mkt-funnel-bar svc-anim mkt-stage-${i}`} />
-              </div>
-              <span className={`mkt-funnel-value svc-anim mkt-value-${i}`}>{s.value}</span>
-            </div>
-          ))}
-        </div>
-
-        <span className="mkt-optimizing svc-anim">Optimizing...</span>
-        <span className="mkt-outcome svc-anim">
-          ROAS <span className="mkt-outcome-value">4.2×</span>
+    <div ref={ref} className="c5-inner" aria-hidden="true">
+      <div className="c5-top">
+        <span>
+          <span className="c5-live-dot" />
+          Campaign A
         </span>
+        <span className="c5-live-label">Live</span>
+      </div>
+      <div>
+        {METRICS.map((m, i) => (
+          <div className="c5-metric" key={m.label}>
+            <div className="c5-metric-row">
+              <span>{m.label}</span>
+              <span className="c5-metric-val">
+                {values[i]}
+                {m.suffix}
+              </span>
+            </div>
+            <div className="c5-track">
+              <div
+                className={`c5-fill c5-fill-${i}${inView ? " c5-in-view" : ""}`}
+                style={{ ["--fill-width" as string]: `${m.width}%` }}
+              >
+                {!reduced && <div className="c5-shimmer" style={{ animationDelay: `${m.delay}s` }} />}
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

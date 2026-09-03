@@ -1,53 +1,50 @@
-// Tiny working product interface, not an icon: a browser-chrome frame whose
-// dashboard visibly gets BUILT — boot tag, then structure, then metrics,
-// then a chart, then a deploy ping — one continuous CSS-keyframe story per
-// element (see the swBootTag/swDashShell/... rules in globals.css). All
-// motion is opacity/transform only, everything is tagged .svc-anim so
-// ServiceCard's hover rule can pause it uniformly, and reduced-motion
-// freezes on the finished "Deployed" state via the shared media query.
-const BARS = [0, 1, 2, 3, 4];
+"use client";
+import { useInView } from "./useInView";
+import { useCountUp } from "./useCountUp";
+import { useReducedMotion } from "./useReducedMotion";
 
+// Terminal-style dashboard: a URL bar with a blinking cursor, two stat
+// boxes that count up once the card scrolls into view, and a pinging
+// "active" status dot that keeps going continuously — unlike the previous
+// design, nothing here pauses on hover, it just idles under the ring/
+// spotlight hover chrome from ServiceCard.
 export default function SoftwareArtifact() {
+  const { ref, inView } = useInView<HTMLDivElement>();
+  const reduced = useReducedMotion();
+  const users = useCountUp(12.4, inView, { decimals: 1, reduced });
+  const growth = useCountUp(24, inView, { reduced });
+
   return (
-    <div className="sw-art" aria-hidden="true">
-      <div className="sw-frame">
-        <div className="sw-frame-bar">
-          <span className="sw-frame-dot" style={{ background: "#F87171" }} />
-          <span className="sw-frame-dot" style={{ background: "#FBBF24" }} />
-          <span className="sw-frame-dot" style={{ background: "#4ADE80" }} />
-          <span className="sw-frame-url">app.aivik.dev</span>
+    <div ref={ref} className="c1-inner" aria-hidden="true">
+      <div className="c1-url-row">
+        <span className="c1-dots">
+          <span className="c1-dot c1-dot-r" />
+          <span className="c1-dot c1-dot-y" />
+          <span className="c1-dot c1-dot-g" />
+        </span>
+        app.aivik.dev
+        <span className="c1-cursor" />
+      </div>
+
+      <div className="c1-stats">
+        <div className="c1-stat-box">
+          <div className="c1-stat-label">Users</div>
+          <div className="c1-stat-val">{users}K</div>
         </div>
-
-        <div className="sw-frame-body svc-anim">
-          <span className="sw-boot-tag svc-anim">&lt;Component /&gt;</span>
-
-          <div className="sw-dash-nav svc-anim" />
-
-          <div className="sw-dash-cards">
-            <div className="sw-metric svc-anim sw-metric-shell">
-              <span className="sw-metric-value svc-anim sw-metric-1">12.4K</span>
-              <span className="sw-metric-label">Users</span>
-            </div>
-            <div className="sw-metric svc-anim sw-metric-shell">
-              <span className="sw-metric-value sw-metric-up svc-anim sw-metric-2">+24%</span>
-              <span className="sw-metric-label">Growth</span>
-            </div>
-          </div>
-
-          <div className="sw-chart">
-            {BARS.map((i) => (
-              <span key={i} className={`sw-chart-bar svc-anim sw-chart-bar-${i}`} />
-            ))}
-          </div>
-
-          <div className="sw-status svc-anim sw-status-connecting">
-            <span className="svc-status-dot" style={{ background: "var(--accent-code)" }} />
-            API connected
-          </div>
-          <div className="sw-status svc-anim sw-status-deployed">
-            <span className="svc-check">✓</span> Deployed
+        <div className="c1-stat-box">
+          <div className="c1-stat-label">Growth</div>
+          <div className="c1-stat-val c1-green">
+            +{growth}%
+            <svg width="10" height="10" viewBox="0 0 10 10" className="c1-arrow">
+              <path d="M5 9V1M1 5l4-4 4 4" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
           </div>
         </div>
+      </div>
+
+      <div className="c1-status-row">
+        <span>STATUS: ACTIVE</span>
+        <span className="c1-status-dot" />
       </div>
     </div>
   );

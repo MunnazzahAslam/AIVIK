@@ -1,32 +1,25 @@
+"use client";
+import { useInView } from "./useInView";
+
 export default function ServiceCard({
   title,
-  description,
-  items,
+  index,
   children,
 }: {
   title: string;
-  description: string;
-  items: string[];
+  index: number;
   children: React.ReactNode;
 }) {
+  const { ref, inView } = useInView<HTMLDivElement>();
+
   return (
-    <div className="service-card">
-      <div className="service-card-art">
-        {children}
-        <div className="service-card-details">
-          <p className="service-card-details-desc">{description}</p>
-          <div className="service-card-details-divider" />
-          <ul className="service-card-details-list">
-            {items.map((item) => (
-              <li key={item}>
-                <span aria-hidden="true">→</span>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-      <h3 className="service-card-title font-heading font-bold">{title}</h3>
+    <div
+      ref={ref}
+      className={`svc-card${inView ? " svc-in-view" : ""}`}
+      style={{ transitionDelay: `${index * 80 + 20}ms` }}
+    >
+      <div className="svc-box">{children}</div>
+      <div className="svc-title font-heading font-bold">{title}</div>
     </div>
   );
 }
