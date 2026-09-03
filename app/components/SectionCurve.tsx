@@ -36,7 +36,19 @@ export default function SectionCurve({ fill, direction }: Props) {
       <svg
         viewBox={`0 0 1440 ${CURVE_HEIGHT}`}
         preserveAspectRatio="none"
-        style={{ width: "100%", height: CURVE_HEIGHT, display: "block" }}
+        // preserveAspectRatio="none" stretches the path to fill whatever
+        // box it's given, independently per axis. With a fixed pixel
+        // height, the curve's horizontal span shrinks on narrow viewports
+        // while its vertical excursion doesn't — the same dip gets
+        // compressed into a much narrower width, reading as a much
+        // steeper curve on mobile. Scaling height down with viewport
+        // width (clamped so it never disappears or exceeds the original
+        // 110px) keeps the curve's visual proportions roughly consistent
+        // across screen sizes. CURVE_HEIGHT itself stays the fixed
+        // reference other components use to reserve layout space around
+        // the curve — a shorter rendered curve just leaves a bit more of
+        // that reserved space as flat color, which is harmless.
+        style={{ width: "100%", height: `clamp(40px, 7.7vw, ${CURVE_HEIGHT}px)`, display: "block" }}
       >
         <path d={PATHS[direction]} fill={fill} />
       </svg>
