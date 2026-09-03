@@ -289,10 +289,15 @@ h6 {
   flex-grow: 2.25;
 }
 
+/* Fixed height (not content- or width-dependent) so every unhovered
+   card is exactly the same height as every other, even when a sibling's
+   hover-shrink would otherwise make its own title wrap an extra line. */
 .svc-title {
   margin-top: 14px;
   font-size: 16px;
   line-height: 1.3;
+  height: 2.6em;
+  overflow: hidden;
   color: var(--section-dark-text);
 }
 
