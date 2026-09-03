@@ -24,16 +24,20 @@ export default function ServiceCard({
     >
       <div className="svc-box">{children}</div>
       <div className="svc-title font-heading font-bold">{title}</div>
-      <p className="svc-description">{description}</p>
-      <div className="svc-divider" aria-hidden="true" />
-      <ul className="svc-items">
-        {items.map((item) => (
-          <li key={item} className="svc-item">
-            <span className="svc-item-arrow" aria-hidden="true">→</span>
-            {item}
-          </li>
-        ))}
-      </ul>
+      <div className="svc-reveal">
+        <div className="svc-reveal-inner">
+          <p className="svc-description">{description}</p>
+          <div className="svc-divider" aria-hidden="true" />
+          <ul className="svc-items">
+            {items.map((item) => (
+              <li key={item} className="svc-item">
+                <span className="svc-item-arrow" aria-hidden="true">→</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 }

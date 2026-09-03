@@ -237,10 +237,18 @@ h6 {
    siblings shrink evenly to hold the row width constant — pure CSS via
    :has(), no JS/state. Below the 1100px breakpoint this reverts to a
    plain stacked grid (2 then 1 column) where hover-expand doesn't apply,
-   since touch has no persistent hover to drive it. */
+   since touch has no persistent hover to drive it.
+
+   Height is NOT reserved up front — at rest a card is only as tall as
+   its box + title, no empty space. The description/divider/items live
+   in .svc-reveal, a 0fr-row grid that only opens to its content's real
+   height on hover (align-items: flex-start on the row keeps unhovered
+   siblings from being stretched to match the hovered card's new
+   height). The artifact inside .svc-box is untouched by any of this. */
 
 .svc-grid {
   display: flex;
+  align-items: flex-start;
   gap: var(--card-gap);
 }
 
@@ -285,42 +293,51 @@ h6 {
   margin-top: 14px;
   font-size: 16px;
   line-height: 1.3;
-  height: 2.6em;
-  overflow: hidden;
   color: var(--section-dark-text);
 }
 
-/* Reserved, invisible by default so the card's height never changes
-   between resting and hovered states — only opacity animates in. */
+/* The 0fr → 1fr grid-row trick animates height to its real content
+   height without ever hardcoding a pixel value. The inner wrapper needs
+   its own overflow:hidden for the collapsed (0fr) state to clip. */
+.svc-reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease-in-out;
+}
+
+.svc-card:hover .svc-reveal {
+  grid-template-rows: 1fr;
+}
+
+.svc-reveal-inner {
+  overflow: hidden;
+}
+
 .svc-description {
   margin-top: 6px;
   font-size: 13px;
   line-height: 1.5;
-  height: 2.6em;
-  overflow: hidden;
   color: var(--section-dark-muted);
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
 }
 
 .svc-card:hover .svc-description {
   opacity: 1;
-  transition-delay: 150ms;
+  transition-delay: 120ms;
 }
 
-/* Sub-services list — reserved and invisible by default, same technique
-   as the description, revealed with a per-item stagger once hovered. */
 .svc-divider {
   height: 1px;
   margin: 12px 0;
   background: var(--section-dark-border);
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.25s ease-in-out;
 }
 
 .svc-card:hover .svc-divider {
   opacity: 1;
-  transition-delay: 180ms;
+  transition-delay: 150ms;
 }
 
 .svc-items {
@@ -344,7 +361,7 @@ h6 {
   text-overflow: ellipsis;
   opacity: 0;
   transform: translateY(6px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
 }
 
 .svc-item-arrow {
@@ -357,10 +374,10 @@ h6 {
   transform: translateY(0);
 }
 
-.svc-card:hover .svc-item:nth-child(1) { transition-delay: 200ms; }
-.svc-card:hover .svc-item:nth-child(2) { transition-delay: 240ms; }
-.svc-card:hover .svc-item:nth-child(3) { transition-delay: 280ms; }
-.svc-card:hover .svc-item:nth-child(4) { transition-delay: 320ms; }
+.svc-card:hover .svc-item:nth-child(1) { transition-delay: 170ms; }
+.svc-card:hover .svc-item:nth-child(2) { transition-delay: 200ms; }
+.svc-card:hover .svc-item:nth-child(3) { transition-delay: 230ms; }
+.svc-card:hover .svc-item:nth-child(4) { transition-delay: 260ms; }
 
 .svc-box {
   position: relative;
@@ -722,6 +739,7 @@ h6 {
     transform: none !important;
   }
 
+  .svc-reveal,
   .svc-description,
   .svc-divider,
   .svc-item {
