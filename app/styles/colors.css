@@ -30,8 +30,8 @@
 
   /* Services card scale (reuses --section-dark-surface/-border for the
      card's own surface/hairline so it stays inside the existing token set) */
-  --radius-card: 12px;
-  --card-gap: 8px;
+  --radius-card: 18px;
+  --card-gap: 18px;
 
   /* Service card accents — each a hue rotation of the brand blue used in
      the nav logo's underscore (#2563EB, ≈HSL 221° 83% 53%) at the same
