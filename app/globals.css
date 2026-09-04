@@ -216,9 +216,8 @@ h6 {
 
 /* Subtle light-gray section ground with a barely-visible dot grid — a
    single static background-image (no JS, no repaint cost), tiling every
-   26px so it reads as texture rather than a pattern up close. Shared by
-   every light section that wants this treatment (Services, WhyAivik). */
-.dot-grid-bg {
+   26px so it reads as texture rather than a pattern up close. */
+.services-dot-bg {
   background-color: #f7f7f7;
   background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
   background-size: 26px 26px;

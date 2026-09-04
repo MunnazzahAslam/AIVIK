@@ -74,7 +74,7 @@ export default function Services() {
       // section's own last 110px — without it, that curve visually eats
       // into the padding and the gap before the next section reads smaller
       // than the (curve-free) gap at the top.
-      className="pt-[120px] pb-[230px] px-6 dot-grid-bg"
+      className="pt-[120px] pb-[230px] px-6 services-dot-bg"
       style={{ position: "relative", zIndex: 0 }}
     >
       <div className="max-w-6xl mx-auto">

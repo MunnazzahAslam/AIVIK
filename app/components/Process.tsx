@@ -587,7 +587,7 @@ export default function Process() {
         </div>
       </div>
 
-      <SectionCurve fill="#f7f7f7" direction="dip" />
+      <SectionCurve fill="var(--section-light)" direction="dip" />
     </section>
   );
 }
