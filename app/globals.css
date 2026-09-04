@@ -233,11 +233,14 @@ h6 {
    directly on the light section background.
 
    Desktop hover: the row is a flex layout (not grid) so the hovered card
-   can grow to ~2.25x its default share of the row while its four
-   siblings shrink evenly to hold the row width constant — pure CSS via
-   :has(), no JS/state. Below the 1100px breakpoint this reverts to a
-   plain stacked grid (2 then 1 column) where hover-expand doesn't apply,
-   since touch has no persistent hover to drive it.
+   can grow to ~1.6x its default share of the row while its four
+   siblings shrink evenly (to ~0.85x) to hold the row width constant —
+   pure CSS via :has(), no JS/state. Kept deliberately modest: shrinking
+   siblings further starts squeezing their own header rows (e.g. the
+   Marketing card's "Campaign A" label) below the width their content
+   needs. Below the 1100px breakpoint this reverts to a plain stacked
+   grid (2 then 1 column) where hover-expand doesn't apply, since touch
+   has no persistent hover to drive it.
 
    Height is NOT reserved up front — at rest a card is only as tall as
    its box + title, no empty space. The description/divider/items live
@@ -282,11 +285,11 @@ h6 {
 /* Hovered card expands; its siblings (not themselves hovered) shrink to
    keep the row's total width constant. */
 .svc-grid:has(> .svc-card:hover) > .svc-card:not(:hover) {
-  flex-grow: 0.6875;
+  flex-grow: 0.85;
 }
 
 .svc-grid > .svc-card:hover {
-  flex-grow: 2.25;
+  flex-grow: 1.6;
 }
 
 /* Fixed height (not content- or width-dependent) so every unhovered
@@ -457,6 +460,7 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
   white-space: nowrap;
   color: var(--section-dark-muted);
   font-size: 10px;
@@ -605,14 +609,21 @@ h6 {
 .c4-top {
   display: flex;
   justify-content: space-between;
-  white-space: nowrap;
+  gap: 6px;
   font-size: 10px;
   color: var(--section-dark-muted);
   letter-spacing: 0.03em;
   font-family: var(--font-jetbrains-mono), monospace;
 }
 
-.c4-pct { color: var(--accent-data); font-weight: 700; font-variant-numeric: tabular-nums; }
+.c4-top > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.c4-pct { flex-shrink: 0; color: var(--accent-data); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 .c4-chart-wrap { position: relative; height: 96px; }
 
