@@ -233,11 +233,14 @@ h6 {
    directly on the light section background.
 
    Desktop hover: the row is a flex layout (not grid) so the hovered card
-   can grow to ~2.25x its default share of the row while its four
-   siblings shrink evenly to hold the row width constant — pure CSS via
-   :has(), no JS/state. Below the 1100px breakpoint this reverts to a
-   plain stacked grid (2 then 1 column) where hover-expand doesn't apply,
-   since touch has no persistent hover to drive it.
+   can grow to ~1.6x its default share of the row while its four
+   siblings shrink evenly (to ~0.85x) to hold the row width constant —
+   pure CSS via :has(), no JS/state. Kept deliberately modest: shrinking
+   siblings further starts squeezing their own header rows (e.g. the
+   Marketing card's "Campaign A" label) below the width their content
+   needs. Below the 1100px breakpoint this reverts to a plain stacked
+   grid (2 then 1 column) where hover-expand doesn't apply, since touch
+   has no persistent hover to drive it.
 
    Height is NOT reserved up front — at rest a card is only as tall as
    its box + title, no empty space. The description/divider/items live
@@ -270,7 +273,7 @@ h6 {
   padding: 16px 16px 20px;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), flex-grow 0.35s ease-in-out;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), flex-grow 0.35s ease-in-out 80ms;
   cursor: pointer;
 }
 
@@ -280,24 +283,36 @@ h6 {
 }
 
 /* Hovered card expands; its siblings (not themselves hovered) shrink to
-   keep the row's total width constant. */
+   keep the row's total width constant. Both this and the height reveal
+   below carry an 80ms transition-delay as a hover-intent debounce: real
+   mouse jitter sitting right on a card's rest-state edge can toggle
+   :hover on/off several times a frame, and without the delay each
+   toggle would restart the flex-grow transition mid-flight, reading as
+   a stutter right at the edge. */
 .svc-grid:has(> .svc-card:hover) > .svc-card:not(:hover) {
-  flex-grow: 0.6875;
+  flex-grow: 0.85;
 }
 
 .svc-grid > .svc-card:hover {
-  flex-grow: 2.25;
+  flex-grow: 1.6;
 }
 
 /* Fixed height (not content- or width-dependent) so every unhovered
    card is exactly the same height as every other, even when a sibling's
    hover-shrink would otherwise make its own title wrap an extra line. */
+/* Fixed height (2 lines' worth) so every card is still the same height
+   regardless of title length — but the text is bottom-aligned inside
+   that box instead of top-aligned, so a 1-line title sits flush against
+   the description below exactly like a 2-line title does, rather than
+   leaving a spare reserved line of dead space above the gap. */
 .svc-title {
   margin-top: 14px;
   font-size: 16px;
   line-height: 1.3;
   height: 2.6em;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
   color: var(--section-dark-text);
 }
 
@@ -307,7 +322,7 @@ h6 {
 .svc-reveal {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s ease-in-out;
+  transition: grid-template-rows 0.35s ease-in-out 80ms;
 }
 
 .svc-card:hover .svc-reveal {
@@ -319,10 +334,10 @@ h6 {
 }
 
 .svc-description {
-  margin-top: 6px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--section-dark-muted);
+  margin-top: 3px;
+  font-size: 13.5px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.78);
   opacity: 0;
   transition: opacity 0.25s ease-in-out;
 }
@@ -360,7 +375,7 @@ h6 {
   gap: 6px;
   font-size: 12.5px;
   line-height: 1.5;
-  color: var(--section-dark-muted);
+  color: rgba(255, 255, 255, 0.78);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -370,7 +385,7 @@ h6 {
 }
 
 .svc-item-arrow {
-  color: var(--section-dark-text);
+  color: rgba(255, 255, 255, 0.78);
   flex-shrink: 0;
 }
 
@@ -409,6 +424,7 @@ h6 {
 .c1-url-row {
   display: flex;
   align-items: center;
+  white-space: nowrap;
   color: var(--section-dark-muted);
   padding-bottom: 8px;
   border-bottom: 1px solid var(--section-dark-border);
@@ -456,6 +472,8 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 6px;
+  white-space: nowrap;
   color: var(--section-dark-muted);
   font-size: 10px;
 }
@@ -603,13 +621,21 @@ h6 {
 .c4-top {
   display: flex;
   justify-content: space-between;
+  gap: 6px;
   font-size: 10px;
   color: var(--section-dark-muted);
   letter-spacing: 0.03em;
   font-family: var(--font-jetbrains-mono), monospace;
 }
 
-.c4-pct { color: var(--accent-data); font-weight: 700; font-variant-numeric: tabular-nums; }
+.c4-top > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.c4-pct { flex-shrink: 0; color: var(--accent-data); font-weight: 700; font-variant-numeric: tabular-nums; }
 
 .c4-chart-wrap { position: relative; height: 96px; }
 
@@ -644,9 +670,21 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   font-size: 11px;
   color: var(--section-dark-text);
   font-weight: 600;
+}
+
+.c5-top > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.c5-live-label {
+  flex-shrink: 0;
 }
 
 .c5-live-dot {
