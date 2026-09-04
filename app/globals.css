@@ -273,7 +273,7 @@ h6 {
   padding: 16px 16px 20px;
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), flex-grow 0.35s ease-in-out;
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), flex-grow 0.35s ease-in-out 80ms;
   cursor: pointer;
 }
 
@@ -283,7 +283,12 @@ h6 {
 }
 
 /* Hovered card expands; its siblings (not themselves hovered) shrink to
-   keep the row's total width constant. */
+   keep the row's total width constant. Both this and the height reveal
+   below carry an 80ms transition-delay as a hover-intent debounce: real
+   mouse jitter sitting right on a card's rest-state edge can toggle
+   :hover on/off several times a frame, and without the delay each
+   toggle would restart the flex-grow transition mid-flight, reading as
+   a stutter right at the edge. */
 .svc-grid:has(> .svc-card:hover) > .svc-card:not(:hover) {
   flex-grow: 0.85;
 }
@@ -310,7 +315,7 @@ h6 {
 .svc-reveal {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.35s ease-in-out;
+  transition: grid-template-rows 0.35s ease-in-out 80ms;
 }
 
 .svc-card:hover .svc-reveal {
