@@ -409,6 +409,7 @@ h6 {
 .c1-url-row {
   display: flex;
   align-items: center;
+  white-space: nowrap;
   color: var(--section-dark-muted);
   padding-bottom: 8px;
   border-bottom: 1px solid var(--section-dark-border);
@@ -456,6 +457,7 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  white-space: nowrap;
   color: var(--section-dark-muted);
   font-size: 10px;
 }
@@ -603,6 +605,7 @@ h6 {
 .c4-top {
   display: flex;
   justify-content: space-between;
+  white-space: nowrap;
   font-size: 10px;
   color: var(--section-dark-muted);
   letter-spacing: 0.03em;
@@ -644,9 +647,21 @@ h6 {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
   font-size: 11px;
   color: var(--section-dark-text);
   font-weight: 600;
+}
+
+.c5-top > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.c5-live-label {
+  flex-shrink: 0;
 }
 
 .c5-live-dot {
