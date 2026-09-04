@@ -300,12 +300,19 @@ h6 {
 /* Fixed height (not content- or width-dependent) so every unhovered
    card is exactly the same height as every other, even when a sibling's
    hover-shrink would otherwise make its own title wrap an extra line. */
+/* Fixed height (2 lines' worth) so every card is still the same height
+   regardless of title length — but the text is bottom-aligned inside
+   that box instead of top-aligned, so a 1-line title sits flush against
+   the description below exactly like a 2-line title does, rather than
+   leaving a spare reserved line of dead space above the gap. */
 .svc-title {
   margin-top: 14px;
   font-size: 16px;
   line-height: 1.3;
   height: 2.6em;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
   color: var(--section-dark-text);
 }
 
