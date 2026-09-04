@@ -327,9 +327,9 @@ h6 {
 }
 
 .svc-description {
-  margin-top: -4px;
+  margin-top: 0;
   font-size: 13.5px;
-  line-height: 1.5;
+  line-height: 1.25;
   color: rgba(255, 255, 255, 0.78);
   opacity: 0;
   transition: opacity 0.25s ease-in-out;
@@ -368,7 +368,7 @@ h6 {
   gap: 6px;
   font-size: 12.5px;
   line-height: 1.5;
-  color: var(--section-dark-muted);
+  color: rgba(255, 255, 255, 0.78);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
