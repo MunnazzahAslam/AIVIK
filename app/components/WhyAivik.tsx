@@ -151,7 +151,8 @@ export default function WhyAivik() {
           untouched until the glow lights up on hover. */}
       <div
         aria-hidden="true"
-        style={{ position: "absolute", top: CURVE_HEIGHT, left: 0, right: 0, bottom: 0, backgroundColor: "var(--section-light)", zIndex: -1 }}
+        className="dot-grid-bg"
+        style={{ position: "absolute", top: CURVE_HEIGHT, left: 0, right: 0, bottom: 0, zIndex: -1 }}
       />
 
       {/* Spotlight — covers the whole section including the extended strip above it */}
@@ -179,13 +180,6 @@ export default function WhyAivik() {
             }}
           >
             WHY AIVIK
-            <span
-              className="aivik-cursor"
-              aria-hidden="true"
-              style={{ color: "#2563EB" }}
-            >
-              _
-            </span>
           </h2>
         </div>
 
