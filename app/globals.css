@@ -233,8 +233,8 @@ h6 {
    directly on the light section background.
 
    Desktop hover: the row is a flex layout (not grid) so the hovered card
-   can grow to ~1.4x its default share of the row while its four
-   siblings shrink evenly (to ~0.9x) to hold the row width constant —
+   can grow to ~1.6x its default share of the row while its four
+   siblings shrink evenly (to ~0.85x) to hold the row width constant —
    pure CSS via :has(), no JS/state. Kept deliberately modest: shrinking
    siblings further starts squeezing their own header rows (e.g. the
    Marketing card's "Campaign A" label) below the width their content
@@ -285,11 +285,11 @@ h6 {
 /* Hovered card expands; its siblings (not themselves hovered) shrink to
    keep the row's total width constant. */
 .svc-grid:has(> .svc-card:hover) > .svc-card:not(:hover) {
-  flex-grow: 0.9;
+  flex-grow: 0.85;
 }
 
 .svc-grid > .svc-card:hover {
-  flex-grow: 1.4;
+  flex-grow: 1.6;
 }
 
 /* Fixed height (not content- or width-dependent) so every unhovered
