@@ -14,12 +14,7 @@ export async function POST(req: NextRequest) {
     // Re-validates everything the client already checked (required fields,
     // email/phone format, max lengths) rather than trusting it — the client
     // form can be bypassed entirely (curl, disabled JS, a modified fetch).
-    // Company/service are no longer collected by the simplified form (see
-    // GetAQuote.tsx); message is required in their place.
-    const validation = validateContactInput(body, {
-      requireCompany: false,
-      requireService: false,
-    });
+    const validation = validateContactInput(body);
     if (!validation.ok) {
       return NextResponse.json({ error: validation.error }, { status: 400 });
     }
@@ -32,9 +27,7 @@ export async function POST(req: NextRequest) {
       email,
       company,
       phone,
-      // No structured service selection in the simplified form -- label it
-      // for readability in the Sheet/email rather than leaving it blank.
-      service: service || "General inquiry",
+      service,
       message,
       recaptchaToken,
     };

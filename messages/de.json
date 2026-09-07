@@ -141,8 +141,22 @@
       "namePlaceholder": "Ihr Name",
       "emailLabel": "Ihre E-Mail-Adresse",
       "emailPlaceholder": "sie@unternehmen.de",
-      "messageLabel": "Womit können wir Ihnen helfen?",
-      "messagePlaceholder": "Erzählen Sie uns von Ihrem Projekt oder Ihrer Idee...",
+      "companyLabel": "Firmenname",
+      "companyPlaceholder": "Ihr Unternehmen",
+      "phoneLabel": "Telefonnummer",
+      "phonePlaceholder": "+49 123 456 7890",
+      "servicesLabel": "Womit können wir Ihnen helfen?",
+      "servicesOptions": [
+        "Individuelle Softwareentwicklung",
+        "KI und Automatisierung",
+        "Cloud-Infrastruktur",
+        "Datenanalyse",
+        "Sonstiges",
+        "Noch nicht sicher"
+      ],
+      "otherPlaceholder": "Bitte angeben",
+      "messageLabel": "Beschreiben Sie kurz, was Sie brauchen",
+      "messagePlaceholder": "Was bauen Sie und wobei brauchen Sie Unterstützung?",
       "submitIdle": "Nachricht senden",
       "submitBusy": "Wird gesendet...",
       "apiError": "Etwas ist schiefgelaufen. Bitte schreiben Sie uns eine E-Mail an",
@@ -151,7 +165,9 @@
       "errors": {
         "name": "Name ist erforderlich.",
         "email": "Eine gültige E-Mail-Adresse ist erforderlich.",
-        "message": "Bitte beschreiben Sie kurz, was Sie brauchen."
+        "company": "Firmenname ist erforderlich.",
+        "services": "Bitte wählen Sie mindestens eine Option aus.",
+        "phone": "Das Telefonnummernformat ist ungültig."
       }
     }
   },
