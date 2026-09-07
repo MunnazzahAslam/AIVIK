@@ -1,8 +1,13 @@
+import { getTranslations } from "next-intl/server";
 import AIVIKLogo from "./AIVIKLogo";
+import { Link } from "@/i18n/navigation";
 
 const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com";
 
-export default function Footer() {
+export default async function Footer() {
+  const t = await getTranslations("Footer");
+  const services = (await getTranslations("Services")).raw("list") as { title: string }[];
+
   return (
     <footer
       data-theme="dark"
@@ -17,34 +22,28 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 mb-16">
           {/* Column 1 — Brand */}
           <div>
-            <a href="/" className="block mb-2">
+            <Link href="/" className="block mb-2">
               <AIVIKLogo size="sm" variant="dark" />
-            </a>
+            </Link>
             <p className="font-mono text-[10px] text-on-dark-muted leading-relaxed">
-              Registered in Germany · GDPR Compliant
+              {t("tagline")}
             </p>
           </div>
 
           {/* Column 2 — Services */}
           <div>
             <p className="font-body text-xs text-on-dark-muted uppercase tracking-widest mb-5">
-              Services
+              {t("servicesHeading")}
             </p>
             <div className="flex flex-col gap-2.5">
-              {[
-                "Custom Software Development",
-                "AI and Automation",
-                "Cloud Infrastructure",
-                "Data Analysis",
-                "Digital Marketing",
-              ].map((label) => (
-                <a
-                  key={label}
+              {services.map(({ title }) => (
+                <Link
+                  key={title}
                   href="/#services"
                   className="font-body text-sm link-on-dark"
                 >
-                  {label}
-                </a>
+                  {title}
+                </Link>
               ))}
             </div>
           </div>
@@ -52,46 +51,31 @@ export default function Footer() {
           {/* Column 3 — Company */}
           <div>
             <p className="font-body text-xs text-on-dark-muted uppercase tracking-widest mb-5">
-              Company
+              {t("companyHeading")}
             </p>
             <div className="flex flex-col gap-2.5">
-              <a
-                href="/about"
-                className="font-body text-sm link-on-dark"
-              >
-                About
-              </a>
-              <a
-                href="/#process"
-                className="font-body text-sm link-on-dark"
-              >
-                Process
-              </a>
-              <a
-                href="/#contact"
-                className="font-body text-sm link-on-dark"
-              >
-                Contact
-              </a>
-              <a
-                href="/impressum"
-                className="font-body text-sm link-on-dark"
-              >
-                Impressum
-              </a>
-              <a
-                href="/privacy"
-                className="font-body text-sm link-on-dark"
-              >
-                Privacy Policy
-              </a>
+              <Link href="/about" className="font-body text-sm link-on-dark">
+                {t("companyLinks.about")}
+              </Link>
+              <Link href="/#process" className="font-body text-sm link-on-dark">
+                {t("companyLinks.process")}
+              </Link>
+              <Link href="/#contact" className="font-body text-sm link-on-dark">
+                {t("companyLinks.contact")}
+              </Link>
+              <Link href="/impressum" className="font-body text-sm link-on-dark">
+                {t("companyLinks.impressum")}
+              </Link>
+              <Link href="/privacy" className="font-body text-sm link-on-dark">
+                {t("companyLinks.privacy")}
+              </Link>
             </div>
           </div>
 
           {/* Column 4 — Contact */}
           <div>
             <p className="font-body text-xs text-on-dark-muted uppercase tracking-widest mb-5">
-              Get in touch
+              {t("contactHeading")}
             </p>
             <div className="flex flex-col gap-2.5">
               <a
@@ -106,7 +90,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="font-body text-sm link-on-dark"
               >
-                Book a call
+                {t("bookCall")}
               </a>
               <a
                 href="https://linkedin.com/company/aivik"
@@ -126,10 +110,10 @@ export default function Footer() {
           style={{ borderColor: "var(--section-dark-border)" }}
         >
           <p className="font-body text-xs text-on-dark-muted">
-            © {new Date().getFullYear()} AIVIK. All rights reserved.
+            © {new Date().getFullYear()} AIVIK. {t("copyright")}
           </p>
           <p className="font-body text-xs text-on-dark-muted">
-            Built by engineers. Delivered with precision.
+            {t("tagline2")}
           </p>
         </div>
       </div>

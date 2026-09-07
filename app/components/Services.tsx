@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import FadeIn from "./FadeIn";
 import SectionCurve from "./SectionCurve";
 import ServiceCard from "./services/ServiceCard";
@@ -7,65 +8,20 @@ import CloudArtifact from "./services/CloudArtifact";
 import DataArtifact from "./services/DataArtifact";
 import MarketingArtifact from "./services/MarketingArtifact";
 
-const services = [
-  {
-    title: "Custom Software Development",
-    description: "End-to-end web and application engineering",
-    items: [
-      "Mobile Application Development",
-      "Website Development and Maintenance",
-      "Legacy System Modernization",
-      "CRM and ERP Platform Development",
-    ],
-    Artifact: SoftwareArtifact,
-  },
-  {
-    title: "AI Workflow Automation",
-    description: "Intelligent systems that work for you",
-    items: [
-      "Virtual Assistants and Chatbots",
-      "Agentic Workflows",
-      "Generative AI Solutions",
-      "AI-Powered Customer Support",
-    ],
-    Artifact: WorkflowArtifact,
-  },
-  {
-    title: "Cloud Infrastructure",
-    description: "Scalable, secure cloud foundations",
-    items: [
-      "Hosting and Deployment",
-      "Database Management",
-      "Cloud Migration",
-      "Cloud Security Management and Analysis",
-    ],
-    Artifact: CloudArtifact,
-  },
-  {
-    title: "Data Analysis",
-    description: "Turn data into decisions",
-    items: [
-      "Predictive Analytics",
-      "Data Infrastructure Setup",
-      "Data Governance and Access Control",
-      "Business Intelligence and Reporting",
-    ],
-    Artifact: DataArtifact,
-  },
-  {
-    title: "Digital Marketing",
-    description: "Reach and convert the right audience",
-    items: [
-      "SEO and Content Strategy",
-      "Paid Advertising Campaigns",
-      "Social Media Management",
-      "Marketing Analytics and Reporting",
-    ],
-    Artifact: MarketingArtifact,
-  },
+const ARTIFACTS = [
+  SoftwareArtifact,
+  WorkflowArtifact,
+  CloudArtifact,
+  DataArtifact,
+  MarketingArtifact,
 ];
 
-export default function Services() {
+type ServiceEntry = { title: string; description: string; items: string[] };
+
+export default async function Services() {
+  const t = await getTranslations("Services");
+  const services = t.raw("list") as ServiceEntry[];
+
   return (
     <section
       id="services"
@@ -88,16 +44,19 @@ export default function Services() {
               color: "var(--section-light-text)",
             }}
           >
-            OUR SERVICES
+            {t("heading")}
           </h2>
         </FadeIn>
 
         <div className="svc-grid">
-          {services.map(({ title, description, items, Artifact }, index) => (
-            <ServiceCard key={title} title={title} description={description} items={items} index={index}>
-              <Artifact />
-            </ServiceCard>
-          ))}
+          {services.map(({ title, description, items }, index) => {
+            const Artifact = ARTIFACTS[index];
+            return (
+              <ServiceCard key={title} title={title} description={description} items={items} index={index}>
+                <Artifact />
+              </ServiceCard>
+            );
+          })}
         </div>
       </div>
       <SectionCurve fill="var(--section-dark)" direction="rise" />

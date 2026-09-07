@@ -1,26 +1,11 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import FadeIn from "./FadeIn";
+import { Link } from "@/i18n/navigation";
 import SectionCurve, { CURVE_HEIGHT } from "./SectionCurve";
 
-const PRINCIPLES = [
-  {
-    title: "You talk to the person building it",
-    desc: "No account managers relaying messages. The engineer who writes the code is who you email.",
-  },
-  {
-    title: "You own what you pay for",
-    desc: "Source code, documentation, and IP transfer to you on day one. Nothing held back, nothing licensed back to you.",
-  },
-  {
-    title: "German-registered, GDPR-native",
-    desc: "Not a compliance checklist added later. Data handling is built into how we architect systems from the first line of code.",
-  },
-  {
-    title: "Small enough to move, structured enough to trust",
-    desc: "A focused team, not a bench of juniors rotating through your project. Every engagement gets senior attention throughout.",
-  },
-];
+type Principle = { title: string; desc: string };
 
 const SPOTLIGHT_BG = (x: string, y: string) =>
   `radial-gradient(circle 500px at ${x}% ${y}%, rgba(37,99,235,0.4) 0%, rgba(37,99,235,0.15) 50%, transparent 75%)`;
@@ -108,6 +93,8 @@ function CurveEntryBackground({ color }: { color: string }) {
 }
 
 export default function AboutContent() {
+  const t = useTranslations("About");
+  const PRINCIPLES = t.raw("principles") as Principle[];
   const intro = useSpotlight();
   const trust = useSpotlight();
 
@@ -207,7 +194,7 @@ export default function AboutContent() {
                 maxWidth: 820,
               }}
             >
-              A small team building software the way we&apos;d want it built for us.
+              {t("introHeading")}
             </h1>
           </FadeIn>
           <FadeIn delay={100}>
@@ -215,11 +202,7 @@ export default function AboutContent() {
               className="font-body text-base leading-relaxed"
               style={{ color: "var(--section-dark-muted)", maxWidth: 640 }}
             >
-              AIVIK is a software engineering and AI automation company, registered
-              in Germany. We build custom software, automate workflows with AI, and
-              set up the cloud infrastructure and data systems underneath, for
-              founders and teams who want a direct line to the people doing the work,
-              not a chain of account managers between them and their own product.
+              {t("introBody")}
             </p>
           </FadeIn>
         </div>
@@ -250,7 +233,7 @@ export default function AboutContent() {
                 color: "var(--section-light-text)",
               }}
             >
-              How we work
+              {t("principlesHeading")}
             </h2>
           </FadeIn>
 
@@ -323,29 +306,28 @@ export default function AboutContent() {
                     color: "var(--section-dark-text)",
                   }}
                 >
-                  Registered, accountable, and easy to check.
+                  {t("trustHeading")}
                 </h2>
                 <p
                   className="font-body text-sm leading-relaxed"
                   style={{ color: "var(--section-dark-muted)", maxWidth: 480 }}
                 >
-                  AIVIK is a registered German business. The full legal details are
-                  public on our{" "}
-                  <a href="/impressum" className="link-on-dark underline">
-                    Impressum
-                  </a>
-                  . We&apos;d rather you verify that yourself than take our word for it.
+                  {t("trustBodyPre")}{" "}
+                  <Link href="/impressum" className="link-on-dark underline">
+                    {t("trustBodyLink")}
+                  </Link>
+                  {t("trustBodyPost")}
                 </p>
               </div>
             </FadeIn>
             <FadeIn delay={100}>
               <div className="flex flex-col sm:flex-row md:flex-col gap-3 md:items-end">
-                <a
+                <Link
                   href="/#contact"
                   className="font-body text-sm font-semibold bg-white text-black px-7 py-[14px] hover:bg-[#F0F0F0] transition-colors duration-200 text-center"
                 >
-                  Get in touch
-                </a>
+                  {t("getInTouch")}
+                </Link>
                 <a
                   href="mailto:info@aivik.eu"
                   className="font-body text-sm link-on-dark px-7 py-[14px] text-center"

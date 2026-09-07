@@ -1,17 +1,24 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useTranslations, useLocale } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import AIVIKLogo from "./AIVIKLogo";
-
-const links = [
-  ["Services", "/#services"],
-  ["Process", "/#process"],
-  ["About", "/about"],
-  ["Contact", "/#contact"],
-] as const;
 
 type NavTheme = "hero-dark" | "dark" | "light";
 
 export default function Nav() {
+  const t = useTranslations("Nav");
+  const locale = useLocale();
+  const pathname = usePathname();
+  const otherLocale = locale === "en" ? "de" : "en";
+
+  const links = [
+    [t("services"), "/#services"],
+    [t("process"), "/#process"],
+    [t("about"), "/about"],
+    [t("contact"), "/#contact"],
+  ] as const;
+
   const [open, setOpen] = useState(false);
   const [navTheme, setNavTheme] = useState<NavTheme>("hero-dark");
 
@@ -69,12 +76,12 @@ export default function Nav() {
           borderBottom: `1px solid ${borderColor}`,
           transition: "background-color 300ms ease, border-color 300ms ease",
         }}
-        aria-label="Main navigation"
+        aria-label={t("mainNav")}
       >
           {/* Logo — far left */}
-          <a href="/" className="flex items-center shrink-0">
+          <Link href="/" className="flex items-center shrink-0">
             <AIVIKLogo size="md" variant={isLight ? "light" : "dark"} />
-          </a>
+          </Link>
 
           {/* Desktop nav links — truly centered on full nav width */}
           <div
@@ -82,7 +89,7 @@ export default function Nav() {
             role="list"
           >
             {links.map(([label, href]) => (
-              <a
+              <Link
                 key={label}
                 href={href}
                 role="listitem"
@@ -92,28 +99,40 @@ export default function Nav() {
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.5"; }}
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
 
-          {/* Desktop CTA — far right */}
-          <button
-            onClick={scrollToContact}
-            className="hidden md:block ml-auto font-body font-bold text-[13px] px-6 py-[10px] transition-colors duration-200 shrink-0"
-            style={{
-              backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
-              color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",
-              letterSpacing: "0.02em",
-            }}
-          >
-            Get a Quote
-          </button>
+          {/* Desktop CTA + language switch — far right */}
+          <div className="hidden md:flex items-center gap-5 ml-auto shrink-0">
+            <Link
+              href={pathname}
+              locale={otherLocale}
+              className="font-body font-medium text-[13px] transition-opacity duration-200"
+              style={{ color: textColor, opacity: 0.6 }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.6"; }}
+            >
+              {otherLocale.toUpperCase()}
+            </Link>
+            <button
+              onClick={scrollToContact}
+              className="font-body font-bold text-[13px] px-6 py-[10px] transition-colors duration-200"
+              style={{
+                backgroundColor: isLight ? "var(--nav-bg-on-dark)" : "var(--nav-bg-on-light)",
+                color: isLight ? "var(--nav-text-on-dark)" : "var(--nav-text-on-light)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {t("getQuote")}
+            </button>
+          </div>
 
           {/* Mobile hamburger */}
           <button
             className="md:hidden flex flex-col gap-[5px] cursor-pointer p-2 ml-auto"
             onClick={() => setOpen(!open)}
-            aria-label={open ? "Close menu" : "Open menu"}
+            aria-label={open ? t("closeMenu") : t("openMenu")}
             aria-expanded={open}
           >
             <span
@@ -137,10 +156,10 @@ export default function Nav() {
           className="fixed inset-0 z-40 flex flex-col items-center justify-center gap-10"
           style={{ backgroundColor: "var(--section-dark)" }}
           role="dialog"
-          aria-label="Mobile navigation"
+          aria-label={t("mobileNav")}
         >
           {links.map(([label, href]) => (
-            <a
+            <Link
               key={label}
               href={href}
               className="font-heading text-4xl font-bold transition-colors duration-200"
@@ -154,8 +173,17 @@ export default function Nav() {
               onClick={() => setOpen(false)}
             >
               {label}
-            </a>
+            </Link>
           ))}
+          <Link
+            href={pathname}
+            locale={otherLocale}
+            className="font-body text-sm font-semibold transition-colors duration-200"
+            style={{ color: "var(--section-dark-muted)" }}
+            onClick={() => setOpen(false)}
+          >
+            {otherLocale.toUpperCase()}
+          </Link>
           <button
             className="mt-4 font-body text-sm font-semibold px-8 py-4"
             style={{
@@ -167,7 +195,7 @@ export default function Nav() {
               scrollToContact();
             }}
           >
-            Get a Quote
+            {t("getQuote")}
           </button>
         </div>
       )}

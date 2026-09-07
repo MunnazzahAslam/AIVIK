@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { scrambleFrame } from "@/lib/scrambleText";
 import SectionCurve from "./SectionCurve";
 
@@ -21,32 +22,8 @@ function ScrambleText({ text, triggered }: { text: string; triggered: boolean })
   return <>{display}</>;
 }
 
-const steps = [
-  {
-    label: "DISCOVERY",
-    title: "Discovery and Alignment",
-    desc: "A structured session to map your business objectives, technical constraints, and success criteria — so every decision is grounded in your goals, not assumptions.",
-    side: "left" as const,
-  },
-  {
-    label: "ARCHITECTURE",
-    title: "Solution Architecture",
-    desc: "A detailed technical blueprint: system architecture, technology selection, timeline, and resource plan — full visibility before a single line of code is written.",
-    side: "right" as const,
-  },
-  {
-    label: "DELIVERY",
-    title: "Agile Delivery",
-    desc: "Focused sprints with regular milestones. Continuous visibility through live demos, progress updates, and direct access to the engineering team throughout.",
-    side: "left" as const,
-  },
-  {
-    label: "LAUNCH",
-    title: "Launch and Continuous Support",
-    desc: "Deployment is the beginning, not the end. We manage go-live, monitor performance, and remain your long-term engineering partner as your product scales.",
-    side: "right" as const,
-  },
-];
+type Step = { label: string; title: string; desc: string };
+const STEP_SIDES = ["left", "right", "left", "right"] as const;
 
 const THRESHOLDS    = [0.12, 0.35, 0.58, 0.80];
 const STEP          = 110;
@@ -69,6 +46,8 @@ function makeSegment(a: { x: number; y: number }, b: { x: number; y: number }): 
 }
 
 export default function Process() {
+  const t = useTranslations("Process");
+  const steps = (t.raw("steps") as Step[]).map((s, i) => ({ ...s, side: STEP_SIDES[i] }));
 
   // ── Desktop refs ──────────────────────────────────────────────────────────
   const desktopScrollRef = useRef<HTMLDivElement>(null); // the 380vh div
@@ -313,7 +292,7 @@ export default function Process() {
                 className="font-heading font-black"
                 style={{ fontSize: "clamp(48px, 6vw, 72px)", letterSpacing: "-2px", lineHeight: 1, color: "var(--section-dark-text)" }}
               >
-                OUR PROCESS
+                {t("heading")}
               </h2>
             </div>
 
@@ -459,7 +438,7 @@ export default function Process() {
               className="font-heading font-black"
               style={{ fontSize: "clamp(36px, 8vw, 52px)", letterSpacing: "-1.5px", lineHeight: 1, color: "var(--section-dark-text)" }}
             >
-              OUR PROCESS
+              {t("heading")}
             </h2>
           </div>
 

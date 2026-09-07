@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import FadeIn from "./FadeIn";
 
 // reCAPTCHA v3 placeholder:
@@ -27,21 +28,6 @@ const initialForm: FormState = {
   message: "",
 };
 
-// Value doubles as the label — the API just joins selected values into one
-// human-readable string, so there's no separate code-to-label map to keep in sync.
-const SERVICE_OPTIONS = [
-  "Custom Software Development",
-  "AI and Automation",
-  "Cloud Infrastructure",
-  "Data Analysis",
-  "Other",
-  "Not sure yet",
-];
-
-// "Other" and "Not sure yet" are catch-alls — picking one doesn't make sense
-// alongside a specific service, so each clears every other selection.
-const EXCLUSIVE_OPTIONS = ["Other", "Not sure yet"];
-
 // Color classes (.aivik-input) are defined in globals.css
 const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
 
@@ -52,16 +38,17 @@ const mutedColor = "#A1A1A6";
 const errorTextClass = "font-body text-xs text-red-400 mt-1.5";
 
 type FieldErrors = Partial<Record<keyof FormState, string>>;
+type ErrorMessages = { name: string; email: string; company: string; services: string; phone: string };
 
-function validateForm(form: FormState): FieldErrors {
+function validateForm(form: FormState, messages: ErrorMessages): FieldErrors {
   const errors: FieldErrors = {};
-  if (!form.name.trim()) errors.name = "Name is required.";
+  if (!form.name.trim()) errors.name = messages.name;
   if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
-    errors.email = "A valid email is required.";
-  if (!form.company.trim()) errors.company = "Company name is required.";
-  if (form.services.length === 0) errors.services = "Please select at least one option.";
+    errors.email = messages.email;
+  if (!form.company.trim()) errors.company = messages.company;
+  if (form.services.length === 0) errors.services = messages.services;
   if (form.phone && !/^[\d\s\+\-\(\)]{7,20}$/.test(form.phone))
-    errors.phone = "Phone number format is invalid.";
+    errors.phone = messages.phone;
   return errors;
 }
 
@@ -75,6 +62,23 @@ function RequiredMark() {
 }
 
 export default function GetAQuote() {
+  const t = useTranslations("GetAQuote");
+  // Value doubles as the label — the API just joins selected values into one
+  // human-readable string, so there's no separate code-to-label map to keep in sync.
+  const SERVICE_OPTIONS = t.raw("form.servicesOptions") as string[];
+  const OTHER_VALUE = SERVICE_OPTIONS[4];
+  const NOT_SURE_VALUE = SERVICE_OPTIONS[5];
+  // "Other" and "Not sure yet" are catch-alls — picking one doesn't make sense
+  // alongside a specific service, so each clears every other selection.
+  const EXCLUSIVE_OPTIONS = [OTHER_VALUE, NOT_SURE_VALUE];
+  const errorMessages: ErrorMessages = {
+    name: t("form.errors.name"),
+    email: t("form.errors.email"),
+    company: t("form.errors.company"),
+    services: t("form.errors.services"),
+    phone: t("form.errors.phone"),
+  };
+
   const [form, setForm] = useState<FormState>(initialForm);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -90,7 +94,7 @@ export default function GetAQuote() {
     setForm((prev) => ({ ...prev, [name]: value }));
     // Re-validate live once a field has been touched, so errors clear as the user fixes them.
     if (touched[name as keyof FormState]) {
-      setErrors(validateForm({ ...form, [name]: value }));
+      setErrors(validateForm({ ...form, [name]: value }, errorMessages));
     }
   };
 
@@ -99,7 +103,7 @@ export default function GetAQuote() {
   ) => {
     const { name } = e.target;
     setTouched((prev) => ({ ...prev, [name]: true }));
-    setErrors(validateForm(form));
+    setErrors(validateForm(form, errorMessages));
   };
 
   const toggleService = (value: string) => {
@@ -119,7 +123,7 @@ export default function GetAQuote() {
         ];
       }
       if (touched.services) {
-        setErrors(validateForm({ ...prev, services: nextServices }));
+        setErrors(validateForm({ ...prev, services: nextServices }, errorMessages));
       }
       return { ...prev, services: nextServices };
     });
@@ -129,7 +133,7 @@ export default function GetAQuote() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const validationErrors = validateForm(form);
+    const validationErrors = validateForm(form, errorMessages);
     setErrors(validationErrors);
     setTouched({
       name: true,
@@ -152,7 +156,7 @@ export default function GetAQuote() {
       // Fold the free-text "Other" detail into the services list the API expects,
       // rather than sending it as a separate field.
       const services = form.services.map((s) =>
-        s === "Other" && form.otherService.trim() ? `Other: ${form.otherService.trim()}` : s
+        s === OTHER_VALUE && form.otherService.trim() ? `${OTHER_VALUE}: ${form.otherService.trim()}` : s
       );
 
       const res = await fetch("/api/contact", {
@@ -222,15 +226,13 @@ export default function GetAQuote() {
                 lineHeight: "1",
               }}
             >
-              Let&apos;s Connect.
+              {t("heading")}
             </h2>
             <p
               className="font-body text-base leading-relaxed max-w-[480px]"
               style={{ color: "#A1A1A6" }}
             >
-              Whether you have a defined project or an early idea, we are here
-              to listen. Tell us where you are and we will tell you honestly how
-              we can help.
+              {t("intro")}
             </p>
 
             <div
@@ -239,11 +241,7 @@ export default function GetAQuote() {
             />
 
             <div className="flex flex-col gap-4">
-              {[
-                "Structured discovery before any commitment",
-                "Transparent delivery with regular milestones",
-                "Long-term partnership beyond project delivery",
-              ].map((text) => (
+              {(t.raw("bullets") as string[]).map((text) => (
                 <div key={text} className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
@@ -269,7 +267,7 @@ export default function GetAQuote() {
 
             <div>
               <p className="font-mono text-[11px] tracking-[2px] uppercase mb-2" style={{ color: labelColor }}>
-                Prefer email?
+                {t("preferEmail")}
               </p>
               <a
                 href="mailto:info@aivik.eu"
@@ -320,13 +318,13 @@ export default function GetAQuote() {
                   className="font-heading text-2xl font-bold"
                   style={{ color: "#F5F5F7" }}
                 >
-                  Thank you.
+                  {t("form.successTitle")}
                 </h3>
                 <p
                   className="font-body text-sm max-w-[320px]"
                   style={{ color: "#A1A1A6" }}
                 >
-                  Redirecting you to book a call...
+                  {t("form.successBody")}
                 </p>
               </div>
             ) : (
@@ -341,12 +339,12 @@ export default function GetAQuote() {
                   border: "0.5px solid rgba(255,255,255,0.1)",
                   borderRadius: 28,
                 }}
-                aria-label="Project inquiry form"
+                aria-label={t("heading")}
               >
                 {/* Name */}
                 <div>
                   <label htmlFor="name" className={labelClass} style={{ color: labelColor }}>
-                    Your name
+                    {t("form.nameLabel")}
                     <RequiredMark />
                   </label>
                   <input
@@ -357,7 +355,7 @@ export default function GetAQuote() {
                     value={form.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="Your name"
+                    placeholder={t("form.namePlaceholder")}
                     className={inputClass}
                     autoComplete="name"
                     aria-invalid={!!(touched.name && errors.name)}
@@ -373,7 +371,7 @@ export default function GetAQuote() {
                 {/* Email */}
                 <div>
                   <label htmlFor="email" className={labelClass} style={{ color: labelColor }}>
-                    Your email
+                    {t("form.emailLabel")}
                     <RequiredMark />
                   </label>
                   <input
@@ -384,7 +382,7 @@ export default function GetAQuote() {
                     value={form.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="you@company.com"
+                    placeholder={t("form.emailPlaceholder")}
                     className={inputClass}
                     autoComplete="email"
                     aria-invalid={!!(touched.email && errors.email)}
@@ -400,7 +398,7 @@ export default function GetAQuote() {
                 {/* Company */}
                 <div>
                   <label htmlFor="company" className={labelClass} style={{ color: labelColor }}>
-                    Company name
+                    {t("form.companyLabel")}
                     <RequiredMark />
                   </label>
                   <input
@@ -411,7 +409,7 @@ export default function GetAQuote() {
                     value={form.company}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="Your company"
+                    placeholder={t("form.companyPlaceholder")}
                     className={inputClass}
                     autoComplete="organization"
                     aria-invalid={!!(touched.company && errors.company)}
@@ -427,7 +425,7 @@ export default function GetAQuote() {
                 {/* Phone (optional) */}
                 <div>
                   <label htmlFor="phone" className={labelClass} style={{ color: labelColor }}>
-                    Phone number
+                    {t("form.phoneLabel")}
                   </label>
                   <input
                     id="phone"
@@ -436,7 +434,7 @@ export default function GetAQuote() {
                     value={form.phone}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="+49 123 456 7890"
+                    placeholder={t("form.phonePlaceholder")}
                     className={inputClass}
                     autoComplete="tel"
                     aria-invalid={!!(touched.phone && errors.phone)}
@@ -452,7 +450,7 @@ export default function GetAQuote() {
                 {/* Services */}
                 <div>
                   <p id="services-label" className={labelClass} style={{ color: labelColor }}>
-                    What can we help you with?
+                    {t("form.servicesLabel")}
                     <RequiredMark />
                   </p>
                   <div
@@ -483,14 +481,14 @@ export default function GetAQuote() {
                       );
                     })}
                   </div>
-                  {form.services.includes("Other") && (
+                  {form.services.includes(OTHER_VALUE) && (
                     <input
                       type="text"
                       name="otherService"
                       value={form.otherService}
                       onChange={handleChange}
-                      placeholder="Please specify"
-                      aria-label="Please specify the other service"
+                      placeholder={t("form.otherPlaceholder")}
+                      aria-label={t("form.otherPlaceholder")}
                       className={`${inputClass} mt-3`}
                     />
                   )}
@@ -504,7 +502,7 @@ export default function GetAQuote() {
                 {/* Message (optional) */}
                 <div>
                   <label htmlFor="message" className={labelClass} style={{ color: labelColor }}>
-                    Give us a brief description of what you need
+                    {t("form.messageLabel")}
                   </label>
                   <textarea
                     id="message"
@@ -513,7 +511,7 @@ export default function GetAQuote() {
                     value={form.message}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    placeholder="What are you building and what do you need help with?"
+                    placeholder={t("form.messagePlaceholder")}
                     className={`${inputClass} resize-none`}
                   />
                 </div>
@@ -521,7 +519,7 @@ export default function GetAQuote() {
                 {/* API error */}
                 {status === "error" && (
                   <p className="font-body text-xs text-red-400" role="alert">
-                    Something went wrong. Please email us at{" "}
+                    {t("form.apiError")}{" "}
                     <a
                       href="mailto:info@aivik.eu"
                       className="underline hover:text-white"
@@ -544,7 +542,7 @@ export default function GetAQuote() {
                   onMouseEnter={() => setSubmitHovered(true)}
                   onMouseLeave={() => setSubmitHovered(false)}
                 >
-                  {status === "submitting" ? "Sending..." : "Book a discovery call"}
+                  {status === "submitting" ? t("form.submitBusy") : t("form.submitIdle")}
                 </button>
               </form>
             )}

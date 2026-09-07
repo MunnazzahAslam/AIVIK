@@ -1,24 +1,18 @@
 import { MetadataRoute } from "next";
 
+const paths = ["", "/about", "/impressum", "/privacy"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: "https://aivik.eu",
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 1,
+  return paths.map((path) => ({
+    url: `https://aivik.eu${path}`,
+    lastModified: new Date(),
+    changeFrequency: path === "" ? "monthly" : "yearly",
+    priority: path === "" ? 1 : 0.3,
+    alternates: {
+      languages: {
+        en: `https://aivik.eu${path}`,
+        de: `https://aivik.eu/de${path}`,
+      },
     },
-    {
-      url: "https://aivik.eu/impressum",
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-    {
-      url: "https://aivik.eu/privacy",
-      lastModified: new Date(),
-      changeFrequency: "yearly",
-      priority: 0.3,
-    },
-  ];
+  }));
 }
