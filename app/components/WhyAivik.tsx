@@ -1,39 +1,9 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import SectionCurve, { CURVE_HEIGHT } from "./SectionCurve";
 
-const REASONS = [
-  {
-    number: "01",
-    title: "You Own Everything, Always",
-    desc: "Full source code, documentation, and IP transferred on day one. No lock-in, no hostage situations, no surprises.",
-  },
-  {
-    number: "02",
-    title: "Germany Registered, GDPR Native",
-    desc: "Not retrofitted compliance. Every system is built European-grade from the first line of code. Your data stays yours.",
-  },
-  {
-    number: "03",
-    title: "One Point of Contact, Full Accountability",
-    desc: "No account managers playing telephone. The person you speak to is the person building your product.",
-  },
-  {
-    number: "04",
-    title: "Progress, Not Promises",
-    desc: "Discovery doesn't last months here. You see real, deployed progress within days of signing — not decks and promises.",
-  },
-  {
-    number: "05",
-    title: "AI-Native by Default",
-    desc: "We don't bolt AI on at the end. Automation, intelligence, and efficiency are designed into every system from the start.",
-  },
-  {
-    number: "06",
-    title: "We Stay After Launch",
-    desc: "Monitoring, iterations, scaling. We treat launch as the beginning, not the finish line. Long-term partners, not project vendors.",
-  },
-];
+type Reason = { title: string; desc: string };
 
 // Per-card border classes for each breakpoint (1-col mobile → 2-col tablet → 3-col desktop).
 // Static strings so Tailwind JIT includes them all.
@@ -48,6 +18,8 @@ const BORDER_CLASSES = [
 ] as const;
 
 export default function WhyAivik() {
+  const t = useTranslations("WhyAivik");
+  const REASONS = t.raw("reasons") as Reason[];
   const gridRef                           = useRef<HTMLDivElement>(null);
   const overlayRef                        = useRef<HTMLDivElement>(null);
   const [hoveredIndex, setHoveredIndex]   = useState<number | null>(null);
@@ -178,7 +150,7 @@ export default function WhyAivik() {
               color: "var(--section-light-text)",
             }}
           >
-            WHY AIVIK
+            {t("heading")}
             <span
               className="aivik-cursor"
               aria-hidden="true"
@@ -205,7 +177,7 @@ export default function WhyAivik() {
                  scroll-reveal translateY on separate elements prevents the animation
                  from locking transform on the element receiving hover.              */
               <div
-                key={reason.number}
+                key={reason.title}
                 onMouseEnter={() => !isTouch && setHoveredIndex(i)}
                 onMouseLeave={() => !isTouch && setHoveredIndex(null)}
                 onClick={(e) => handleCardTap(e, i)}

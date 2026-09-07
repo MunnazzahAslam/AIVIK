@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { scrambleFrame } from "@/lib/scrambleText";
 import SectionCurve from "./SectionCurve";
 
@@ -78,6 +79,7 @@ function CountUp({ to, suffix = "" }: { to: number; suffix?: string }) {
 
 
 export default function Hero() {
+  const t = useTranslations("Hero");
   const word1Ref = useRef<HTMLSpanElement>(null);
   const word2Ref = useRef<HTMLSpanElement>(null);
   const word3Ref = useRef<HTMLSpanElement>(null);
@@ -90,11 +92,12 @@ export default function Hero() {
 
     let cancelled = false;
 
-    scrambleText(w1, "Build.", 600)
-      .then(() => { if (!cancelled) return scrambleText(w2, "Scale.", 600); })
-      .then(() => { if (!cancelled) return scrambleText(w3, "Automate.", 600); });
+    scrambleText(w1, t("word1"), 600)
+      .then(() => { if (!cancelled) return scrambleText(w2, t("word2"), 600); })
+      .then(() => { if (!cancelled) return scrambleText(w3, t("word3"), 600); });
 
     return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scrollToContact = () => {
@@ -127,25 +130,33 @@ export default function Hero() {
           <div className="flex flex-col justify-center">
             <h1
               className="font-heading font-bold text-white"
-              style={{ letterSpacing: "-4px", lineHeight: "0.85" }}
+              // German compound words (e.g. "Automatisieren." vs
+              // "Automate.") can be long enough at this font size to
+              // overflow the grid column into the right column instead of
+              // wrapping, since there's no space to break on. hyphens:auto
+              // (paired with the page's own lang attribute) lets the browser
+              // break at a real syllable boundary instead of an arbitrary
+              // character; overflowWrap is the fallback for browsers/locales
+              // without hyphenation dictionaries.
+              style={{ letterSpacing: "-4px", lineHeight: "0.85", overflowWrap: "break-word", hyphens: "auto" }}
             >
               <span
                 ref={word1Ref}
                 className="block text-[48px] md:text-[64px] lg:text-[96px]"
               >
-                Build.
+                {t("word1")}
               </span>
               <span
                 ref={word2Ref}
                 className="block text-[48px] md:text-[64px] lg:text-[96px]"
               >
-                Scale.
+                {t("word2")}
               </span>
               <span
                 ref={word3Ref}
                 className="block text-[48px] md:text-[64px] lg:text-[96px]"
               >
-                Automate.
+                {t("word3")}
               </span>
             </h1>
           </div>
@@ -156,7 +167,7 @@ export default function Hero() {
               className="animate-fade-in-up font-body text-lg leading-[1.7]"
               style={{ color: "var(--section-dark-muted)", animationDelay: "0.3s", maxWidth: 420 }}
             >
-              We design intelligent software, AI solutions, and digital platforms that help businesses automate operations, accelerate growth, and stay ahead in a rapidly evolving world.</p>
+              {t("description")}</p>
 
             <div
               className="animate-fade-in-up flex flex-col sm:flex-row gap-3 mt-10"
@@ -166,13 +177,13 @@ export default function Hero() {
                 onClick={scrollToContact}
                 className="font-body text-sm font-semibold bg-white text-black px-7 py-[14px] hover:bg-[#F0F0F0] transition-colors duration-200 text-center"
               >
-                Get a Quote
+                {t("getQuote")}
               </button>
               <button
                 onClick={scrollToServices}
                 className="font-body text-sm font-semibold bg-transparent border border-[#333333] text-white px-7 py-[14px] hover:border-white transition-colors duration-200 text-center"
               >
-                Explore our services
+                {t("exploreServices")}
               </button>
             </div>
 

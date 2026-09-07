@@ -1,0 +1,253 @@
+{
+  "Nav": {
+    "services": "Leistungen",
+    "process": "Prozess",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "getQuote": "Angebot anfordern",
+    "openMenu": "Menü öffnen",
+    "closeMenu": "Menü schließen",
+    "mainNav": "Hauptnavigation",
+    "mobileNav": "Mobile Navigation"
+  },
+  "Hero": {
+    "word1": "Entwickeln.",
+    "word2": "Skalieren.",
+    "word3": "Automatisieren.",
+    "description": "Wir entwickeln intelligente Software, KI-Lösungen und digitale Plattformen, die Unternehmen dabei helfen, Abläufe zu automatisieren, Wachstum zu beschleunigen und in einer sich schnell wandelnden Welt die Nase vorn zu behalten.",
+    "getQuote": "Angebot anfordern",
+    "exploreServices": "Unsere Leistungen entdecken"
+  },
+  "Services": {
+    "heading": "UNSERE LEISTUNGEN",
+    "list": [
+      {
+        "title": "Individuelle Softwareentwicklung",
+        "description": "Web- und Anwendungsentwicklung aus einer Hand",
+        "items": [
+          "Entwicklung mobiler Anwendungen",
+          "Website-Entwicklung und -Wartung",
+          "Modernisierung von Altsystemen",
+          "Entwicklung von CRM- und ERP-Plattformen"
+        ]
+      },
+      {
+        "title": "KI-Workflow-Automatisierung",
+        "description": "Intelligente Systeme, die für Sie arbeiten",
+        "items": [
+          "Virtuelle Assistenten und Chatbots",
+          "Agentenbasierte Workflows",
+          "Generative KI-Lösungen",
+          "KI-gestützter Kundensupport"
+        ]
+      },
+      {
+        "title": "Cloud-Infrastruktur",
+        "description": "Skalierbare, sichere Cloud-Grundlagen",
+        "items": [
+          "Hosting und Deployment",
+          "Datenbankverwaltung",
+          "Cloud-Migration",
+          "Cloud-Sicherheitsmanagement und -analyse"
+        ]
+      },
+      {
+        "title": "Datenanalyse",
+        "description": "Daten in Entscheidungen verwandeln",
+        "items": [
+          "Prädiktive Analysen",
+          "Aufbau von Dateninfrastruktur",
+          "Data Governance und Zugriffskontrolle",
+          "Business Intelligence und Reporting"
+        ]
+      },
+      {
+        "title": "Digitales Marketing",
+        "description": "Die richtige Zielgruppe erreichen und überzeugen",
+        "items": [
+          "SEO- und Content-Strategie",
+          "Bezahlte Werbekampagnen",
+          "Social-Media-Management",
+          "Marketing-Analysen und Reporting"
+        ]
+      }
+    ]
+  },
+  "Process": {
+    "heading": "UNSER PROZESS",
+    "steps": [
+      {
+        "label": "ANALYSE",
+        "title": "Analyse und Abstimmung",
+        "desc": "Ein strukturierter Termin, um Ihre Geschäftsziele, technischen Rahmenbedingungen und Erfolgskriterien zu erfassen — damit jede Entscheidung auf Ihren Zielen basiert, nicht auf Annahmen."
+      },
+      {
+        "label": "ARCHITEKTUR",
+        "title": "Lösungsarchitektur",
+        "desc": "Ein detaillierter technischer Bauplan: Systemarchitektur, Technologieauswahl, Zeitplan und Ressourcenplanung — volle Transparenz, bevor auch nur eine Zeile Code geschrieben wird."
+      },
+      {
+        "label": "UMSETZUNG",
+        "title": "Agile Umsetzung",
+        "desc": "Fokussierte Sprints mit regelmäßigen Meilensteinen. Durchgehende Transparenz durch Live-Demos, Fortschrittsupdates und direkten Zugang zum Entwicklungsteam."
+      },
+      {
+        "label": "LAUNCH",
+        "title": "Launch und laufender Support",
+        "desc": "Der Go-live ist der Anfang, nicht das Ende. Wir begleiten die Einführung, überwachen die Performance und bleiben Ihr langfristiger Technologiepartner, wenn Ihr Produkt wächst."
+      }
+    ]
+  },
+  "WhyAivik": {
+    "heading": "WARUM AIVIK",
+    "reasons": [
+      {
+        "title": "Ihnen gehört alles, immer",
+        "desc": "Vollständiger Quellcode, Dokumentation und geistiges Eigentum werden Ihnen ab dem ersten Tag übertragen. Kein Lock-in, keine Geiselnahme, keine Überraschungen."
+      },
+      {
+        "title": "In Deutschland ansässig, DSGVO-nativ",
+        "desc": "Keine nachträglich aufgesetzte Compliance. Jedes System wird von der ersten Zeile Code an nach europäischem Standard gebaut. Ihre Daten bleiben Ihre."
+      },
+      {
+        "title": "Ein Ansprechpartner, volle Verantwortung",
+        "desc": "Keine Account-Manager, die nur weiterleiten. Die Person, mit der Sie sprechen, ist die Person, die Ihr Produkt baut."
+      },
+      {
+        "title": "Fortschritt statt Versprechen",
+        "desc": "Die Discovery-Phase dauert bei uns keine Monate. Sie sehen echten, live geschalteten Fortschritt innerhalb weniger Tage nach Vertragsunterschrift — keine Folien und Versprechen."
+      },
+      {
+        "title": "KI-nativ von Grund auf",
+        "desc": "Wir setzen KI nicht nachträglich obendrauf. Automatisierung, Intelligenz und Effizienz werden von Anfang an in jedes System eingebaut."
+      },
+      {
+        "title": "Wir bleiben auch nach dem Launch",
+        "desc": "Monitoring, Iterationen, Skalierung. Für uns ist der Launch der Anfang, nicht die Ziellinie. Langfristige Partner, keine Projekt-Dienstleister."
+      }
+    ]
+  },
+  "GetAQuote": {
+    "heading": "Lassen Sie uns sprechen.",
+    "intro": "Ob Sie ein konkretes Projekt oder erst eine Idee haben — wir hören zu. Erzählen Sie uns, wo Sie stehen, und wir sagen Ihnen ehrlich, wie wir helfen können.",
+    "bullets": [
+      "Strukturierte Analyse vor jeder Verpflichtung",
+      "Transparente Umsetzung mit regelmäßigen Meilensteinen",
+      "Langfristige Partnerschaft über die Projektlieferung hinaus"
+    ],
+    "preferEmail": "Lieber per E-Mail?",
+    "form": {
+      "nameLabel": "Ihr Name",
+      "namePlaceholder": "Ihr Name",
+      "emailLabel": "Ihre E-Mail-Adresse",
+      "emailPlaceholder": "sie@unternehmen.de",
+      "companyLabel": "Firmenname",
+      "companyPlaceholder": "Ihr Unternehmen",
+      "phoneLabel": "Telefonnummer",
+      "phonePlaceholder": "+49 123 456 7890",
+      "servicesLabel": "Womit können wir Ihnen helfen?",
+      "servicesOptions": [
+        "Individuelle Softwareentwicklung",
+        "KI und Automatisierung",
+        "Cloud-Infrastruktur",
+        "Datenanalyse",
+        "Sonstiges",
+        "Noch nicht sicher"
+      ],
+      "otherPlaceholder": "Bitte angeben",
+      "messageLabel": "Beschreiben Sie kurz, was Sie brauchen",
+      "messagePlaceholder": "Was bauen Sie und wobei brauchen Sie Unterstützung?",
+      "submitIdle": "Kennenlerngespräch buchen",
+      "submitBusy": "Wird gesendet...",
+      "apiError": "Etwas ist schiefgelaufen. Bitte schreiben Sie uns eine E-Mail an",
+      "successTitle": "Vielen Dank.",
+      "successBody": "Sie werden weitergeleitet, um einen Termin zu buchen...",
+      "errors": {
+        "name": "Name ist erforderlich.",
+        "email": "Eine gültige E-Mail-Adresse ist erforderlich.",
+        "company": "Firmenname ist erforderlich.",
+        "services": "Bitte wählen Sie mindestens eine Option aus.",
+        "phone": "Das Telefonnummernformat ist ungültig."
+      }
+    }
+  },
+  "Footer": {
+    "tagline": "Ansässig in Deutschland · DSGVO-konform",
+    "servicesHeading": "Leistungen",
+    "companyHeading": "Unternehmen",
+    "contactHeading": "Kontakt aufnehmen",
+    "companyLinks": {
+      "about": "Über uns",
+      "process": "Prozess",
+      "contact": "Kontakt",
+      "impressum": "Impressum",
+      "privacy": "Datenschutzerklärung"
+    },
+    "bookCall": "Termin buchen",
+    "copyright": "Alle Rechte vorbehalten.",
+    "tagline2": "Von Ingenieuren gebaut. Mit Präzision geliefert."
+  },
+  "About": {
+    "metaTitle": "Über uns",
+    "metaDescription": "AIVIK ist ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung. Erfahren Sie, wie wir arbeiten und warum unsere Kunden direkten Zugang zu den Entwicklern haben, die ihr Produkt bauen.",
+    "introHeading": "Ein kleines Team, das Software so baut, wie wir sie uns selbst wünschen würden.",
+    "introBody": "AIVIK ist ein Unternehmen für Softwareentwicklung und KI-Automatisierung mit Sitz in Deutschland. Wir entwickeln individuelle Software, automatisieren Arbeitsabläufe mit KI und bauen die dahinterliegende Cloud-Infrastruktur und Datensysteme auf — für Gründer und Teams, die eine direkte Verbindung zu den Menschen wollen, die die Arbeit leisten, statt einer Kette von Account-Managern zwischen sich und ihrem eigenen Produkt.",
+    "principlesHeading": "Wie wir arbeiten",
+    "principles": [
+      {
+        "title": "Sie sprechen mit der Person, die es baut",
+        "desc": "Keine Account-Manager, die Nachrichten weiterleiten. Der Entwickler, der den Code schreibt, ist derjenige, dem Sie eine E-Mail schreiben."
+      },
+      {
+        "title": "Ihnen gehört, wofür Sie bezahlen",
+        "desc": "Quellcode, Dokumentation und geistiges Eigentum gehen ab dem ersten Tag an Sie über. Nichts wird zurückgehalten, nichts wird Ihnen nur lizenziert."
+      },
+      {
+        "title": "In Deutschland ansässig, DSGVO-nativ",
+        "desc": "Keine nachträglich abgehakte Compliance-Liste. Der Umgang mit Daten ist von der ersten Zeile Code an Teil unserer Systemarchitektur."
+      },
+      {
+        "title": "Klein genug, um schnell zu sein, strukturiert genug, um zu vertrauen",
+        "desc": "Ein fokussiertes Team, keine Bank aus Junior-Entwicklern, die durch Ihr Projekt rotieren. Jedes Projekt erhält durchgehend die Aufmerksamkeit erfahrener Entwickler."
+      }
+    ],
+    "trustHeading": "Registriert, verantwortlich und leicht zu überprüfen.",
+    "trustBodyPre": "AIVIK ist ein eingetragenes deutsches Unternehmen. Die vollständigen rechtlichen Angaben finden Sie öffentlich in unserem ",
+    "trustBodyLink": "Impressum",
+    "trustBodyPost": ". Wir möchten lieber, dass Sie das selbst überprüfen, als dass Sie uns einfach glauben.",
+    "getInTouch": "Kontakt aufnehmen"
+  },
+  "Impressum": {
+    "metaTitle": "Impressum",
+    "metaDescription": "Impressum für AIVIK, ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung, gemäß §5 TMG.",
+    "back": "Zurück",
+    "title": "Impressum",
+    "sectionLabel": "Angaben gemäß § 5 TMG",
+    "addressLine1": "AIVIK",
+    "addressLine2": "München, Deutschland",
+    "contactHeading": "Kontakt",
+    "emailLine": "E-Mail: info@aivik.eu",
+    "websiteLine": "Webseite: aivik.eu",
+    "responsibleHeading": "Verantwortlich für den Inhalt",
+    "responsibleName": "Team AIVIK"
+  },
+  "Privacy": {
+    "metaTitle": "Datenschutzerklärung",
+    "metaDescription": "Wie AIVIK personenbezogene Daten, die über diese Website übermittelt werden, im Einklang mit der DSGVO erhebt, verwendet und schützt.",
+    "back": "Zurück",
+    "title": "Datenschutzerklärung",
+    "intro": "Diese Website wird von AIVIK betrieben, ansässig in Deutschland.",
+    "dataCollectionHeading": "Datenerhebung",
+    "dataCollectionBody": "Diese Website erhebt keine personenbezogenen Daten über das hinaus, was Sie freiwillig über Kontaktformulare oder E-Mail übermitteln.",
+    "cookiesHeading": "Cookies",
+    "cookiesBody": "Diese Website verwendet keine Tracking-Cookies.",
+    "contactHeading": "Kontakt",
+    "disclaimer": "Für eine vollständige, DSGVO-konforme Datenschutzerklärung erstellen Sie bitte eine unter e-recht24.de und ersetzen Sie diese Seite."
+  },
+  "Metadata": {
+    "titleDefault": "AIVIK — Softwareentwicklung & KI-Automatisierung",
+    "description": "AIVIK ist eine in Deutschland ansässige Technologieberatung, die individuelle Softwareentwicklung, KI-Automatisierung, Cloud-Infrastruktur und Datenanalyse für europäische Start-ups und wachsende Unternehmen anbietet.",
+    "ogDescription": "Individuelle Software, KI-Automatisierung und Cloud-Infrastruktur für Unternehmen, die schneller vorankommen wollen. Ansässig in Deutschland. DSGVO-konform.",
+    "twitterDescription": "Individuelle Software, KI-Automatisierung und Cloud-Infrastruktur für europäische Unternehmen."
+  }
+}

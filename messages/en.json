@@ -1,0 +1,253 @@
+{
+  "Nav": {
+    "services": "Services",
+    "process": "Process",
+    "about": "About",
+    "contact": "Contact",
+    "getQuote": "Get a Quote",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation"
+  },
+  "Hero": {
+    "word1": "Build.",
+    "word2": "Scale.",
+    "word3": "Automate.",
+    "description": "We design intelligent software, AI solutions, and digital platforms that help businesses automate operations, accelerate growth, and stay ahead in a rapidly evolving world.",
+    "getQuote": "Get a Quote",
+    "exploreServices": "Explore our services"
+  },
+  "Services": {
+    "heading": "OUR SERVICES",
+    "list": [
+      {
+        "title": "Custom Software Development",
+        "description": "End-to-end web and application engineering",
+        "items": [
+          "Mobile Application Development",
+          "Website Development and Maintenance",
+          "Legacy System Modernization",
+          "CRM and ERP Platform Development"
+        ]
+      },
+      {
+        "title": "AI Workflow Automation",
+        "description": "Intelligent systems that work for you",
+        "items": [
+          "Virtual Assistants and Chatbots",
+          "Agentic Workflows",
+          "Generative AI Solutions",
+          "AI-Powered Customer Support"
+        ]
+      },
+      {
+        "title": "Cloud Infrastructure",
+        "description": "Scalable, secure cloud foundations",
+        "items": [
+          "Hosting and Deployment",
+          "Database Management",
+          "Cloud Migration",
+          "Cloud Security Management and Analysis"
+        ]
+      },
+      {
+        "title": "Data Analysis",
+        "description": "Turn data into decisions",
+        "items": [
+          "Predictive Analytics",
+          "Data Infrastructure Setup",
+          "Data Governance and Access Control",
+          "Business Intelligence and Reporting"
+        ]
+      },
+      {
+        "title": "Digital Marketing",
+        "description": "Reach and convert the right audience",
+        "items": [
+          "SEO and Content Strategy",
+          "Paid Advertising Campaigns",
+          "Social Media Management",
+          "Marketing Analytics and Reporting"
+        ]
+      }
+    ]
+  },
+  "Process": {
+    "heading": "OUR PROCESS",
+    "steps": [
+      {
+        "label": "DISCOVERY",
+        "title": "Discovery and Alignment",
+        "desc": "A structured session to map your business objectives, technical constraints, and success criteria — so every decision is grounded in your goals, not assumptions."
+      },
+      {
+        "label": "ARCHITECTURE",
+        "title": "Solution Architecture",
+        "desc": "A detailed technical blueprint: system architecture, technology selection, timeline, and resource plan — full visibility before a single line of code is written."
+      },
+      {
+        "label": "DELIVERY",
+        "title": "Agile Delivery",
+        "desc": "Focused sprints with regular milestones. Continuous visibility through live demos, progress updates, and direct access to the engineering team throughout."
+      },
+      {
+        "label": "LAUNCH",
+        "title": "Launch and Continuous Support",
+        "desc": "Deployment is the beginning, not the end. We manage go-live, monitor performance, and remain your long-term engineering partner as your product scales."
+      }
+    ]
+  },
+  "WhyAivik": {
+    "heading": "WHY AIVIK",
+    "reasons": [
+      {
+        "title": "You Own Everything, Always",
+        "desc": "Full source code, documentation, and IP transferred on day one. No lock-in, no hostage situations, no surprises."
+      },
+      {
+        "title": "Germany Registered, GDPR Native",
+        "desc": "Not retrofitted compliance. Every system is built European-grade from the first line of code. Your data stays yours."
+      },
+      {
+        "title": "One Point of Contact, Full Accountability",
+        "desc": "No account managers playing telephone. The person you speak to is the person building your product."
+      },
+      {
+        "title": "Progress, Not Promises",
+        "desc": "Discovery doesn't last months here. You see real, deployed progress within days of signing — not decks and promises."
+      },
+      {
+        "title": "AI-Native by Default",
+        "desc": "We don't bolt AI on at the end. Automation, intelligence, and efficiency are designed into every system from the start."
+      },
+      {
+        "title": "We Stay After Launch",
+        "desc": "Monitoring, iterations, scaling. We treat launch as the beginning, not the finish line. Long-term partners, not project vendors."
+      }
+    ]
+  },
+  "GetAQuote": {
+    "heading": "Let's Connect.",
+    "intro": "Whether you have a defined project or an early idea, we are here to listen. Tell us where you are and we will tell you honestly how we can help.",
+    "bullets": [
+      "Structured discovery before any commitment",
+      "Transparent delivery with regular milestones",
+      "Long-term partnership beyond project delivery"
+    ],
+    "preferEmail": "Prefer email?",
+    "form": {
+      "nameLabel": "Your name",
+      "namePlaceholder": "Your name",
+      "emailLabel": "Your email",
+      "emailPlaceholder": "you@company.com",
+      "companyLabel": "Company name",
+      "companyPlaceholder": "Your company",
+      "phoneLabel": "Phone number",
+      "phonePlaceholder": "+49 123 456 7890",
+      "servicesLabel": "What can we help you with?",
+      "servicesOptions": [
+        "Custom Software Development",
+        "AI and Automation",
+        "Cloud Infrastructure",
+        "Data Analysis",
+        "Other",
+        "Not sure yet"
+      ],
+      "otherPlaceholder": "Please specify",
+      "messageLabel": "Give us a brief description of what you need",
+      "messagePlaceholder": "What are you building and what do you need help with?",
+      "submitIdle": "Book a discovery call",
+      "submitBusy": "Sending...",
+      "apiError": "Something went wrong. Please email us at",
+      "successTitle": "Thank you.",
+      "successBody": "Redirecting you to book a call...",
+      "errors": {
+        "name": "Name is required.",
+        "email": "A valid email is required.",
+        "company": "Company name is required.",
+        "services": "Please select at least one option.",
+        "phone": "Phone number format is invalid."
+      }
+    }
+  },
+  "Footer": {
+    "tagline": "Based in Germany · GDPR Compliant",
+    "servicesHeading": "Services",
+    "companyHeading": "Company",
+    "contactHeading": "Get in touch",
+    "companyLinks": {
+      "about": "About",
+      "process": "Process",
+      "contact": "Contact",
+      "impressum": "Impressum",
+      "privacy": "Privacy Policy"
+    },
+    "bookCall": "Book a call",
+    "copyright": "All rights reserved.",
+    "tagline2": "Built by engineers. Delivered with precision."
+  },
+  "About": {
+    "metaTitle": "About",
+    "metaDescription": "AIVIK is a Germany-based software engineering and AI automation company. Learn how we work and why clients keep direct access to the engineers building their product.",
+    "introHeading": "A small team building software the way we'd want it built for us.",
+    "introBody": "AIVIK is a software engineering and AI automation company, based in Germany. We build custom software, automate workflows with AI, and set up the cloud infrastructure and data systems underneath, for founders and teams who want a direct line to the people doing the work, not a chain of account managers between them and their own product.",
+    "principlesHeading": "How we work",
+    "principles": [
+      {
+        "title": "You talk to the person building it",
+        "desc": "No account managers relaying messages. The engineer who writes the code is who you email."
+      },
+      {
+        "title": "You own what you pay for",
+        "desc": "Source code, documentation, and IP transfer to you on day one. Nothing held back, nothing licensed back to you."
+      },
+      {
+        "title": "German-based, GDPR-native",
+        "desc": "Not a compliance checklist added later. Data handling is built into how we architect systems from the first line of code."
+      },
+      {
+        "title": "Small enough to move, structured enough to trust",
+        "desc": "A focused team, not a bench of juniors rotating through your project. Every engagement gets senior attention throughout."
+      }
+    ],
+    "trustHeading": "Registered, accountable, and easy to check.",
+    "trustBodyPre": "AIVIK is a registered German business. The full legal details are public on our",
+    "trustBodyLink": "Impressum",
+    "trustBodyPost": ". We'd rather you verify that yourself than take our word for it.",
+    "getInTouch": "Get in touch"
+  },
+  "Impressum": {
+    "metaTitle": "Impressum",
+    "metaDescription": "Legal notice for AIVIK, a Germany-based software engineering and AI automation company, per §5 TMG.",
+    "back": "Back",
+    "title": "Impressum",
+    "sectionLabel": "Angaben gemäß § 5 TMG",
+    "addressLine1": "AIVIK",
+    "addressLine2": "Munich, Germany",
+    "contactHeading": "Contact",
+    "emailLine": "Email: info@aivik.eu",
+    "websiteLine": "Website: aivik.eu",
+    "responsibleHeading": "Responsible for content",
+    "responsibleName": "Team AIVIK"
+  },
+  "Privacy": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "How AIVIK collects, uses, and protects personal data submitted through this website, in line with GDPR.",
+    "back": "Back",
+    "title": "Privacy Policy",
+    "intro": "This website is operated by AIVIK, based in Germany.",
+    "dataCollectionHeading": "Data collection",
+    "dataCollectionBody": "This website does not collect personal data beyond what you voluntarily submit via contact forms or email.",
+    "cookiesHeading": "Cookies",
+    "cookiesBody": "This website does not use tracking cookies.",
+    "contactHeading": "Contact",
+    "disclaimer": "For a full GDPR-compliant privacy policy, generate one at e-recht24.de and replace this page."
+  },
+  "Metadata": {
+    "titleDefault": "AIVIK — Software Engineering & AI Automation",
+    "description": "AIVIK is a Germany-based tech consultancy delivering custom software development, AI automation, cloud infrastructure, and data analysis for European startups and growing companies.",
+    "ogDescription": "Custom software, AI automation, and cloud infrastructure for companies ready to move faster. Based in Germany. GDPR compliant.",
+    "twitterDescription": "Custom software, AI automation, and cloud infrastructure for European companies."
+  }
+}
