@@ -95,16 +95,24 @@ export async function sendNotificationEmail(data: Submission) {
     return;
   }
 
+  // Company/phone are usually blank now (dropped from the simplified
+  // contact form) -- only show them when there's something to show, rather
+  // than printing empty labels on every inquiry.
+  const optionalLines = [
+    data.company && `Company: ${data.company}`,
+    data.phone && `Phone: ${data.phone}`,
+  ].filter(Boolean);
+
   const body = `
 New AIVIK inquiry received:
 
 Name: ${data.name}
 Email: ${data.email}
-Company: ${data.company}
-Phone: ${data.phone || "not provided"}
-Service: ${data.service}
+${optionalLines.length ? optionalLines.join("\n") + "\n" : ""}Service: ${data.service}
 Message: ${data.message || "not provided"}
 Timestamp: ${data.timestamp}
+
+Reply directly to follow up -- include a Calendly link if it's time to schedule a call.
   `.trim();
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -116,6 +124,9 @@ Timestamp: ${data.timestamp}
     body: JSON.stringify({
       from: "AIVIK Website <noreply@aivik.eu>",
       to: ["info@aivik.eu", "aslammunnazzah@gmail.com"],
+      // So "Reply" on this notification goes to the lead, not to noreply@ --
+      // makes the "reply directly to follow up" instruction above actually work.
+      reply_to: data.email,
       subject: `New AIVIK inquiry from ${data.name}`,
       text: body,
     }),

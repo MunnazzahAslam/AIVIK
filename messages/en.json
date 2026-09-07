@@ -141,33 +141,17 @@
       "namePlaceholder": "Your name",
       "emailLabel": "Your email",
       "emailPlaceholder": "you@company.com",
-      "companyLabel": "Company name",
-      "companyPlaceholder": "Your company",
-      "phoneLabel": "Phone number",
-      "phonePlaceholder": "+49 123 456 7890",
-      "servicesLabel": "What can we help you with?",
-      "servicesOptions": [
-        "Custom Software Development",
-        "AI and Automation",
-        "Cloud Infrastructure",
-        "Data Analysis",
-        "Other",
-        "Not sure yet"
-      ],
-      "otherPlaceholder": "Please specify",
-      "messageLabel": "Give us a brief description of what you need",
-      "messagePlaceholder": "What are you building and what do you need help with?",
-      "submitIdle": "Book a discovery call",
+      "messageLabel": "What do you need help with?",
+      "messagePlaceholder": "Tell us about your project or idea...",
+      "submitIdle": "Send message",
       "submitBusy": "Sending...",
       "apiError": "Something went wrong. Please email us at",
       "successTitle": "Thank you.",
-      "successBody": "Redirecting you to book a call...",
+      "successBody": "We'll follow up shortly to schedule a time to talk.",
       "errors": {
         "name": "Name is required.",
         "email": "A valid email is required.",
-        "company": "Company name is required.",
-        "services": "Please select at least one option.",
-        "phone": "Phone number format is invalid."
+        "message": "Please tell us a bit about what you need."
       }
     }
   },
