@@ -47,7 +47,11 @@ export async function appendToGoogleSheet(data: Submission) {
   const sheetId = process.env.GOOGLE_SHEET_ID;
 
   if (!clientEmail || !privateKey || !sheetId) {
-    console.log("[contact] Google Sheets env vars not set, skipping sheet append");
+    // console.error (not .log) so a missing config is impossible to miss in
+    // Vercel's function logs -- this exact class of silent skip (present
+    // but unnoticed for the Resend key) is what caused notification emails
+    // to go quietly missing for an unknown stretch of time.
+    console.error("[contact] Google Sheets env vars not set, skipping sheet append");
     return;
   }
 
@@ -91,7 +95,13 @@ function neutralizeFormula(value: string): string {
 export async function sendNotificationEmail(data: Submission) {
   const resendKey = process.env.RESEND_API_KEY;
   if (!resendKey) {
-    console.log("[contact] No RESEND_API_KEY set, skipping email notification");
+    // console.error (not .log) -- RESEND_API_KEY was missing from Vercel's
+    // production env entirely, which silently no-op'd every notification
+    // email with only an info-level log line nobody was watching for. This
+    // alone doesn't send an alert (there's no key to send one *with*), but
+    // it at least makes the failure visible in Vercel's function logs/error
+    // tracking instead of indistinguishable from a normal skip.
+    console.error("[contact] No RESEND_API_KEY set, skipping email notification");
     return;
   }
 
@@ -133,6 +143,11 @@ Reply directly to follow up -- include a Calendly link if it's time to schedule 
   });
 
   if (!res.ok) {
-    throw new Error(`Resend API error: ${res.status}`);
+    // Capture Resend's actual error body (e.g. "domain not verified",
+    // "invalid API key") -- a bare status code isn't enough to diagnose a
+    // delivery failure after the fact, and a 200 from this fetch only means
+    // Resend *accepted* the request, not that it reached an inbox.
+    const detail = await res.text().catch(() => "");
+    throw new Error(`Resend API error: ${res.status} ${detail}`.trim());
   }
 }
