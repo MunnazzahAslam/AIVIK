@@ -352,6 +352,7 @@ export default function GetAQuote() {
                     name="name"
                     type="text"
                     required
+                    maxLength={100}
                     value={form.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -379,6 +380,7 @@ export default function GetAQuote() {
                     name="email"
                     type="email"
                     required
+                    maxLength={254}
                     value={form.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -406,6 +408,7 @@ export default function GetAQuote() {
                     name="company"
                     type="text"
                     required
+                    maxLength={150}
                     value={form.company}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -431,6 +434,7 @@ export default function GetAQuote() {
                     id="phone"
                     name="phone"
                     type="tel"
+                    maxLength={20}
                     value={form.phone}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -485,6 +489,7 @@ export default function GetAQuote() {
                     <input
                       type="text"
                       name="otherService"
+                      maxLength={150}
                       value={form.otherService}
                       onChange={handleChange}
                       placeholder={t("form.otherPlaceholder")}
@@ -508,6 +513,7 @@ export default function GetAQuote() {
                     id="message"
                     name="message"
                     rows={3}
+                    maxLength={3000}
                     value={form.message}
                     onChange={handleChange}
                     onBlur={handleBlur}

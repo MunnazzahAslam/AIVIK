@@ -67,16 +67,24 @@ export async function appendToGoogleSheet(data: Submission) {
       values: [
         [
           data.timestamp,
-          data.name,
-          data.email,
-          data.company,
-          data.phone || "",
-          data.service,
-          data.message || "",
+          neutralizeFormula(data.name),
+          neutralizeFormula(data.email),
+          neutralizeFormula(data.company),
+          neutralizeFormula(data.phone || ""),
+          neutralizeFormula(data.service),
+          neutralizeFormula(data.message || ""),
         ],
       ],
     },
   });
+}
+
+// USER_ENTERED makes Sheets evaluate any cell starting with =, +, -, or @
+// as a formula (e.g. a submitted name of =HYPERLINK("evil.com") would
+// render as a live, clickable formula for whoever opens the sheet) — a
+// leading apostrophe forces Sheets to treat the value as plain text.
+function neutralizeFormula(value: string): string {
+  return /^[=+\-@]/.test(value) ? `'${value}` : value;
 }
 
 // Resend — best-effort notification email to the team inbox.
