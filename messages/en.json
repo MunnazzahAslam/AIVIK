@@ -241,8 +241,31 @@
     "dataCollectionBody": "This website does not collect personal data beyond what you voluntarily submit via contact forms or email.",
     "cookiesHeading": "Cookies",
     "cookiesBody": "This website does not use tracking cookies.",
+    "chatHeading": "Chat assistant",
+    "chatBody": "This website includes an AI chat assistant. Conversations are stored so we can review and improve them; if you share your name and email to request a follow-up, that information is handled the same way as a contact form submission.",
     "contactHeading": "Contact",
     "disclaimer": "For a full GDPR-compliant privacy policy, generate one at e-recht24.de and replace this page."
+  },
+  "Chat": {
+    "title": "AIVIK Assistant",
+    "subtitle": "AI Assistant · usually replies in seconds",
+    "greeting": "Hey! I'm Mara, AIVIK's AI assistant. Ask me about what we build, how we work, or what something might cost — I'll do my best, and loop in the team for anything specific.",
+    "starters": [
+      "What do you build?",
+      "How does pricing work?",
+      "Can I see your process?",
+      "I want to talk to someone"
+    ],
+    "nudge": "Curious which service fits your project? Ask me anything.",
+    "placeholder": "Type a message...",
+    "send": "Send",
+    "open": "Open chat",
+    "close": "Close chat",
+    "typing": "Mara is typing",
+    "resize": "Resize chat height",
+    "leadConfirmed": "✓ Got it — someone from the team will follow up by email.",
+    "error": "Something went wrong. Please try again, or email us directly at",
+    "disclosure": "You're chatting with an AI assistant."
   },
   "Metadata": {
     "titleDefault": "AIVIK — Software Engineering & AI Automation",

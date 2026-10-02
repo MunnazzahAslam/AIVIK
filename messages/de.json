@@ -241,8 +241,31 @@
     "dataCollectionBody": "Diese Website erhebt keine personenbezogenen Daten über das hinaus, was Sie freiwillig über Kontaktformulare oder E-Mail übermitteln.",
     "cookiesHeading": "Cookies",
     "cookiesBody": "Diese Website verwendet keine Tracking-Cookies.",
+    "chatHeading": "Chat-Assistent",
+    "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können; wenn Sie Ihren Namen und Ihre E-Mail-Adresse für eine Rückmeldung angeben, wird diese Angabe wie bei einer Kontaktformular-Übermittlung behandelt.",
     "contactHeading": "Kontakt",
     "disclaimer": "Für eine vollständige, DSGVO-konforme Datenschutzerklärung erstellen Sie bitte eine unter e-recht24.de und ersetzen Sie diese Seite."
+  },
+  "Chat": {
+    "title": "AIVIK Assistent",
+    "subtitle": "KI-Assistent · antwortet meist in Sekunden",
+    "greeting": "Hallo! Ich bin Mara, der KI-Assistent von AIVIK. Fragen Sie mich, was wir entwickeln, wie wir arbeiten, oder was etwas kosten könnte — ich helfe gerne weiter und binde bei Bedarf das Team ein.",
+    "starters": [
+      "Was entwickelt ihr?",
+      "Wie funktioniert die Preisgestaltung?",
+      "Kann ich euren Prozess sehen?",
+      "Ich möchte mit jemandem sprechen"
+    ],
+    "nudge": "Unsicher, welcher Service passt? Fragen Sie mich einfach.",
+    "placeholder": "Nachricht eingeben...",
+    "send": "Senden",
+    "open": "Chat öffnen",
+    "close": "Chat schließen",
+    "typing": "Mara schreibt",
+    "resize": "Chat-Höhe anpassen",
+    "leadConfirmed": "✓ Verstanden — jemand aus dem Team meldet sich per E-Mail.",
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an",
+    "disclosure": "Sie chatten mit einem KI-Assistenten."
   },
   "Metadata": {
     "titleDefault": "AIVIK — Softwareentwicklung & KI-Automatisierung",
