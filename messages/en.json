@@ -157,11 +157,11 @@
       "otherPlaceholder": "Please specify",
       "messageLabel": "Give us a brief description of what you need",
       "messagePlaceholder": "What are you building and what do you need help with?",
-      "submitIdle": "Book a discovery call",
+      "submitIdle": "Send message",
       "submitBusy": "Sending...",
       "apiError": "Something went wrong. Please email us at",
       "successTitle": "Thank you.",
-      "successBody": "Redirecting you to book a call...",
+      "successBody": "We'll follow up shortly to schedule a time to talk.",
       "errors": {
         "name": "Name is required.",
         "email": "A valid email is required.",

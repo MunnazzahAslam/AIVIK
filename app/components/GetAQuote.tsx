@@ -8,6 +8,11 @@ import FadeIn from "./FadeIn";
 // 2. Add NEXT_PUBLIC_RECAPTCHA_SITE_KEY to .env
 // 3. Wrap app in <GoogleReCaptchaProvider> and use useGoogleReCaptcha hook here
 
+// Same fields as the original form (name, email, company, phone, service
+// selection, optional message) -- only the post-submit behavior changed:
+// no auto-redirect into a booking flow. The AIVIK team follows up by email
+// with a Calendly link once they've actually read the inquiry, rather than
+// making every visitor book a slot before they can finish.
 type FormState = {
   name: string;
   email: string;
@@ -168,13 +173,6 @@ export default function GetAQuote() {
       if (!res.ok) throw new Error("API error");
 
       setStatus("success");
-
-      // Redirect to Calendly after 2 seconds
-      setTimeout(() => {
-        const calendlyUrl =
-          process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com";
-        window.location.href = calendlyUrl;
-      }, 2000);
     } catch {
       setStatus("error");
     }
@@ -352,6 +350,7 @@ export default function GetAQuote() {
                     name="name"
                     type="text"
                     required
+                    maxLength={100}
                     value={form.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -379,6 +378,7 @@ export default function GetAQuote() {
                     name="email"
                     type="email"
                     required
+                    maxLength={254}
                     value={form.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -406,6 +406,7 @@ export default function GetAQuote() {
                     name="company"
                     type="text"
                     required
+                    maxLength={150}
                     value={form.company}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -431,6 +432,7 @@ export default function GetAQuote() {
                     id="phone"
                     name="phone"
                     type="tel"
+                    maxLength={20}
                     value={form.phone}
                     onChange={handleChange}
                     onBlur={handleBlur}
@@ -485,6 +487,7 @@ export default function GetAQuote() {
                     <input
                       type="text"
                       name="otherService"
+                      maxLength={150}
                       value={form.otherService}
                       onChange={handleChange}
                       placeholder={t("form.otherPlaceholder")}
@@ -508,6 +511,7 @@ export default function GetAQuote() {
                     id="message"
                     name="message"
                     rows={3}
+                    maxLength={3000}
                     value={form.message}
                     onChange={handleChange}
                     onBlur={handleBlur}

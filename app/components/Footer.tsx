@@ -11,10 +11,18 @@ export default async function Footer() {
   return (
     <footer
       data-theme="dark"
+      // overflow-x:hidden guards against a sub-pixel rounding artifact in
+      // the 4-column grid below at specific widths (e.g. exactly 768px) --
+      // grid-cols-4 + gap-12 can compute to a small fraction of a pixel
+      // wider than its container there, technically making the page
+      // horizontally scrollable by a few px with no actual content that's
+      // misaligned or cut off. This contains that at the source rather
+      // than the (documented) alternative of clipping at the <html> level.
       className="border-t pt-20 pb-10 px-6"
       style={{
         backgroundColor: "var(--section-dark)",
         borderColor: "var(--section-dark-border)",
+        overflowX: "hidden",
       }}
     >
       <div className="max-w-6xl mx-auto">

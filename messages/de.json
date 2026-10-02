@@ -157,11 +157,11 @@
       "otherPlaceholder": "Bitte angeben",
       "messageLabel": "Beschreiben Sie kurz, was Sie brauchen",
       "messagePlaceholder": "Was bauen Sie und wobei brauchen Sie Unterstützung?",
-      "submitIdle": "Kennenlerngespräch buchen",
+      "submitIdle": "Nachricht senden",
       "submitBusy": "Wird gesendet...",
       "apiError": "Etwas ist schiefgelaufen. Bitte schreiben Sie uns eine E-Mail an",
       "successTitle": "Vielen Dank.",
-      "successBody": "Sie werden weitergeleitet, um einen Termin zu buchen...",
+      "successBody": "Wir melden uns in Kürze, um einen Termin zu vereinbaren.",
       "errors": {
         "name": "Name ist erforderlich.",
         "email": "Eine gültige E-Mail-Adresse ist erforderlich.",

@@ -5,31 +5,30 @@ import {
   insertSubmission,
   sendNotificationEmail,
 } from "@/lib/contact";
+import { validateContactInput } from "@/lib/validation";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, company, phone, services, message, recaptchaToken } =
-      body;
 
-    if (!name || !email || !company || !Array.isArray(services) || services.length === 0) {
-      return NextResponse.json(
-        { error: "Missing required fields" },
-        { status: 400 }
-      );
+    // Re-validates everything the client already checked (required fields,
+    // email/phone format, max lengths) rather than trusting it — the client
+    // form can be bypassed entirely (curl, disabled JS, a modified fetch).
+    const validation = validateContactInput(body);
+    if (!validation.ok) {
+      return NextResponse.json({ error: validation.error }, { status: 400 });
     }
+    const { name, email, company, phone, service, message } = validation.data;
+    const { recaptchaToken } = body;
 
     const submission: Submission = {
       timestamp: new Date().toISOString(),
       name,
       email,
       company,
-      phone: phone || "",
-      // The submissions table has a single NOT NULL `service` text column —
-      // join the (now multi-select) services into one readable string rather
-      // than migrating the schema for this.
-      service: services.join(", "),
-      message: message || "",
+      phone,
+      service,
+      message,
       recaptchaToken,
     };
 

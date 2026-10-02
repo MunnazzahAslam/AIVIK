@@ -83,9 +83,14 @@ export default function Nav() {
             <AIVIKLogo size="md" variant={isLight ? "light" : "dark"} />
           </Link>
 
-          {/* Desktop nav links — truly centered on full nav width */}
+          {/* Desktop nav links — centered within the space between the logo
+              and the right-side group (not the full nav width). Using
+              flex-1 + justify-center here instead of absolute positioning
+              means this block actually participates in the nav's layout,
+              so it can never overlap its siblings even as the right-side
+              group's width changes (e.g. the language switch link). */}
           <div
-            className="hidden md:flex items-center gap-10 absolute left-1/2 -translate-x-1/2"
+            className="hidden md:flex items-center justify-center gap-10 flex-1 min-w-0"
             role="list"
           >
             {links.map(([label, href]) => (
