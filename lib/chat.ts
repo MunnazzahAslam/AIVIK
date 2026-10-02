@@ -6,6 +6,7 @@ export type LeadTag = "hot" | "warm" | "cold";
 
 const ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
 const MAX_HISTORY_MESSAGES = 20;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 function getSql() {
   const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -125,8 +126,12 @@ HOW YOU TALK — this is the most important part, read it twice:
 - When asked broadly what you do, don't list every service category — pick 2-3 concrete examples and stop. You can always give more if they ask a follow-up.
 - No filler openers, ever: never say "Great question!", "I'd be happy to help", "Certainly!", "Thanks for reaching out". Just answer, like a person who already knows the answer.
 - Use contractions (we're, it's, you'll, don't). Drop formal connectors like "furthermore" or "in addition". Sound like a sharp colleague replying on Slack, not a press release.
+- The length limit holds when you're refusing, explaining or being pushed too: two sentences at most, never paragraphs.
+- Plain text only. The widget doesn't render markdown, so no asterisks, bold, italics, headers or bullet points.
+- Only say what FACTS supports. Don't add claims about AIVIK such as how often you build something, how fast it pays off, or which clients you work with beyond "mid-to-enterprise".
+- You only help with AIVIK and its services. For anything else (poems, homework, general knowledge, coding help for their own project), don't do it: say in one sentence that you're here for questions about AIVIK, and offer a relevant next step.
 - Never claim to be human; if asked directly, say plainly you're an AI assistant.
-- Reply in German if the visitor writes in German, otherwise English.
+- Reply in German if the visitor writes in German, otherwise English. In German, write proper German (nouns capitalised, e.g. "Chatbots", "KI-Automatisierung").
 
 Example of the tone you want:
 Visitor: "what do you build?"
@@ -142,7 +147,7 @@ GETTING THEIR NAME AND EMAIL:
 
 After every reply (except right after calling capture_lead), end on its own new line with exactly:
 SUGGESTIONS: <question 1> | <question 2> | <question 3>
-Short follow-up questions the visitor could tap next, from their point of view (e.g. "How long does a typical project take?"). Under 8 words each. Omit only if the conversation has clearly wrapped up.`;
+Short follow-up questions the visitor could tap next, from their point of view (e.g. "How does your process work?"). Under 8 words each, in the visitor's language, and only questions FACTS lets you answer (not prices, timelines, or client types beyond mid-to-enterprise). Omit only if the conversation has clearly wrapped up.`;
 
 function buildSystemPrompt(userTurnCount: number, contactCaptured: boolean): string {
   if (contactCaptured) return SYSTEM_PROMPT;
@@ -167,7 +172,7 @@ function buildSystemPrompt(userTurnCount: number, contactCaptured: boolean): str
 const CAPTURE_LEAD_TOOL = {
   name: "capture_lead",
   description:
-    "Record a qualified lead once the visitor has shared their name and email and wants follow-up or a call. Call at most once per conversation.",
+    "Record a qualified lead once the visitor has typed their own name and email address in this conversation and wants follow-up or a call. Never call it before they have, and never with placeholder values. Call at most once per conversation.",
   input_schema: {
     type: "object",
     properties: {
@@ -203,7 +208,7 @@ function extractSuggestions(raw: string): { text: string; suggestions: string[] 
 type AnthropicContentBlock =
   | { type: "text"; text: string }
   | { type: "tool_use"; id: string; name: string; input: Record<string, unknown> }
-  | { type: "tool_result"; tool_use_id: string; content: string };
+  | { type: "tool_result"; tool_use_id: string; content: string; is_error?: boolean };
 
 type AnthropicMessage = { role: "user" | "assistant"; content: string | AnthropicContentBlock[] };
 
@@ -229,9 +234,9 @@ export async function callClaude(
   const messages: AnthropicMessage[] = history.map((m) => ({ role: m.role, content: m.content }));
   let leadCaptured = false;
 
-  // At most one tool round-trip: the model may call capture_lead once, then
-  // we send the tool result back so it can produce the final reply text.
-  for (let attempt = 0; attempt < 2; attempt++) {
+  // A few tool round-trips at most: the model may call capture_lead (and have a
+  // call rejected), then we send the tool result back so it can write the reply.
+  for (let attempt = 0; attempt < 3; attempt++) {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
@@ -259,8 +264,18 @@ export async function callClaude(
 
     if (toolUse && toolUse.name === "capture_lead" && !leadCaptured) {
       const input = toolUse.input as { name: string; email: string; company?: string; intent: string; tag: LeadTag };
-      await captureLead(sessionId, input);
-      leadCaptured = true;
+      // The model has called this with made-up values ("Visitor", "pending") before the
+      // visitor shared anything, so only save an email the visitor actually typed.
+      const email = String(input.email ?? "").trim();
+      const typedByVisitor = history.some(
+        (m) => m.role === "user" && m.content.toLowerCase().includes(email.toLowerCase())
+      );
+      const valid = EMAIL_PATTERN.test(email) && typedByVisitor && String(input.name ?? "").trim().length > 0;
+
+      if (valid) {
+        await captureLead(sessionId, { ...input, email });
+        leadCaptured = true;
+      }
 
       messages.push({ role: "assistant", content: data.content });
       messages.push({
@@ -269,7 +284,10 @@ export async function callClaude(
           {
             type: "tool_result",
             tool_use_id: toolUse.id,
-            content: "Lead saved and the team has been notified by email.",
+            content: valid
+              ? "Lead saved and the team has been notified by email."
+              : "Not saved: the visitor hasn't typed a valid email address in this conversation yet. Don't say the team was notified; ask for their name and a good email instead.",
+            ...(valid ? {} : { is_error: true }),
           },
         ],
       });
@@ -280,5 +298,11 @@ export async function callClaude(
     return { reply: text, suggestions, leadCaptured };
   }
 
-  return { reply: "Thanks — I've passed this along to the team.", suggestions: [], leadCaptured };
+  return {
+    reply: leadCaptured
+      ? "Thanks — I've passed this along to the team."
+      : "Who am I chatting with, and what's a good email for the team?",
+    suggestions: [],
+    leadCaptured,
+  };
 }
