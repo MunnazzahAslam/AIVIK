@@ -5,9 +5,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import "../globals.css";
 import { Analytics } from "@vercel/analytics/next";
-import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
+import ChatWidget from "../components/ChatWidget";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -145,15 +145,9 @@ export default async function RootLayout({
         />
         <NextIntlClientProvider>
           {children}
+          <ChatWidget />
         </NextIntlClientProvider>
         <Analytics />
-        <Script
-          id="chatbase-widget"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `(function(){if(!window.chatbase||window.chatbase("getState")!=="initialized"){window.chatbase=(...arguments)=>{if(!window.chatbase.q){window.chatbase.q=[]}window.chatbase.q.push(arguments)};window.chatbase=new Proxy(window.chatbase,{get(target,prop){if(prop==="q"){return target.q}return(...args)=>target(prop,...args)}})}const onLoad=function(){const script=document.createElement("script");script.src="https://www.chatbase.co/embed.min.js";script.id="x4UviZxEzw_RWthynMR5s";script.domain="www.chatbase.co";document.body.appendChild(script)};if(document.readyState==="complete"){onLoad()}else{window.addEventListener("load",onLoad)}})();`,
-          }}
-        />
       </body>
     </html>
   );

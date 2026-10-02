@@ -72,6 +72,15 @@ export default async function Privacy({
 
           <div className="aivik-section-divider pt-6">
             <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
+              {t("chatHeading")}
+            </p>
+            <p className="font-body text-sm text-on-dark-muted leading-relaxed">
+              {t("chatBody")}
+            </p>
+          </div>
+
+          <div className="aivik-section-divider pt-6">
+            <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
               {t("contactHeading")}
             </p>
             <a
