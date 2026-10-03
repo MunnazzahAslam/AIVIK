@@ -1,4 +1,6 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { USE_CASES_BASE } from "@/data/use-cases";
 import AIVIKLogo from "./AIVIKLogo";
 import { Link } from "@/i18n/navigation";
 
@@ -6,6 +8,8 @@ const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.c
 
 export default async function Footer() {
   const t = await getTranslations("Footer");
+  const locale = (await getLocale()) as Locale;
+  const useCasesLabel = (await getTranslations("UseCases"))("navLabel");
   const services = (await getTranslations("Services")).raw("list") as { title: string }[];
 
   return (
@@ -64,6 +68,9 @@ export default async function Footer() {
             <div className="flex flex-col gap-2.5">
               <Link href="/about" className="font-body text-sm link-on-dark">
                 {t("companyLinks.about")}
+              </Link>
+              <Link href={USE_CASES_BASE[locale]} className="font-body text-sm link-on-dark">
+                {useCasesLabel}
               </Link>
               <Link href="/#process" className="font-body text-sm link-on-dark">
                 {t("companyLinks.process")}

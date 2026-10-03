@@ -5,6 +5,24 @@ const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  // The use-case pages have German addresses (/de/anwendungsfaelle/ki-rezeption)
+  // but one set of route files (app/[locale]/use-cases). The German paths are
+  // rewritten onto those files, and the English-named paths under /de redirect
+  // to the German ones so each page has a single address per language.
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: "/de/anwendungsfaelle", destination: "/de/use-cases" },
+        { source: "/de/anwendungsfaelle/:slug", destination: "/de/use-cases/:slug" },
+      ],
+    };
+  },
+  async redirects() {
+    return [
+      { source: "/de/use-cases", destination: "/de/anwendungsfaelle", permanent: true },
+      { source: "/de/use-cases/:slug", destination: "/de/anwendungsfaelle/:slug", permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

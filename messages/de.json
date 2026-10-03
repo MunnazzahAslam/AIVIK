@@ -1,6 +1,7 @@
 {
   "Nav": {
     "services": "Leistungen",
+    "useCases": "Anwendungsfälle",
     "process": "Prozess",
     "about": "Über uns",
     "contact": "Kontakt",
@@ -72,6 +73,48 @@
         ]
       }
     ]
+  },
+  "UseCases": {
+    "navLabel": "Anwendungsfälle",
+    "badge": "Konzeptprojekt",
+    "titleSuffix": "Anwendungsfall",
+    "index": {
+      "metaTitle": "Anwendungsfälle",
+      "metaDescription": "Vier Konzeptprojekte von AIVIK, jedes als kurzes Video: eine KI-Rezeption, eine KI-Immobiliensuche, ein 3D-Onlineshop und eine scroll-animierte Website.",
+      "heading": "ANWENDUNGSFÄLLE",
+      "intro": "Vier Produkte, die wir entworfen und entwickelt haben, um zu zeigen, was wir für Sie bauen können. Die Marken sind fiktiv; die Software ist echt und läuft."
+    },
+    "teaser": {
+      "heading": "UNSERE ARBEIT",
+      "all": "Alle Anwendungsfälle ansehen"
+    },
+    "card": {
+      "view": "Anwendungsfall ansehen"
+    },
+    "serviceLink": "So sieht es gebaut aus",
+    "page": {
+      "back": "Alle Anwendungsfälle",
+      "videoLabel": "Video: {headline}",
+      "chapters": "Kapitel",
+      "chaptersHint": "Zu einem Schritt springen",
+      "whatHappens": "Was in diesem Video passiert",
+      "noSound": "Das Video hat keinen Ton.",
+      "problem": "Das Problem",
+      "built": "Was wir gebaut haben",
+      "hood": "Unter der Haube",
+      "gallery": "Galerie",
+      "shows": "Was es zeigt",
+      "galleryOpen": "Bild {n} in voller Größe öffnen",
+      "galleryClose": "Schließen",
+      "galleryPrev": "Vorheriges Bild",
+      "galleryNext": "Nächstes Bild",
+      "ctaHeading": "Das möchten Sie auch für Ihr Unternehmen?",
+      "ctaText": "Erzählen Sie uns, was Sie vorhaben, und wir sagen Ihnen ehrlich, wie wir es bauen würden.",
+      "ctaContact": "Gespräch beginnen",
+      "ctaAsk": "Den KI-Assistenten fragen",
+      "ctaAskMessage": "Haben Sie so etwas schon gebaut? Ich habe den Anwendungsfall {brand} ({headline}) gesehen und möchte etwas Ähnliches.",
+      "next": "Nächster Anwendungsfall"
+    }
   },
   "Process": {
     "heading": "UNSER PROZESS",

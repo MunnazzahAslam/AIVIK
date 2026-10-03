@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import FadeIn from "./FadeIn";
 
@@ -85,6 +85,15 @@ export default function GetAQuote() {
   };
 
   const [form, setForm] = useState<FormState>(initialForm);
+
+  // A use-case page links here as /?service=ai#contact: start with that service chosen.
+  useEffect(() => {
+    const wanted = new URLSearchParams(window.location.search).get("service");
+    const option = wanted === "ai" ? SERVICE_OPTIONS[1] : wanted === "software" ? SERVICE_OPTIONS[0] : null;
+    if (option) setForm((prev) => (prev.services.length ? prev : { ...prev, services: [option] }));
+    // Runs once on arrival; the options only change with the language.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [touched, setTouched] = useState<Partial<Record<keyof FormState, boolean>>>({});

@@ -1,5 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import { Submission, appendToGoogleSheet, insertSubmission, sendNotificationEmail } from "./contact";
+import { USE_CASES, USE_CASES_BASE, siteUrl, useCasePath } from "@/data/use-cases";
 
 export type ChatRole = "user" | "assistant";
 export type LeadTag = "hot" | "warm" | "cold";
@@ -109,6 +110,13 @@ async function captureLead(
   });
 }
 
+// The use cases Mara can point to, built from the same data as the pages so
+// the two never drift apart.
+const USE_CASE_FACTS = USE_CASES.map(
+  (u) =>
+    `- ${u.brand} (${u.industry.en}; shows: ${u.proves.en}): ${u.summary.en} What it is and isn't: ${u.conceptNote.en} English page: ${siteUrl("en", useCasePath("en", u))} German page: ${siteUrl("de", useCasePath("de", u))}`
+).join("\n");
+
 const SYSTEM_PROMPT = `You are Mara, AIVIK's AI assistant, embedded as a chat widget on aivik.eu. AIVIK is a software engineering and AI automation company registered in Germany, GDPR-native, serving mid-to-enterprise clients across Europe.
 
 FACTS — the only source of truth, never invent beyond this:
@@ -118,6 +126,11 @@ Services: Custom Software Development (web & mobile apps, legacy modernization, 
 Process: Discovery & Alignment -> Solution Architecture -> Agile Delivery (sprints, live demos) -> Launch & Continuous Support (long-term partner, not a one-off vendor).
 
 Why clients pick AIVIK: full source code/IP ownership from day one, one point of contact with direct engineer access, real deployed progress within days not proposal decks, AI designed in from the start.
+
+USE CASES — four concept builds AIVIK designed and built to show what it can do. The brands are fictional: always call them concept builds (German: Konzeptprojekte), never clients or client projects, and never claim results, numbers or testimonials for them.
+${USE_CASE_FACTS}
+Overview of all four: ${siteUrl("en", USE_CASES_BASE.en)} (German: ${siteUrl("de", USE_CASES_BASE.de)})
+When a visitor asks whether AIVIK has built something like their idea, or asks for examples, a portfolio or past work: name the closest use case in one sentence, say it's a concept build, and paste its full URL as plain text (the German page if they write in German). For a general request (portfolio, examples, past work) with no specific idea, give the overview URL. If none of the four is close to what they describe, say plainly that it isn't among the use cases and give the overview URL; never stretch a use case to fit or describe it as more than it is (Duneline, for example, is a front end only, with no back end, saved bookings or live data). One URL per reply.
 
 PRICING — read this twice, it's a hard rule: you do not know AIVIK's prices, and there are no rough ranges you can safely give — not "typically", not "roughly", not "usually around". Every project is scoped individually, so any number you state would be made up and could actively mislead someone. If asked about cost, say plainly it depends on scope and a team member will follow up with real numbers once they understand the project — and nothing more specific than that. Same for timelines and guarantees: never invent them.
 

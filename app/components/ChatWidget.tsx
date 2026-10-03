@@ -27,6 +27,26 @@ function getSessionId(): string {
   return id;
 }
 
+// Replies are plain text. Links to our own site (the use-case pages Mara
+// points to) become real links; nothing else is turned into markup.
+const OWN_LINK = /(https:\/\/(?:www\.)?aivik\.eu\/[^\s<>"')\]]*)/g;
+
+function linkify(text: string): React.ReactNode[] {
+  return text.split(OWN_LINK).map((part, i) => {
+    if (i % 2 === 0) return part;
+    // Sentence punctuation right after a link belongs to the sentence.
+    const url = part.replace(/[.,;:!?]+$/, "");
+    return (
+      <span key={i}>
+        <a href={url} className="underline" style={{ color: ACCENT, textUnderlineOffset: 3, wordBreak: "break-word" }}>
+          {url.replace(/^https:\/\/(?:www\.)?/, "")}
+        </a>
+        {part.slice(url.length)}
+      </span>
+    );
+  });
+}
+
 function clampHeight(h: number): number {
   if (typeof window === "undefined") return h;
   const max = Math.max(window.innerHeight - VIEWPORT_MARGIN, MIN_PANEL_HEIGHT);
@@ -177,6 +197,21 @@ export default function ChatWidget() {
     }
   };
 
+  // "Ask the AI assistant" buttons elsewhere on the site open the widget and
+  // ask their question (see AskAssistantButton). The ref keeps the listener
+  // on the latest send, which closes over the session and loading state.
+  const sendRef = useRef(send);
+  sendRef.current = send;
+  useEffect(() => {
+    const onAsk = (e: Event) => {
+      openWidget();
+      const message = (e as CustomEvent<{ message?: string }>).detail?.message;
+      if (message) sendRef.current(message);
+    };
+    window.addEventListener("aivik:open-chat", onAsk);
+    return () => window.removeEventListener("aivik:open-chat", onAsk);
+  }, []);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     send(input);
@@ -320,7 +355,7 @@ export default function ChatWidget() {
                     : { backgroundColor: "var(--section-light-surface)", color: "var(--section-light-text)" }
                 }
               >
-                {m.content}
+                {m.role === "assistant" ? linkify(m.content) : m.content}
                 {m.leadCaptured && (
                   <p className="font-body text-xs mt-2 opacity-70">{t("leadConfirmed")}</p>
                 )}

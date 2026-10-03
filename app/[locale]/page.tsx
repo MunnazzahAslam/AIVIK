@@ -3,6 +3,7 @@ import type { Locale } from "@/i18n/routing";
 import Nav from "@/app/components/Nav";
 import Hero from "@/app/components/Hero";
 import Services from "@/app/components/Services";
+import UseCasesTeaser from "@/app/components/use-cases/UseCasesTeaser";
 import WhyAivik from "@/app/components/WhyAivik";
 import Process from "@/app/components/Process";
 import GetAQuote from "@/app/components/GetAQuote";
@@ -21,6 +22,7 @@ export default async function Home({
       <Nav />
       <Hero />
       <Services />
+      <UseCasesTeaser />
       <Process />
       <WhyAivik />
       <GetAQuote />
