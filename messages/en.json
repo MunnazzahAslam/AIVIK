@@ -1,6 +1,7 @@
 {
   "Nav": {
     "services": "Services",
+    "useCases": "Use cases",
     "process": "Process",
     "about": "About",
     "contact": "Contact",
@@ -72,6 +73,48 @@
         ]
       }
     ]
+  },
+  "UseCases": {
+    "navLabel": "Use cases",
+    "badge": "Concept build",
+    "titleSuffix": "Use case",
+    "index": {
+      "metaTitle": "Use cases",
+      "metaDescription": "Four concept builds by AIVIK, each as a short video: an AI receptionist, AI property search, a 3D online shop and a scroll-animated website.",
+      "heading": "USE CASES",
+      "intro": "Four products we designed and built to show what we can build for you. The brands are fictional; the software is real and running."
+    },
+    "teaser": {
+      "heading": "OUR WORK",
+      "all": "See all use cases"
+    },
+    "card": {
+      "view": "View use case"
+    },
+    "serviceLink": "See it built",
+    "page": {
+      "back": "All use cases",
+      "videoLabel": "Video: {headline}",
+      "chapters": "Chapters",
+      "chaptersHint": "Jump to a step",
+      "whatHappens": "What happens in this video",
+      "noSound": "The video has no sound.",
+      "problem": "The problem",
+      "built": "What we built",
+      "hood": "Under the hood",
+      "gallery": "Gallery",
+      "shows": "What it shows",
+      "galleryOpen": "Open image {n} full size",
+      "galleryClose": "Close",
+      "galleryPrev": "Previous image",
+      "galleryNext": "Next image",
+      "ctaHeading": "Want this for your business?",
+      "ctaText": "Tell us what you have in mind and we'll say honestly how we'd build it.",
+      "ctaContact": "Start a conversation",
+      "ctaAsk": "Ask the AI assistant",
+      "ctaAskMessage": "Have you built something like this? I saw the {brand} use case ({headline}) and want something similar.",
+      "next": "Next use case"
+    }
   },
   "Process": {
     "heading": "OUR PROCESS",

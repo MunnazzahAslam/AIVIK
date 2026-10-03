@@ -1,19 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import type { Locale } from "@/i18n/routing";
+import { USE_CASES_BASE, pathInLocale } from "@/data/use-cases";
 import AIVIKLogo from "./AIVIKLogo";
 
 type NavTheme = "hero-dark" | "dark" | "light";
 
 export default function Nav() {
   const t = useTranslations("Nav");
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const pathname = usePathname();
-  const otherLocale = locale === "en" ? "de" : "en";
+  const router = useRouter();
+  const otherLocale: Locale = locale === "en" ? "de" : "en";
+  // Use-case pages have different addresses per language, so the switch maps
+  // the path rather than reusing it.
+  const otherLocalePath = pathInLocale(pathname, locale, otherLocale);
 
   const links = [
     [t("services"), "/#services"],
+    [t("useCases"), USE_CASES_BASE[locale]],
     [t("process"), "/#process"],
     [t("about"), "/about"],
     [t("contact"), "/#contact"],
@@ -64,7 +71,10 @@ export default function Nav() {
       : "var(--nav-border-on-light)";
 
   const scrollToContact = () => {
-    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+    const contact = document.getElementById("contact");
+    // Only the home page has the contact form; from any other page, go there.
+    if (contact) contact.scrollIntoView({ behavior: "smooth" });
+    else router.push("/#contact");
   };
 
   return (
@@ -90,7 +100,7 @@ export default function Nav() {
               so it can never overlap its siblings even as the right-side
               group's width changes (e.g. the language switch link). */}
           <div
-            className="hidden md:flex items-center justify-center gap-10 flex-1 min-w-0"
+            className="hidden lg:flex items-center justify-center gap-8 xl:gap-10 flex-1 min-w-0"
             role="list"
           >
             {links.map(([label, href]) => (
@@ -109,9 +119,9 @@ export default function Nav() {
           </div>
 
           {/* Desktop CTA + language switch — far right */}
-          <div className="hidden md:flex items-center gap-5 ml-auto shrink-0">
+          <div className="hidden lg:flex items-center gap-5 ml-auto shrink-0">
             <Link
-              href={pathname}
+              href={otherLocalePath}
               locale={otherLocale}
               className="font-body font-medium text-[13px] transition-opacity duration-200"
               style={{ color: textColor, opacity: 0.6 }}
@@ -135,7 +145,7 @@ export default function Nav() {
 
           {/* Mobile hamburger */}
           <button
-            className="md:hidden flex flex-col gap-[5px] cursor-pointer p-2 ml-auto"
+            className="lg:hidden flex flex-col gap-[5px] cursor-pointer p-2 ml-auto"
             onClick={() => setOpen(!open)}
             aria-label={open ? t("closeMenu") : t("openMenu")}
             aria-expanded={open}
@@ -181,7 +191,7 @@ export default function Nav() {
             </Link>
           ))}
           <Link
-            href={pathname}
+            href={otherLocalePath}
             locale={otherLocale}
             className="font-body text-sm font-semibold transition-colors duration-200"
             style={{ color: "var(--section-dark-muted)" }}

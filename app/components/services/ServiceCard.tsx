@@ -1,4 +1,5 @@
 "use client";
+import { Link } from "@/i18n/navigation";
 import { useInView } from "./useInView";
 
 export default function ServiceCard({
@@ -6,12 +7,15 @@ export default function ServiceCard({
   description,
   items,
   index,
+  cases,
   children,
 }: {
   title: string;
   description: string;
   items: string[];
   index: number;
+  /** Use cases that show this service built, linked under the list. */
+  cases?: { label: string; links: { name: string; href: string }[] };
   children: React.ReactNode;
 }) {
   const { ref, inView } = useInView<HTMLDivElement>();
@@ -36,6 +40,17 @@ export default function ServiceCard({
               </li>
             ))}
           </ul>
+          {cases && (
+            <p className="svc-cases">
+              {cases.label}:{" "}
+              {cases.links.map((c, i) => (
+                <span key={c.href}>
+                  {i > 0 && ", "}
+                  <Link href={c.href}>{c.name}</Link>
+                </span>
+              ))}
+            </p>
+          )}
         </div>
       </div>
     </div>

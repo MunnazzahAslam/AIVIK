@@ -1,4 +1,6 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
+import { USE_CASES, useCasePath } from "@/data/use-cases";
 import FadeIn from "./FadeIn";
 import SectionCurve from "./SectionCurve";
 import ServiceCard from "./services/ServiceCard";
@@ -18,8 +20,13 @@ const ARTIFACTS = [
 
 type ServiceEntry = { title: string; description: string; items: string[] };
 
+// Which service card each use case belongs under, by the card's position.
+const CARD_SERVICE = ["software", "ai"] as const;
+
 export default async function Services() {
   const t = await getTranslations("Services");
+  const tCases = await getTranslations("UseCases");
+  const locale = (await getLocale()) as Locale;
   const services = t.raw("list") as ServiceEntry[];
 
   return (
@@ -27,9 +34,7 @@ export default async function Services() {
       id="services"
       data-theme="light"
       // Extra bottom padding accounts for the SectionCurve overlapping this
-      // section's own last 110px — without it, that curve visually eats
-      // into the padding and the gap before the next section reads smaller
-      // than the (curve-free) gap at the top.
+      // section's own last 110px.
       className="pt-[120px] pb-[230px] px-6 services-dot-bg"
       style={{ position: "relative", zIndex: 0 }}
     >
@@ -51,15 +56,18 @@ export default async function Services() {
         <div className="svc-grid">
           {services.map(({ title, description, items }, index) => {
             const Artifact = ARTIFACTS[index];
+            const links = USE_CASES.filter((u) => u.service === CARD_SERVICE[index]).map((u) => ({ name: u.brand, href: useCasePath(locale, u) }));
+            const cases = links.length ? { label: tCases("serviceLink"), links } : undefined;
             return (
-              <ServiceCard key={title} title={title} description={description} items={items} index={index}>
+              <ServiceCard key={title} title={title} description={description} items={items} index={index} cases={cases}>
                 <Artifact />
               </ServiceCard>
             );
           })}
         </div>
       </div>
-      <SectionCurve fill="var(--section-dark)" direction="rise" />
+      {/* Dotted grey into the plain white of the use-cases section. */}
+      <SectionCurve fill="var(--section-light)" direction="dip" />
     </section>
   );
 }

@@ -220,7 +220,7 @@ h6 {
 .services-dot-bg {
   background-color: #f7f7f7;
   background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
-  background-size: 26px 26px;
+  background-size: 16px 16px;
 }
 
 /* ─── Grid + card shell ───
@@ -823,4 +823,322 @@ h6 {
   }
   .c5-live-dot::after { animation: none !important; opacity: 0 !important; }
   .c5-shimmer { animation: none !important; opacity: 0 !important; }
+}
+
+/* ─── Use cases ─────────────────────────────────────────────────────────
+   Cards, badges, the video player's chapter list and the gallery. Dark
+   surfaces throughout, with the brand blue (#2563EB) as the one accent. */
+
+.uc-label {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--section-dark-muted);
+}
+
+.uc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--section-dark-ghost);
+  color: var(--section-dark-muted);
+  white-space: nowrap;
+}
+.uc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+@media (max-width: 760px) {
+  .uc-grid { grid-template-columns: 1fr; }
+}
+
+.uc-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-card);
+  background: var(--section-dark-surface);
+  border: 1px solid var(--section-dark-border);
+  overflow: hidden;
+  transition: border-color 250ms ease, transform 250ms ease;
+}
+.uc-card:hover,
+.uc-card:focus-visible {
+  transform: translateY(-3px);
+}
+.uc-card:focus-visible,
+.uc-chapter:focus-visible,
+.uc-thumb:focus-visible,
+.uc-btn:focus-visible,
+.uc-lightbox button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+.uc-card-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  overflow: hidden;
+}
+.uc-card-media img,
+.uc-card-media video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.uc-card-media video {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+.uc-card-media video.is-playing {
+  opacity: 1;
+}
+.uc-card-arrow {
+  transition: transform 250ms ease;
+}
+.uc-card:hover .uc-card-arrow {
+  transform: translateX(4px);
+}
+
+/* Video player */
+.uc-player {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--section-dark-border);
+  background: #000;
+  aspect-ratio: 16 / 9;
+}
+.uc-player video {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.uc-chapters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+/* One chapter per row on phones, so the list's height doesn't depend on which font has loaded. */
+@media (max-width: 640px) {
+  .uc-chapters { display: grid; grid-template-columns: 1fr; }
+  .uc-chapters .uc-chapter { width: 100%; }
+}
+.uc-chapter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--section-dark-border);
+  background: var(--section-dark-surface);
+  color: var(--section-dark-muted);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease, background-color 200ms ease;
+}
+.uc-chapter:hover {
+  border-color: rgba(37, 99, 235, 0.75);
+  color: var(--section-dark-text);
+}
+.uc-chapter[aria-current="true"] {
+  border-color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.16);
+  color: var(--section-dark-text);
+}
+.uc-chapter-time {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 12px;
+  color: #7ea6ff;
+}
+
+/* Gallery */
+.uc-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+@media (max-width: 760px) {
+  .uc-gallery { grid-template-columns: 1fr; }
+}
+.uc-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--section-dark-border);
+  background: var(--section-dark-surface);
+  cursor: zoom-in;
+  transition: border-color 200ms ease;
+}
+.uc-thumb:hover {
+  border-color: var(--section-dark-subtle);
+}
+.uc-thumb img {
+  object-fit: cover;
+  object-position: top;
+}
+
+.uc-lightbox {
+  width: 100vw;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(3, 6, 13, 0.94);
+  color: var(--section-dark-text);
+}
+.uc-lightbox::backdrop {
+  background: rgba(3, 6, 13, 0.94);
+}
+.uc-lightbox-inner {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+  padding: 16px;
+  gap: 12px;
+}
+.uc-lightbox-stage {
+  position: relative;
+  min-height: 0;
+}
+.uc-lightbox-stage img {
+  object-fit: contain;
+}
+.uc-lightbox button {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--section-dark-ghost);
+  background: var(--section-dark-surface);
+  color: var(--section-dark-text);
+  cursor: pointer;
+}
+.uc-lightbox button:hover {
+  border-color: rgba(37, 99, 235, 0.75);
+}
+
+/* Background of the home page's "Our work" section: a fine line grid on
+   white, like graph paper, fading out at the top and bottom so it never meets
+   the curves above and below with a hard edge. Sits behind the section's content. */
+.work-grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.09) 1px, transparent 1px);
+  background-size: 56px 56px;
+  /* Shifted half a square so one grid line runs down the exact centre, where
+     the dots-to-line connector hands over to it. */
+  background-position: calc(50% + 28px) top;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 330px), transparent calc(100% - 150px));
+  mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 330px), transparent calc(100% - 150px));
+}
+
+/* The dots-to-line connector (DotsToLine.tsx): centred on the section, starting
+   above it so the dots sit in the Services section and cross the curve. */
+.uc-trail {
+  position: absolute;
+  left: calc(50% + 0.5px);
+  transform: translateX(-50%);
+  pointer-events: none;
+  overflow: visible;
+}
+/* On phones the heading spans the centre, so the trail stops short of it and fades out. */
+@media (max-width: 760px) {
+  .uc-trail {
+    clip-path: inset(0 0 132px 0);
+    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
+  }
+}
+
+/* Buttons */
+.uc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+}
+.uc-btn-primary {
+  background-color: var(--section-light);
+  color: var(--section-light-text);
+  border: 1px solid var(--section-light);
+}
+.uc-btn-primary:hover {
+  background-color: var(--section-light-surface);
+}
+/* Solid dark button, for light sections */
+.uc-btn-dark {
+  background-color: var(--section-light-text);
+  color: var(--section-light);
+  border: 1px solid var(--section-light-text);
+}
+.uc-btn-dark:hover {
+  background-color: #1b2636;
+  border-color: #1b2636;
+}
+.uc-btn-ghost {
+  background-color: transparent;
+  color: var(--section-dark-text);
+  border: 1px solid var(--section-dark-ghost);
+}
+.uc-btn-ghost:hover {
+  border-color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.12);
+}
+
+/* "See it built" links on the service cards */
+.svc-cases {
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--section-dark-muted);
+}
+.svc-cases a {
+  color: var(--section-dark-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(37, 99, 235, 0.9);
+}
+.svc-cases a:hover {
+  color: #7ea6ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uc-card,
+  .uc-card-arrow,
+  .uc-card-media video {
+    transition: none;
+  }
+  .uc-card:hover,
+  .uc-card:focus-visible {
+    transform: none;
+  }
 }
