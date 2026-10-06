@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
 import ChatWidget from "../components/ChatWidget";
 import CookieConsent from "../components/CookieConsent";
+import { GTM_HEAD_SCRIPT, GTM_ID } from "@/lib/gtm";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -139,7 +140,20 @@ export default async function RootLayout({
       lang={locale}
       className={`${spaceGrotesk.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
+      <head>
+        {/* Google Tag Manager */}
+        <script dangerouslySetInnerHTML={{ __html: GTM_HEAD_SCRIPT }} />
+      </head>
       <body className="font-body">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}

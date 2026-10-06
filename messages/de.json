@@ -284,7 +284,7 @@
     "dataCollectionHeading": "Datenerhebung",
     "dataCollectionBody": "Diese Website erhebt keine personenbezogenen Daten über das hinaus, was Sie freiwillig über Kontaktformulare oder E-Mail übermitteln.",
     "cookiesHeading": "Cookies und Tracking",
-    "cookiesBody": "Diese Website nutzt den Google Tag Manager, um Analyse- und Werbemessdienste zu laden. Diese können Cookies setzen und Nutzungsdaten an die Anbieter dieser Dienste, etwa Google, übermitteln. Sie werden nur geladen, wenn Sie im Cookie-Banner zustimmen; lehnen Sie ab, wird keiner dieser Dienste geladen. Ihre Auswahl wird in Ihrem Browser gespeichert und kann jederzeit geändert oder widerrufen werden.",
+    "cookiesBody": "Diese Website nutzt den Google Tag Manager, um Analyse- und Werbemessdienste zu laden. Diese können Cookies setzen und Nutzungsdaten an die Anbieter dieser Dienste, etwa Google, übermitteln. Der Google Tag Manager selbst wird auf jeder Seite geladen, jedoch mit dem Google Consent Mode standardmäßig auf „abgelehnt“: Bis Sie im Cookie-Banner zustimmen, setzen diese Dienste keine Analyse- oder Werbe-Cookies und übermitteln höchstens eingeschränkte, cookielose Signale. Lehnen Sie ab, bleibt es dabei. Ihre Auswahl wird in Ihrem Browser gespeichert und kann jederzeit geändert oder widerrufen werden.",
     "chatHeading": "Chat-Assistent",
     "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können; wenn Sie Ihren Namen und Ihre E-Mail-Adresse für eine Rückmeldung angeben, wird diese Angabe wie bei einer Kontaktformular-Übermittlung behandelt.",
     "contactHeading": "Kontakt",
@@ -312,9 +312,10 @@
       "ctaContact": "Gespräch beginnen",
       "more": "Weitere Artikel"
     }
+  },
   "Consent": {
     "title": "Cookies",
-    "body": "Wir möchten Analyse- und Marketing-Cookies einsetzen, um zu sehen, wie diese Website genutzt wird, und um unsere Kampagnen zu messen. Sie werden nur geladen, wenn Sie zustimmen.",
+    "body": "Wir möchten Analyse- und Marketing-Cookies einsetzen, um zu sehen, wie diese Website genutzt wird, und um unsere Kampagnen zu messen. Sie werden nur verwendet, wenn Sie zustimmen.",
     "privacyLink": "Datenschutzerklärung",
     "decline": "Ablehnen",
     "accept": "Akzeptieren",
