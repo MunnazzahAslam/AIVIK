@@ -12,7 +12,8 @@ import UseCaseCards from "./UseCaseCards";
  * surface by a curve and by a faint line grid in the same grey as the Services
  * dots, which fades in and out on every side. The Services dots carry on past
  * the curve and thin out until only the ones on the grid's crossings are left,
- * which is what joins the two sections.
+ * which is what joins the two sections. The same happens in reverse at the
+ * bottom: the grid gives way to dots that close up towards the curve into Process.
  */
 export default async function UseCasesTeaser() {
   const t = await getTranslations("UseCases");
@@ -31,6 +32,10 @@ export default async function UseCasesTeaser() {
         <div className="work-dots-mid" />
       </div>
       <div className="work-grid-bg" aria-hidden="true" />
+      <div className="work-dots-end" aria-hidden="true">
+        <div className="work-dots-end-mid" />
+        <div className="work-dots-end-fine" />
+      </div>
       <div className="max-w-6xl mx-auto">
         <FadeIn className="mb-12">
           <h2

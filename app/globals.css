@@ -1107,6 +1107,36 @@ h6 {
   mask-image: linear-gradient(to bottom, transparent calc(var(--curve-h) + 40px), #000 calc(var(--curve-h) + 170px), transparent calc(var(--curve-h) + 400px));
 }
 
+/* The same handover in reverse at the bottom of the section: the grid's lines
+   fade out and its crossing dots close up (every 32px, then every 16px) on the
+   way down to the curve into Process, which covers whatever lies below it. */
+.work-dots-end {
+  --curve-h: clamp(40px, 7.7vw, 110px);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.work-dots-end-mid,
+.work-dots-end-fine {
+  position: absolute;
+  inset: 0;
+}
+.work-dots-end-mid {
+  background-image: radial-gradient(#d6d6d6 1.3px, transparent 1.3px);
+  background-size: 32px 32px;
+  background-position: calc(50% + 0.5px) -15.5px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 400px), #000 calc(100% - var(--curve-h) - 170px), transparent calc(100% - var(--curve-h) - 40px));
+  mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 400px), #000 calc(100% - var(--curve-h) - 170px), transparent calc(100% - var(--curve-h) - 40px));
+}
+.work-dots-end-fine {
+  background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: calc(50% + 0.5px) -7.5px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 210px), #000 calc(100% - var(--curve-h) - 20px));
+  mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 210px), #000 calc(100% - var(--curve-h) - 20px));
+}
+
 /* Buttons */
 .uc-btn {
   display: inline-flex;
