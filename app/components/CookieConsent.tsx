@@ -2,10 +2,8 @@
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { CONSENT_KEY } from "@/lib/gtm";
 
-const GTM_ID = "GTM-MSBD5SV6";
-const GTM_SCRIPT_ID = "gtm-loader";
-const CONSENT_KEY = "aivik_consent";
 const OPEN_EVENT = "aivik:open-consent";
 // Cookies set by Google tags, removed when consent is withdrawn.
 const TRACKING_COOKIE = /^(_ga|_gid|_gat|_gcl|_gac)/;
@@ -21,11 +19,10 @@ function readChoice(): Choice | null {
   }
 }
 
-// Google Tag Manager is only ever loaded from here, after the visitor has
-// accepted. This is Google's standard loader plus Consent Mode signals, so
-// tags in the container that check consent see it as granted.
-function loadGtm() {
-  if (document.getElementById(GTM_SCRIPT_ID)) return;
+// GTM itself loads on every page from the inline script in the layout <head>,
+// with Consent Mode defaults set to "denied". The banner only updates that
+// consent state, so tags in the container start or stop using cookies.
+function updateConsent(choice: Choice) {
   const w = window as unknown as { dataLayer: unknown[] };
   w.dataLayer = w.dataLayer || [];
   // gtag has to push the arguments object itself, not an array.
@@ -33,18 +30,14 @@ function loadGtm() {
     // eslint-disable-next-line prefer-rest-params
     w.dataLayer.push(arguments);
   };
-  gtag("consent", "default", {
-    ad_storage: "granted",
-    ad_user_data: "granted",
-    ad_personalization: "granted",
-    analytics_storage: "granted",
+  gtag("consent", "update", {
+    ad_storage: choice,
+    ad_user_data: choice,
+    ad_personalization: choice,
+    analytics_storage: choice,
   });
-  w.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
-  const script = document.createElement("script");
-  script.id = GTM_SCRIPT_ID;
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
-  document.head.appendChild(script);
+  gtag("set", "ads_data_redaction", choice === "denied");
+  w.dataLayer.push({ event: choice === "granted" ? "consent_granted" : "consent_denied" });
 }
 
 function clearTrackingCookies() {
@@ -77,9 +70,8 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    const choice = readChoice();
-    if (choice === "granted") loadGtm();
-    if (choice === null) setVisible(true);
+    // A stored "granted" was already applied by the <head> script.
+    if (readChoice() === null) setVisible(true);
 
     const open = () => setVisible(true);
     window.addEventListener(OPEN_EVENT, open);
@@ -93,14 +85,9 @@ export default function CookieConsent() {
       // Storage unavailable: the choice holds for this page view only.
     }
     setVisible(false);
-    if (choice === "granted") {
-      loadGtm();
-    } else if (document.getElementById(GTM_SCRIPT_ID)) {
-      // Consent withdrawn after tags were running: a reload is the only way
-      // to stop scripts that are already on the page.
-      clearTrackingCookies();
-      location.reload();
-    }
+    updateConsent(choice);
+    // Consent withdrawn: remove cookies Google tags may already have set.
+    if (choice === "denied") clearTrackingCookies();
   };
 
   if (!visible) return null;
