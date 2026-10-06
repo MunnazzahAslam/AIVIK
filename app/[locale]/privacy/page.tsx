@@ -3,6 +3,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
+import { CookieSettingsButton } from "@/app/components/CookieConsent";
 
 export async function generateMetadata({
   params,
@@ -68,6 +69,7 @@ export default async function Privacy({
             <p className="font-body text-sm text-on-dark-muted leading-relaxed">
               {t("cookiesBody")}
             </p>
+            <CookieSettingsButton className="font-body text-sm link-on-dark underline mt-3" />
           </div>
 
           <div className="aivik-section-divider pt-6">
