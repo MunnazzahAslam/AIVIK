@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { routing } from "@/i18n/routing";
 import type { Locale } from "@/i18n/routing";
 import ChatWidget from "../components/ChatWidget";
+import CookieConsent from "../components/CookieConsent";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -146,6 +147,7 @@ export default async function RootLayout({
         <NextIntlClientProvider>
           {children}
           <ChatWidget />
+          <CookieConsent />
         </NextIntlClientProvider>
         <Analytics />
       </body>

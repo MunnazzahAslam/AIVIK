@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { USE_CASES_BASE } from "@/data/use-cases";
 import AIVIKLogo from "./AIVIKLogo";
+import { CookieSettingsButton } from "./CookieConsent";
 import { Link } from "@/i18n/navigation";
 
 const CALENDLY_URL = process.env.NEXT_PUBLIC_CALENDLY_URL || "https://calendly.com";
@@ -88,6 +89,7 @@ export default async function Footer() {
               <Link href="/privacy" className="font-body text-sm link-on-dark">
                 {t("companyLinks.privacy")}
               </Link>
+              <CookieSettingsButton className="font-body text-sm link-on-dark text-left" />
             </div>
           </div>
 
