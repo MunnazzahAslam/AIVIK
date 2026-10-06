@@ -32,7 +32,7 @@ export default async function BlogIndex({ params }: { params: Promise<{ locale: 
   return (
     <main>
       <Nav />
-      {/* White with dark cards, like the home page's "Our work" section. */}
+      {/* White with dark cards, like the home page's use-cases section. */}
       <section style={{ backgroundColor: "var(--section-light)" }} className="px-6 pt-[150px] pb-28">
         <div className="max-w-6xl mx-auto">
           {/* The nav takes its colours from this block, not the whole section: it

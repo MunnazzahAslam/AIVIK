@@ -1035,7 +1035,7 @@ h6 {
   border-color: rgba(37, 99, 235, 0.75);
 }
 
-/* Background of the home page's "Our work" section: a faint line grid on
+/* Background of the home page's use-cases section: a faint line grid on
    white that picks up the Services section's dots. The lines use the same
    grey, sit 64px apart (four of the 16px dot steps) and carry a dot at each
    crossing. It fades out towards all four edges, so it reads as a texture
@@ -1062,22 +1062,49 @@ h6 {
   mask-composite: intersect;
 }
 
-/* The dots-to-line connector (DotsToLine.tsx): centred on the section, starting
-   above it so the dots sit in the Services section and cross the curve. */
-.uc-trail {
+/* The handover from Services into this section: the Services dots continue
+   below the curve and thin out in two steps (every 16px, then every 32px)
+   until only the dots on the grid's 64px crossings remain. The layer starts
+   inside the curve at the bottom of Services and is cut to the curve's shape,
+   so no dots land on the grey above it. */
+.work-dots {
+  /* Same height as SectionCurve renders at. */
+  --curve-h: clamp(40px, 7.7vw, 110px);
   position: absolute;
-  left: calc(50% + 0.5px);
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--curve-h));
+  height: calc(var(--curve-h) + 420px);
+  z-index: -1;
   pointer-events: none;
-  overflow: visible;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 110' preserveAspectRatio='none'%3E%3Cpath d='M0,90 C360,10 1080,10 1440,90 L1440,110 L0,110 Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 110' preserveAspectRatio='none'%3E%3Cpath d='M0,90 C360,10 1080,10 1440,90 L1440,110 L0,110 Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+  -webkit-mask-size: 100% var(--curve-h), 100% calc(100% - var(--curve-h) + 1px);
+  mask-size: 100% var(--curve-h), 100% calc(100% - var(--curve-h) + 1px);
+  -webkit-mask-position: top, bottom;
+  mask-position: top, bottom;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
-/* On phones the heading spans the centre, so the trail stops short of it and fades out. */
-@media (max-width: 760px) {
-  .uc-trail {
-    clip-path: inset(0 0 132px 0);
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
-  }
+.work-dots-fine,
+.work-dots-mid {
+  position: absolute;
+  inset: 0;
+}
+/* Both patterns are placed so their dots fall on the grid's lines and crossings. */
+.work-dots-fine {
+  background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: calc(50% + 0.5px) calc(var(--curve-h) - 7.5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--curve-h) + 20px), transparent calc(var(--curve-h) + 210px));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--curve-h) + 20px), transparent calc(var(--curve-h) + 210px));
+}
+.work-dots-mid {
+  background-image: radial-gradient(#d6d6d6 1.3px, transparent 1.3px);
+  background-size: 32px 32px;
+  background-position: calc(50% + 0.5px) calc(var(--curve-h) - 15.5px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(var(--curve-h) + 40px), #000 calc(var(--curve-h) + 170px), transparent calc(var(--curve-h) + 400px));
+  mask-image: linear-gradient(to bottom, transparent calc(var(--curve-h) + 40px), #000 calc(var(--curve-h) + 170px), transparent calc(var(--curve-h) + 400px));
 }
 
 /* Buttons */
