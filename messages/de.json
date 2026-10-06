@@ -2,6 +2,7 @@
   "Nav": {
     "services": "Leistungen",
     "useCases": "Anwendungsfälle",
+    "blog": "Blog",
     "process": "Prozess",
     "about": "Über uns",
     "contact": "Kontakt",
@@ -288,6 +289,29 @@
     "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können; wenn Sie Ihren Namen und Ihre E-Mail-Adresse für eine Rückmeldung angeben, wird diese Angabe wie bei einer Kontaktformular-Übermittlung behandelt.",
     "contactHeading": "Kontakt",
     "disclaimer": "Für eine vollständige, DSGVO-konforme Datenschutzerklärung erstellen Sie bitte eine unter e-recht24.de und ersetzen Sie diese Seite."
+  },
+  "Blog": {
+    "navLabel": "Blog",
+    "minutes": "{minutes} Min. Lesezeit",
+    "index": {
+      "metaTitle": "Blog",
+      "metaDescription": "Praxisnahe Artikel zu KI, Automatisierung und Software für Unternehmen in Deutschland und Europa: Regulierung, Einsatz und was als Nächstes kommt.",
+      "heading": "BLOG",
+      "empty": "Noch keine Artikel."
+    },
+    "card": {
+      "read": "Artikel lesen"
+    },
+    "page": {
+      "back": "Alle Artikel",
+      "published": "Veröffentlicht",
+      "topics": "Themen",
+      "updated": "Aktualisiert am {date}",
+      "ctaHeading": "Sie denken über KI für Ihr Unternehmen nach?",
+      "ctaText": "Erzählen Sie uns, was Sie vorhaben, und wir sagen Ihnen ehrlich, wie wir es bauen würden.",
+      "ctaContact": "Gespräch beginnen",
+      "more": "Weitere Artikel"
+    }
   },
   "Chat": {
     "title": "AIVIK Assistent",

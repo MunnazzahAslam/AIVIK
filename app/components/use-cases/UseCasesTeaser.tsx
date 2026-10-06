@@ -10,9 +10,7 @@ import UseCaseCards from "./UseCaseCards";
 /**
  * The home page's use-cases section, after Services: the four cards and a link
  * to the index. Plain white with dark cards, set off from the dotted Services
- * surface by a curve and by its own background: a fine line grid that fades
- * out at the top and bottom (dots for Services, lines for the work). A trail
- * of dots that closes up into the grid's centre line joins the two.
+ * surface by a curve. A trail of dots ending in a small ring joins the two.
  */
 export default async function UseCasesTeaser() {
   const t = await getTranslations("UseCases");
@@ -26,7 +24,6 @@ export default async function UseCasesTeaser() {
       className="px-6 pt-[50px] pb-[230px]"
       style={{ backgroundColor: "var(--section-light)", position: "relative", zIndex: 0 }}
     >
-      <div className="work-grid-bg" aria-hidden="true" />
       <DotsToLine />
       <div className="max-w-6xl mx-auto">
         <FadeIn className="mb-12">

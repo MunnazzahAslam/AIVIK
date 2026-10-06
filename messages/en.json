@@ -2,6 +2,7 @@
   "Nav": {
     "services": "Services",
     "useCases": "Use cases",
+    "blog": "Blog",
     "process": "Process",
     "about": "About",
     "contact": "Contact",
@@ -288,6 +289,29 @@
     "chatBody": "This website includes an AI chat assistant. Conversations are stored so we can review and improve them; if you share your name and email to request a follow-up, that information is handled the same way as a contact form submission.",
     "contactHeading": "Contact",
     "disclaimer": "For a full GDPR-compliant privacy policy, generate one at e-recht24.de and replace this page."
+  },
+  "Blog": {
+    "navLabel": "Blog",
+    "minutes": "{minutes} min read",
+    "index": {
+      "metaTitle": "Blog",
+      "metaDescription": "Practical articles on AI, automation and software for companies in Germany and Europe: regulation, adoption and what comes next.",
+      "heading": "BLOG",
+      "empty": "No articles yet."
+    },
+    "card": {
+      "read": "Read article"
+    },
+    "page": {
+      "back": "All articles",
+      "published": "Published",
+      "topics": "Topics",
+      "updated": "Updated {date}",
+      "ctaHeading": "Thinking about AI for your business?",
+      "ctaText": "Tell us what you have in mind and we'll say honestly how we'd build it.",
+      "ctaContact": "Start a conversation",
+      "more": "More articles"
+    }
   },
   "Chat": {
     "title": "AIVIK Assistant",

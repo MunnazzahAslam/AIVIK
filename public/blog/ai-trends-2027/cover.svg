@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Five numbered nodes connected to a central hub, with 2027 in the background">
+  <!-- Animated with CSS, like the artwork on the service cards. Works as a plain <img>. -->
+  <style>
+    .glow { animation: glow 5s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.6s ease-out infinite; }
+    @keyframes ripple { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+    .packet { opacity: 0; animation: packet 2.4s ease-in-out infinite; }
+    @keyframes packet {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12%, 80% { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+    }
+    .halo { opacity: 0; transform-box: fill-box; transform-origin: center; animation: halo 2.4s ease-out infinite; }
+    @keyframes halo { 0%, 70% { transform: scale(1); opacity: 0; } 80% { opacity: 0.9; } 100% { transform: scale(1.5); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#121D30" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="50%" cy="50%" r="70%">
+      <stop offset="0.55" stop-color="#03060D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03060D" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#03060D"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#fade)"/>
+  <circle class="glow" cx="800" cy="450" r="330" fill="url(#glow)"/>
+  <text x="800" y="545" text-anchor="middle" font-family="'Space Grotesk', 'Inter', system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif" font-size="280" font-weight="700" letter-spacing="-8" fill="none" stroke="#1E2E47" stroke-width="2">2027</text>
+  <path d="M800 450L800.0 200.0" stroke="#2563EB" stroke-width="2" opacity="0.55"/>
+  <path d="M800 450L1247.0 372.7" stroke="#2563EB" stroke-width="2" opacity="0.55"/>
+  <path d="M800 450L1076.3 652.3" stroke="#2563EB" stroke-width="2" opacity="0.55"/>
+  <path d="M800 450L523.7 652.3" stroke="#2563EB" stroke-width="2" opacity="0.55"/>
+  <path d="M800 450L353.0 372.7" stroke="#2563EB" stroke-width="2" opacity="0.55"/>
+  <circle class="packet" style="--dx: 0.0px; --dy: -250.0px; animation-delay: 0.00s" cx="800" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="packet" style="--dx: 447.0px; --dy: -77.3px; animation-delay: 0.48s" cx="800" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="packet" style="--dx: 276.3px; --dy: 202.3px; animation-delay: 0.96s" cx="800" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="packet" style="--dx: -276.3px; --dy: 202.3px; animation-delay: 1.44s" cx="800" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="packet" style="--dx: -447.0px; --dy: -77.3px; animation-delay: 1.92s" cx="800" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="ripple" cx="800" cy="450" r="62" fill="none" stroke="#2563EB" stroke-width="2" opacity="0.6"/>
+  <circle cx="800" cy="450" r="62" fill="#03060D" stroke="#2563EB" stroke-width="2" opacity="0.6"/>
+  <circle cx="800" cy="450" r="34" fill="#2563EB"/>
+  <circle class="halo" style="animation-delay: 0.00s" cx="800.0" cy="200.0" r="40" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="800.0" cy="200.0" r="40" fill="#080E1A" stroke="#2563EB" stroke-width="2"/>
+  <text x="800.0" y="210.0" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700" fill="#FFFFFF">01</text>
+  <circle class="halo" style="animation-delay: 0.48s" cx="1247.0" cy="372.7" r="40" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="1247.0" cy="372.7" r="40" fill="#080E1A" stroke="#2563EB" stroke-width="2"/>
+  <text x="1247.0" y="382.7" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700" fill="#FFFFFF">02</text>
+  <circle class="halo" style="animation-delay: 0.96s" cx="1076.3" cy="652.3" r="40" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="1076.3" cy="652.3" r="40" fill="#080E1A" stroke="#2563EB" stroke-width="2"/>
+  <text x="1076.3" y="662.3" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700" fill="#FFFFFF">03</text>
+  <circle class="halo" style="animation-delay: 1.44s" cx="523.7" cy="652.3" r="40" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="523.7" cy="652.3" r="40" fill="#080E1A" stroke="#2563EB" stroke-width="2"/>
+  <text x="523.7" y="662.3" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700" fill="#FFFFFF">04</text>
+  <circle class="halo" style="animation-delay: 1.92s" cx="353.0" cy="372.7" r="40" fill="none" stroke="#3B82F6" stroke-width="3"/>
+  <circle cx="353.0" cy="372.7" r="40" fill="#080E1A" stroke="#2563EB" stroke-width="2"/>
+  <text x="353.0" y="382.7" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" font-weight="700" fill="#FFFFFF">05</text>
+</svg>
