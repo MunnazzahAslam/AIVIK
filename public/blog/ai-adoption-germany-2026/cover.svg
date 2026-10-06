@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Bar chart: 20 percent in 2024, 36 percent in 2025, 57 percent in 2026">
+  <!-- Animated with CSS, like the artwork on the service cards. Works as a plain <img>. -->
+  <style>
+    .glow { animation: glow 5s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.6s ease-out infinite; }
+    @keyframes ripple { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+    .packet { opacity: 0; animation: packet 2.4s ease-in-out infinite; }
+    @keyframes packet {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12%, 80% { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+    }
+    .bar { transform-box: fill-box; transform-origin: 50% 100%; animation: bar 10s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+    @keyframes bar { 0% { transform: scaleY(0); } 14%, 92% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
+    .value { animation: value 10s ease infinite; }
+    @keyframes value { 0%, 9% { opacity: 0; } 17%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+    .march { animation: march 1.2s linear infinite; }
+    @keyframes march { to { stroke-dashoffset: -16; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#121D30" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="50%" cy="50%" r="70%">
+      <stop offset="0.55" stop-color="#03060D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03060D" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#03060D"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#fade)"/>
+  <circle class="glow" cx="1080" cy="420" r="330" fill="url(#glow)"/>
+  <path class="march" d="M340 330H1260" stroke="#3A506E" stroke-width="2" stroke-dasharray="4 12" stroke-linecap="round"/>
+  <text x="1284" y="340" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" letter-spacing="2" fill="#8499B8">50%</text>
+  <path d="M340 690H1260" stroke="#1E2E47" stroke-width="2"/>
+  <rect class="bar" style="animation-delay: 0.00s" x="430" y="546" width="180" height="144" rx="10" fill="#0B1424" stroke="#1E2E47" stroke-width="2"/>
+  <text class="value" style="animation-delay: 0.00s" x="520" y="520" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="40" font-weight="700" fill="#8499B8">20%</text>
+  <text x="520" y="738" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" letter-spacing="3" fill="#8499B8">2024</text>
+  <rect class="bar" style="animation-delay: 0.25s" x="710" y="431" width="180" height="259" rx="10" fill="#0B1424" stroke="#1E2E47" stroke-width="2"/>
+  <text class="value" style="animation-delay: 0.25s" x="800" y="405" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="40" font-weight="700" fill="#8499B8">36%</text>
+  <text x="800" y="738" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" letter-spacing="3" fill="#8499B8">2025</text>
+  <rect class="bar" style="animation-delay: 0.50s" x="990" y="280" width="180" height="410" rx="10" fill="#2563EB" stroke="#2563EB" stroke-width="2"/>
+  <text class="value" style="animation-delay: 0.50s" x="1080" y="254" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="64" font-weight="700" fill="#FFFFFF">57%</text>
+  <text x="1080" y="738" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="26" letter-spacing="3" fill="#8499B8">2026</text>
+</svg>

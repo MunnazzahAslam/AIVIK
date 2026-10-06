@@ -11,6 +11,7 @@ export default async function Footer() {
   const t = await getTranslations("Footer");
   const locale = (await getLocale()) as Locale;
   const useCasesLabel = (await getTranslations("UseCases"))("navLabel");
+  const blogLabel = (await getTranslations("Blog"))("navLabel");
   const services = (await getTranslations("Services")).raw("list") as { title: string }[];
 
   return (
@@ -72,6 +73,9 @@ export default async function Footer() {
               </Link>
               <Link href={USE_CASES_BASE[locale]} className="font-body text-sm link-on-dark">
                 {useCasesLabel}
+              </Link>
+              <Link href="/blog" className="font-body text-sm link-on-dark">
+                {blogLabel}
               </Link>
               <Link href="/#process" className="font-body text-sm link-on-dark">
                 {t("companyLinks.process")}

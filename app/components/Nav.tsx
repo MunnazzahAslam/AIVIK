@@ -21,6 +21,7 @@ export default function Nav() {
   const links = [
     [t("services"), "/#services"],
     [t("useCases"), USE_CASES_BASE[locale]],
+    [t("blog"), "/blog"],
     [t("process"), "/#process"],
     [t("about"), "/about"],
     [t("contact"), "/#contact"],

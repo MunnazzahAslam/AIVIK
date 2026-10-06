@@ -1,5 +1,7 @@
 import { MetadataRoute } from "next";
 import { USE_CASES, USE_CASES_BASE, siteUrl, useCasePath } from "@/data/use-cases";
+import { routing } from "@/i18n/routing";
+import { BLOG_BASE, blogPath, getPosts } from "@/lib/blog";
 
 const paths = ["", "/about", "/impressum", "/privacy"];
 
@@ -29,5 +31,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: { en: siteUrl("en", en), de: siteUrl("de", de) } },
   }));
 
-  return [...pages, ...useCases];
+  // Blog: the index and one entry per article and language, read from content/blog.
+  const blogIndex: MetadataRoute.Sitemap = [
+    {
+      url: siteUrl("en", BLOG_BASE),
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
+      alternates: { languages: { en: siteUrl("en", BLOG_BASE), de: siteUrl("de", BLOG_BASE) } },
+    },
+  ];
+  const posts: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
+    getPosts(locale).map((post) => ({
+      url: siteUrl(locale, blogPath(post.slug)),
+      lastModified: new Date(post.updated ?? post.date),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+      alternates: { languages: Object.fromEntries(post.locales.map((l) => [l, siteUrl(l, blogPath(post.slug))])) },
+    })),
+  );
+
+  return [...pages, ...useCases, ...blogIndex, ...posts];
 }

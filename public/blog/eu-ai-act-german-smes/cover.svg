@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="A timeline of EU AI Act dates from February 2025 to December 2027">
+  <!-- Animated with CSS, like the artwork on the service cards. Works as a plain <img>. -->
+  <style>
+    .glow { animation: glow 5s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.6s ease-out infinite; }
+    @keyframes ripple { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+    .packet { opacity: 0; animation: packet 2.4s ease-in-out infinite; }
+    @keyframes packet {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12%, 80% { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+    }
+    .draw { stroke-dasharray: 500; animation: draw 8s ease-in-out infinite; }
+    @keyframes draw { 0% { stroke-dashoffset: 500; } 28%, 100% { stroke-dashoffset: 0; } }
+    .march { animation: march 1.2s linear infinite; }
+    @keyframes march { to { stroke-dashoffset: -16; } }
+    .travel { animation-duration: 8s; animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1); }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#121D30" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="50%" cy="50%" r="70%">
+      <stop offset="0.55" stop-color="#03060D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03060D" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#03060D"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#fade)"/>
+  <circle class="glow" cx="330" cy="450" r="260" fill="url(#glow)"/>
+  <circle class="pulse" style="animation-delay: 0.0s" cx="330.0" cy="300.0" r="9" fill="#2563EB" opacity="1.00"/>
+  <circle class="pulse" style="animation-delay: 0.2s" cx="405.0" cy="320.1" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 0.4s" cx="459.9" cy="375.0" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 0.6s" cx="480.0" cy="450.0" r="9" fill="#2563EB" opacity="1.00"/>
+  <circle class="pulse" style="animation-delay: 0.8s" cx="459.9" cy="525.0" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 1.0s" cx="405.0" cy="579.9" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 1.2s" cx="330.0" cy="600.0" r="9" fill="#2563EB" opacity="1.00"/>
+  <circle class="pulse" style="animation-delay: 1.4s" cx="255.0" cy="579.9" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 1.6s" cx="200.1" cy="525.0" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 1.8s" cx="180.0" cy="450.0" r="9" fill="#2563EB" opacity="1.00"/>
+  <circle class="pulse" style="animation-delay: 2.0s" cx="200.1" cy="375.0" r="9" fill="#2563EB" opacity="0.45"/>
+  <circle class="pulse" style="animation-delay: 2.2s" cx="255.0" cy="320.1" r="9" fill="#2563EB" opacity="0.45"/>
+  <path class="draw" d="M660 450H1160" stroke="#2563EB" stroke-width="3"/>
+  <path class="march" d="M1160 450H1410" stroke="#3A506E" stroke-width="3" stroke-dasharray="4 12" stroke-linecap="round"/>
+  <circle cx="660" cy="450" r="10" fill="#03060D" stroke="#2563EB" stroke-width="3"/>
+  <text x="660" y="400" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" letter-spacing="2" fill="#8499B8">02.2025</text>
+  <circle cx="910" cy="450" r="10" fill="#03060D" stroke="#2563EB" stroke-width="3"/>
+  <text x="910" y="400" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" letter-spacing="2" fill="#8499B8">08.2025</text>
+  <circle cx="1160" cy="450" r="10" fill="#03060D" stroke="#2563EB" stroke-width="3"/>
+  <text x="1160" y="400" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="28" letter-spacing="2" fill="#8499B8">08.2026</text>
+  <circle class="packet travel" style="--dx: 750px; --dy: 0px" cx="660" cy="450" r="7" fill="#FFFFFF"/>
+  <circle class="glow" cx="1410" cy="450" r="64" fill="url(#glow)"/>
+  <circle class="ripple" cx="1410" cy="450" r="34" fill="none" stroke="#2563EB" stroke-width="2" opacity="0.5"/>
+  <circle cx="1410" cy="450" r="16" fill="#2563EB"/>
+  <text x="1410" y="380" text-anchor="middle" font-family="'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="40" font-weight="700" letter-spacing="2" fill="#FFFFFF">12.2027</text>
+</svg>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="AIVIK">
+  <!-- Animated with CSS, like the artwork on the service cards. Works as a plain <img>. -->
+  <style>
+    .glow { animation: glow 5s ease-in-out infinite; }
+    @keyframes glow { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+    .pulse { animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+    .ripple { transform-box: fill-box; transform-origin: center; animation: ripple 2.6s ease-out infinite; }
+    @keyframes ripple { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+    .packet { opacity: 0; animation: packet 2.4s ease-in-out infinite; }
+    @keyframes packet {
+      0% { transform: translate(0, 0); opacity: 0; }
+      12%, 80% { opacity: 1; }
+      100% { transform: translate(var(--dx), var(--dy)); opacity: 0; }
+    }
+    .cursor { animation: cursor 1.2s steps(1) infinite; }
+    @keyframes cursor { 0%, 55% { opacity: 1; } 56%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+      <path d="M80 0H0V80" fill="none" stroke="#121D30" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#2563EB" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#2563EB" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="fade" cx="50%" cy="50%" r="70%">
+      <stop offset="0.55" stop-color="#03060D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#03060D" stop-opacity="1"/>
+    </radialGradient>
+  </defs>
+  <rect width="1600" height="900" fill="#03060D"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+  <rect width="1600" height="900" fill="url(#fade)"/>
+  <circle class="glow" cx="800" cy="450" r="330" fill="url(#glow)"/>
+  <circle class="pulse" style="animation-delay: 1.34s" cx="480" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.08s" cx="560" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.85s" cx="640" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="720" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.60s" cx="800" cy="290" r="4" fill="#3A506E" opacity="0.33"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="880" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.85s" cx="960" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.08s" cx="1040" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.34s" cx="1120" cy="290" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.24s" cx="480" cy="370" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.95s" cx="560" cy="370" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="640" cy="370" r="4" fill="#3A506E" opacity="0.27"/>
+  <circle class="pulse" style="animation-delay: 0.42s" cx="720" cy="370" r="4" fill="#3A506E" opacity="0.47"/>
+  <circle class="pulse" style="animation-delay: 0.30s" cx="800" cy="370" r="4" fill="#3A506E" opacity="0.67"/>
+  <circle class="pulse" style="animation-delay: 0.42s" cx="880" cy="370" r="4" fill="#3A506E" opacity="0.47"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="960" cy="370" r="4" fill="#3A506E" opacity="0.27"/>
+  <circle class="pulse" style="animation-delay: 0.95s" cx="1040" cy="370" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.24s" cx="1120" cy="370" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.20s" cx="480" cy="450" r="4" fill="#3A506E" opacity="0.20"/>
+  <circle class="pulse" style="animation-delay: 0.90s" cx="560" cy="450" r="4" fill="#3A506E" opacity="0.40"/>
+  <circle class="pulse" style="animation-delay: 0.60s" cx="640" cy="450" r="4" fill="#3A506E" opacity="0.60"/>
+  <circle class="pulse" style="animation-delay: 0.30s" cx="720" cy="450" r="4" fill="#3A506E" opacity="0.80"/>
+  <circle class="pulse" style="animation-delay: 0.00s" cx="800" cy="450" r="4" fill="#3A506E" opacity="1.00"/>
+  <circle class="pulse" style="animation-delay: 0.30s" cx="880" cy="450" r="4" fill="#3A506E" opacity="0.80"/>
+  <circle class="pulse" style="animation-delay: 0.60s" cx="960" cy="450" r="4" fill="#3A506E" opacity="0.60"/>
+  <circle class="pulse" style="animation-delay: 0.90s" cx="1040" cy="450" r="4" fill="#3A506E" opacity="0.40"/>
+  <circle class="pulse" style="animation-delay: 1.20s" cx="1120" cy="450" r="4" fill="#3A506E" opacity="0.20"/>
+  <circle class="pulse" style="animation-delay: 1.24s" cx="480" cy="530" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.95s" cx="560" cy="530" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="640" cy="530" r="4" fill="#3A506E" opacity="0.27"/>
+  <circle class="pulse" style="animation-delay: 0.42s" cx="720" cy="530" r="4" fill="#3A506E" opacity="0.47"/>
+  <circle class="pulse" style="animation-delay: 0.30s" cx="800" cy="530" r="4" fill="#3A506E" opacity="0.67"/>
+  <circle class="pulse" style="animation-delay: 0.42s" cx="880" cy="530" r="4" fill="#3A506E" opacity="0.47"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="960" cy="530" r="4" fill="#3A506E" opacity="0.27"/>
+  <circle class="pulse" style="animation-delay: 0.95s" cx="1040" cy="530" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.24s" cx="1120" cy="530" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.34s" cx="480" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.08s" cx="560" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.85s" cx="640" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="720" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.60s" cx="800" cy="610" r="4" fill="#3A506E" opacity="0.33"/>
+  <circle class="pulse" style="animation-delay: 0.67s" cx="880" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 0.85s" cx="960" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.08s" cx="1040" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <circle class="pulse" style="animation-delay: 1.34s" cx="1120" cy="610" r="4" fill="#3A506E" opacity="0.15"/>
+  <rect class="cursor" x="720" y="520" width="160" height="14" rx="3" fill="#2563EB"/>
+</svg>

@@ -1035,41 +1035,106 @@ h6 {
   border-color: rgba(37, 99, 235, 0.75);
 }
 
-/* Background of the home page's "Our work" section: a fine line grid on
-   white, like graph paper, fading out at the top and bottom so it never meets
-   the curves above and below with a hard edge. Sits behind the section's content. */
+/* Background of the home page's use-cases section: a faint line grid on
+   white that picks up the Services section's dots. The lines use the same
+   grey, sit 64px apart (four of the 16px dot steps) and carry a dot at each
+   crossing. It fades out towards all four edges, so it reads as a texture
+   that surfaces behind the cards rather than a panel with borders. */
 .work-grid-bg {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   background-image:
-    linear-gradient(to right, rgba(15, 23, 42, 0.09) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 23, 42, 0.09) 1px, transparent 1px);
-  background-size: 56px 56px;
-  /* Shifted half a square so one grid line runs down the exact centre, where
-     the dots-to-line connector hands over to it. */
-  background-position: calc(50% + 28px) top;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 330px), transparent calc(100% - 150px));
-  mask-image: linear-gradient(to bottom, transparent 0, #000 150px, #000 calc(100% - 330px), transparent calc(100% - 150px));
+    radial-gradient(#cfcfcf 1.5px, transparent 1.5px),
+    linear-gradient(to right, #e6e6e6 1px, transparent 1px),
+    linear-gradient(to bottom, #e6e6e6 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* One grid line runs down the exact centre; the dots sit on the crossings. */
+  background-position: calc(50% + 0.5px) -31.5px, calc(50% + 32px) top, calc(50% + 32px) top;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 320px, #000 calc(100% - 520px), transparent calc(100% - 200px)),
+    linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0, #000 320px, #000 calc(100% - 520px), transparent calc(100% - 200px)),
+    linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
-/* The dots-to-line connector (DotsToLine.tsx): centred on the section, starting
-   above it so the dots sit in the Services section and cross the curve. */
-.uc-trail {
+/* The handover from Services into this section: the Services dots continue
+   below the curve and thin out in two steps (every 16px, then every 32px)
+   until only the dots on the grid's 64px crossings remain. The layer starts
+   inside the curve at the bottom of Services and is cut to the curve's shape,
+   so no dots land on the grey above it. */
+.work-dots {
+  /* Same height as SectionCurve renders at. */
+  --curve-h: clamp(40px, 7.7vw, 110px);
   position: absolute;
-  left: calc(50% + 0.5px);
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  top: calc(-1 * var(--curve-h));
+  height: calc(var(--curve-h) + 420px);
+  z-index: -1;
   pointer-events: none;
-  overflow: visible;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 110' preserveAspectRatio='none'%3E%3Cpath d='M0,90 C360,10 1080,10 1440,90 L1440,110 L0,110 Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 110' preserveAspectRatio='none'%3E%3Cpath d='M0,90 C360,10 1080,10 1440,90 L1440,110 L0,110 Z'/%3E%3C/svg%3E"), linear-gradient(#000, #000);
+  -webkit-mask-size: 100% var(--curve-h), 100% calc(100% - var(--curve-h) + 1px);
+  mask-size: 100% var(--curve-h), 100% calc(100% - var(--curve-h) + 1px);
+  -webkit-mask-position: top, bottom;
+  mask-position: top, bottom;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
 }
-/* On phones the heading spans the centre, so the trail stops short of it and fades out. */
-@media (max-width: 760px) {
-  .uc-trail {
-    clip-path: inset(0 0 132px 0);
-    -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
-    mask-image: linear-gradient(to bottom, #000 calc(100% - 175px), transparent calc(100% - 132px));
-  }
+.work-dots-fine,
+.work-dots-mid {
+  position: absolute;
+  inset: 0;
+}
+/* Both patterns are placed so their dots fall on the grid's lines and crossings. */
+.work-dots-fine {
+  background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: calc(50% + 0.5px) calc(var(--curve-h) - 7.5px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--curve-h) + 20px), transparent calc(var(--curve-h) + 210px));
+  mask-image: linear-gradient(to bottom, #000 calc(var(--curve-h) + 20px), transparent calc(var(--curve-h) + 210px));
+}
+.work-dots-mid {
+  background-image: radial-gradient(#d6d6d6 1.3px, transparent 1.3px);
+  background-size: 32px 32px;
+  background-position: calc(50% + 0.5px) calc(var(--curve-h) - 15.5px);
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(var(--curve-h) + 40px), #000 calc(var(--curve-h) + 170px), transparent calc(var(--curve-h) + 400px));
+  mask-image: linear-gradient(to bottom, transparent calc(var(--curve-h) + 40px), #000 calc(var(--curve-h) + 170px), transparent calc(var(--curve-h) + 400px));
+}
+
+/* The same handover in reverse at the bottom of the section: the grid's lines
+   fade out and its crossing dots close up (every 32px, then every 16px) on the
+   way down to the curve into Process, which covers whatever lies below it. */
+.work-dots-end {
+  --curve-h: clamp(40px, 7.7vw, 110px);
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+.work-dots-end-mid,
+.work-dots-end-fine {
+  position: absolute;
+  inset: 0;
+}
+.work-dots-end-mid {
+  background-image: radial-gradient(#d6d6d6 1.3px, transparent 1.3px);
+  background-size: 32px 32px;
+  background-position: calc(50% + 0.5px) -15.5px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 400px), #000 calc(100% - var(--curve-h) - 170px), transparent calc(100% - var(--curve-h) - 40px));
+  mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 400px), #000 calc(100% - var(--curve-h) - 170px), transparent calc(100% - var(--curve-h) - 40px));
+}
+.work-dots-end-fine {
+  background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: calc(50% + 0.5px) -7.5px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 210px), #000 calc(100% - var(--curve-h) - 20px));
+  mask-image: linear-gradient(to bottom, transparent calc(100% - var(--curve-h) - 210px), #000 calc(100% - var(--curve-h) - 20px));
 }
 
 /* Buttons */
@@ -1141,4 +1206,155 @@ h6 {
   .uc-card:focus-visible {
     transform: none;
   }
+}
+
+/* ─── Blog ──────────────────────────────────────────────────────────────
+   White pages with the same dark cards as the use cases. The article body
+   comes from Markdown (content/blog), so its elements are styled here rather
+   than with classes. */
+
+.link-on-light {
+  color: var(--section-light-muted);
+  transition: color 200ms ease;
+}
+.link-on-light:hover {
+  color: var(--section-light-text);
+}
+/* The mono label and the pill, on white */
+.uc-label.on-light {
+  color: var(--section-light-muted);
+}
+.uc-badge.on-light {
+  border-color: #cbd5e1;
+  color: #475569;
+}
+
+.blog-cover {
+  position: relative;
+  aspect-ratio: 21 / 9;
+  border-radius: var(--radius-card);
+  background: var(--section-dark);
+  overflow: hidden;
+}
+@media (max-width: 760px) {
+  .blog-cover { aspect-ratio: 16 / 9; }
+}
+.blog-cover img {
+  object-fit: cover;
+}
+
+.blog-prose {
+  max-width: 68ch;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  font-size: clamp(16px, 1.3vw, 18px);
+  line-height: 1.75;
+  color: #334155;
+}
+.blog-prose > * + * {
+  margin-top: 1.2em;
+}
+.blog-prose h2,
+.blog-prose h3 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--section-light-text);
+}
+.blog-prose h2 {
+  font-size: clamp(24px, 2.6vw, 32px);
+  letter-spacing: -0.5px;
+  margin-top: 2.2em;
+}
+.blog-prose h3 {
+  font-size: clamp(19px, 1.8vw, 22px);
+  margin-top: 1.8em;
+}
+.blog-prose strong {
+  font-weight: 600;
+  color: var(--section-light-text);
+}
+.blog-prose a {
+  color: var(--section-light-text);
+  text-decoration: underline;
+  text-decoration-color: #2563eb;
+  text-underline-offset: 3px;
+  transition: color 200ms ease;
+}
+.blog-prose a:hover {
+  color: #2563eb;
+}
+.blog-prose a:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 3px;
+}
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.3em;
+}
+.blog-prose ul { list-style: disc; }
+.blog-prose ol { list-style: decimal; }
+.blog-prose li + li {
+  margin-top: 0.5em;
+}
+.blog-prose li::marker {
+  color: #2563eb;
+  font-weight: 600;
+}
+.blog-prose blockquote {
+  padding: 14px 18px;
+  border-left: 2px solid #2563eb;
+  background: var(--section-light-surface);
+  font-size: 0.92em;
+  color: var(--section-light-muted);
+}
+.blog-prose hr {
+  border: 0;
+  border-top: 1px solid var(--section-light-border);
+  margin: 2.5em 0;
+}
+.blog-prose code {
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.88em;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--section-light-surface);
+  border: 1px solid var(--section-light-border);
+  color: var(--section-light-text);
+}
+.blog-prose pre {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--section-light-surface);
+  border: 1px solid var(--section-light-border);
+  overflow-x: auto;
+}
+.blog-prose pre code {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.blog-prose img {
+  border-radius: 12px;
+  border: 1px solid var(--section-light-border);
+}
+/* Wide tables scroll inside themselves instead of widening the page. */
+.blog-prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+.blog-prose th,
+.blog-prose td {
+  padding: 10px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--section-light-border);
+}
+.blog-prose th {
+  font-weight: 600;
+  color: var(--section-light-text);
+  border-bottom-color: #cbd5e1;
 }
