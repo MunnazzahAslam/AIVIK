@@ -1035,6 +1035,33 @@ h6 {
   border-color: rgba(37, 99, 235, 0.75);
 }
 
+/* Background of the home page's "Our work" section: a faint line grid on
+   white that picks up the Services section's dots. The lines use the same
+   grey, sit 64px apart (four of the 16px dot steps) and carry a dot at each
+   crossing. It fades out towards all four edges, so it reads as a texture
+   that surfaces behind the cards rather than a panel with borders. */
+.work-grid-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(#cfcfcf 1.5px, transparent 1.5px),
+    linear-gradient(to right, #e6e6e6 1px, transparent 1px),
+    linear-gradient(to bottom, #e6e6e6 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* One grid line runs down the exact centre; the dots sit on the crossings. */
+  background-position: calc(50% + 0.5px) -31.5px, calc(50% + 32px) top, calc(50% + 32px) top;
+  -webkit-mask-image:
+    linear-gradient(to bottom, transparent 0, #000 320px, #000 calc(100% - 520px), transparent calc(100% - 200px)),
+    linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+  mask-image:
+    linear-gradient(to bottom, transparent 0, #000 320px, #000 calc(100% - 520px), transparent calc(100% - 200px)),
+    linear-gradient(to right, transparent 0, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
 /* The dots-to-line connector (DotsToLine.tsx): centred on the section, starting
    above it so the dots sit in the Services section and cross the curve. */
 .uc-trail {
