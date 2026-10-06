@@ -282,12 +282,20 @@
     "intro": "This website is operated by AIVIK, based in Germany.",
     "dataCollectionHeading": "Data collection",
     "dataCollectionBody": "This website does not collect personal data beyond what you voluntarily submit via contact forms or email.",
-    "cookiesHeading": "Cookies",
-    "cookiesBody": "This website does not use tracking cookies.",
+    "cookiesHeading": "Cookies and tracking",
+    "cookiesBody": "This website uses Google Tag Manager to load analytics and advertising measurement services. These may set cookies and send usage data to the providers of those services, such as Google. They load only if you accept them in the cookie banner; if you decline, none of them are loaded. Your choice is saved in your browser, and you can change or withdraw it at any time.",
     "chatHeading": "Chat assistant",
     "chatBody": "This website includes an AI chat assistant. Conversations are stored so we can review and improve them; if you share your name and email to request a follow-up, that information is handled the same way as a contact form submission.",
     "contactHeading": "Contact",
     "disclaimer": "For a full GDPR-compliant privacy policy, generate one at e-recht24.de and replace this page."
+  },
+  "Consent": {
+    "title": "Cookies",
+    "body": "We'd like to use analytics and marketing cookies to see how this site is used and to measure our campaigns. They load only if you accept.",
+    "privacyLink": "Privacy Policy",
+    "decline": "Decline",
+    "accept": "Accept",
+    "settings": "Cookie settings"
   },
   "Chat": {
     "title": "AIVIK Assistant",

@@ -282,12 +282,20 @@
     "intro": "Diese Website wird von AIVIK betrieben, ansässig in Deutschland.",
     "dataCollectionHeading": "Datenerhebung",
     "dataCollectionBody": "Diese Website erhebt keine personenbezogenen Daten über das hinaus, was Sie freiwillig über Kontaktformulare oder E-Mail übermitteln.",
-    "cookiesHeading": "Cookies",
-    "cookiesBody": "Diese Website verwendet keine Tracking-Cookies.",
+    "cookiesHeading": "Cookies und Tracking",
+    "cookiesBody": "Diese Website nutzt den Google Tag Manager, um Analyse- und Werbemessdienste zu laden. Diese können Cookies setzen und Nutzungsdaten an die Anbieter dieser Dienste, etwa Google, übermitteln. Sie werden nur geladen, wenn Sie im Cookie-Banner zustimmen; lehnen Sie ab, wird keiner dieser Dienste geladen. Ihre Auswahl wird in Ihrem Browser gespeichert und kann jederzeit geändert oder widerrufen werden.",
     "chatHeading": "Chat-Assistent",
     "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können; wenn Sie Ihren Namen und Ihre E-Mail-Adresse für eine Rückmeldung angeben, wird diese Angabe wie bei einer Kontaktformular-Übermittlung behandelt.",
     "contactHeading": "Kontakt",
     "disclaimer": "Für eine vollständige, DSGVO-konforme Datenschutzerklärung erstellen Sie bitte eine unter e-recht24.de und ersetzen Sie diese Seite."
+  },
+  "Consent": {
+    "title": "Cookies",
+    "body": "Wir möchten Analyse- und Marketing-Cookies einsetzen, um zu sehen, wie diese Website genutzt wird, und um unsere Kampagnen zu messen. Sie werden nur geladen, wenn Sie zustimmen.",
+    "privacyLink": "Datenschutzerklärung",
+    "decline": "Ablehnen",
+    "accept": "Akzeptieren",
+    "settings": "Cookie-Einstellungen"
   },
   "Chat": {
     "title": "AIVIK Assistent",
