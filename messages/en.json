@@ -305,6 +305,7 @@
     "page": {
       "back": "All articles",
       "published": "Published",
+      "author": "Written by",
       "topics": "Topics",
       "updated": "Updated {date}",
       "ctaHeading": "Thinking about AI for your business?",

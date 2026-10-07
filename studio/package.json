@@ -1,0 +1,29 @@
+{
+  "name": "aivik-studio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Sanity Studio for the AIVIK blog (aivik.eu)",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "@sanity/table": "^3.1.17",
+    "@sanity/vision": "^6.18.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "sanity": "^6.18.0",
+    "styled-components": "^6.5.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^7.0.2"
+  }
+}

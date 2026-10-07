@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { blogPath, formatDate, type Post } from "@/lib/blog";
+import { blogPath, formatDate, type PostSummary } from "@/lib/blog";
 
 type Props = {
-  post: Post;
+  post: PostSummary;
   readLabel: string;
   minutesLabel: string;
   /** Heading level of the title: h2 on the index page, h3 under an article. */
@@ -18,7 +18,7 @@ export default function PostCard({ post, readLabel, minutesLabel, as: Heading = 
     <Link href={blogPath(post.slug)} className="uc-card">
       <div className="uc-card-media">
         {/* SVG covers are served as they are; photos go through the image optimiser. */}
-        <Image src={post.cover} alt="" fill sizes="(max-width: 760px) 100vw, 560px" priority={priority} unoptimized={post.cover.endsWith(".svg")} />
+        <Image src={post.cover} alt="" fill sizes="(max-width: 760px) 100vw, 560px" priority={priority} unoptimized={post.cover.endsWith(".svg")} style={post.coverFocus ? { objectPosition: post.coverFocus } : undefined} />
       </div>
       <div className="flex flex-1 flex-col p-6">
         <p className="uc-label">

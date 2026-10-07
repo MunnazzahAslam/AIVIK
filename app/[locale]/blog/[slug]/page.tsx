@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -7,39 +8,42 @@ import { Link } from "@/i18n/navigation";
 import Nav from "@/app/components/Nav";
 import Footer from "@/app/components/Footer";
 import PostCard from "@/app/components/blog/PostCard";
+import PreviewBar from "@/app/components/blog/PreviewBar";
 import { siteUrl } from "@/data/use-cases";
 import { BLOG_BASE, blogPath, formatDate, getPost, getPosts } from "@/lib/blog";
 
 type Params = Promise<{ locale: Locale; slug: string }>;
 
-// One page per Markdown file. Anything else is a 404, and nothing reads the
-// content folder at request time.
-export const dynamicParams = false;
-
-export function generateStaticParams({ params: { locale } }: { params: { locale: Locale } }) {
-  return getPosts(locale).map((post) => ({ slug: post.slug }));
+// The articles known at build time are built then. One published later is built
+// the first time someone opens it, so a new article needs no deploy.
+export async function generateStaticParams({ params: { locale } }: { params: { locale: Locale } }) {
+  return (await getPosts(locale)).map((post) => ({ slug: post.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const post = getPost(locale, slug);
+  const post = await getPost(locale, slug, { preview: draftMode().isEnabled });
   if (!post) return {};
   const url = siteUrl(locale, blogPath(slug));
+  const title = post.seoTitle || post.title;
+  const description = post.seoDescription || post.description;
   const languages = Object.fromEntries(post.locales.map((l) => [l, siteUrl(l, blogPath(slug))]));
 
   return {
-    title: post.title,
-    description: post.description,
+    title,
+    description,
+    ...(post.noindex && { robots: { index: false, follow: true } }),
     alternates: {
-      canonical: url,
+      // An article first published elsewhere points search engines at the original.
+      canonical: post.canonical || url,
       languages: { ...languages, "x-default": siteUrl(post.locales.includes(routing.defaultLocale) ? routing.defaultLocale : locale, blogPath(slug)) },
     },
     openGraph: {
       type: "article",
       url,
       siteName: "AIVIK",
-      title: post.title,
-      description: post.description,
+      title,
+      description,
       locale: locale === "de" ? "de_DE" : "en_EU",
       publishedTime: post.date,
       modifiedTime: post.updated ?? post.date,
@@ -47,7 +51,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       // Social networks don't take SVG, so drawn covers fall back to the site's share image.
       images: [post.cover.endsWith(".svg") ? "/opengraph-image" : post.cover],
     },
-    twitter: { card: "summary_large_image", title: post.title, description: post.description },
+    twitter: { card: "summary_large_image", title, description },
   };
 }
 
@@ -55,11 +59,13 @@ export default async function BlogPost({ params }: { params: Params }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const post = getPost(locale, slug);
+  const preview = draftMode().isEnabled;
+  // Both questions go to Sanity at once, not one after the other.
+  const [post, posts] = await Promise.all([getPost(locale, slug, { preview }), getPosts(locale, { preview })]);
   if (!post) notFound();
 
   const t = await getTranslations("Blog");
-  const more = getPosts(locale).filter((p) => p.slug !== slug).slice(0, 2);
+  const more = posts.filter((p) => p.slug !== slug).slice(0, 2);
   const url = siteUrl(locale, blogPath(slug));
 
   const jsonLd = {
@@ -73,13 +79,17 @@ export default async function BlogPost({ params }: { params: Params }) {
     datePublished: post.date,
     dateModified: post.updated ?? post.date,
     keywords: post.tags.join(", "),
-    author: { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
+    ...(post.category && { articleSection: post.category }),
+    author: post.author
+      ? { "@type": "Person", name: post.author.name, ...(post.author.role && { jobTitle: post.author.role }) }
+      : { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
     publisher: { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
   };
 
   return (
     <main>
       <Nav />
+      {preview && <PreviewBar />}
       <article style={{ backgroundColor: "var(--section-light)" }} className="px-6 pt-[120px] pb-28">
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
 
@@ -101,7 +111,7 @@ export default async function BlogPost({ params }: { params: Params }) {
           </header>
 
           <div className="blog-cover mt-10">
-            <Image src={post.cover} alt="" fill priority sizes="(max-width: 1200px) 100vw, 1152px" unoptimized={post.cover.endsWith(".svg")} />
+            <Image src={post.cover} alt="" fill priority sizes="(max-width: 1200px) 100vw, 1152px" unoptimized={post.cover.endsWith(".svg")} style={post.coverFocus ? { objectPosition: post.coverFocus } : undefined} />
           </div>
 
           {/* Details beside the text on wide screens, above it on narrow ones. */}
@@ -120,6 +130,19 @@ export default async function BlogPost({ params }: { params: Params }) {
                   </p>
                 )}
               </div>
+              {post.author && (
+                <div>
+                  <p className="uc-label on-light">{t("page.author")}</p>
+                  <p className="font-body text-sm mt-2" style={{ color: "var(--section-light-text)" }}>
+                    {post.author.name}
+                  </p>
+                  {post.author.role && (
+                    <p className="font-body text-sm mt-1" style={{ color: "var(--section-light-muted)" }}>
+                      {post.author.role}
+                    </p>
+                  )}
+                </div>
+              )}
               {post.tags.length > 0 && (
                 <div>
                   <p className="uc-label on-light">{t("page.topics")}</p>
@@ -134,7 +157,7 @@ export default async function BlogPost({ params }: { params: Params }) {
               )}
             </aside>
 
-            {/* The article itself, rendered from its Markdown file. */}
+            {/* The article itself, as HTML built from its blocks in Sanity (lib/blog.ts). */}
             <div className="blog-prose" dangerouslySetInnerHTML={{ __html: post.html }} />
           </div>
 

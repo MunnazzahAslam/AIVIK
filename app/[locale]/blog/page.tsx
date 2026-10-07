@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import Nav from "@/app/components/Nav";
 import Footer from "@/app/components/Footer";
 import PostCard from "@/app/components/blog/PostCard";
+import PreviewBar from "@/app/components/blog/PreviewBar";
 import { siteUrl } from "@/data/use-cases";
 import { BLOG_BASE, getPosts } from "@/lib/blog";
 
@@ -27,11 +29,13 @@ export default async function BlogIndex({ params }: { params: Promise<{ locale: 
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Blog");
-  const posts = getPosts(locale);
+  const preview = draftMode().isEnabled;
+  const posts = await getPosts(locale, { preview });
 
   return (
     <main>
       <Nav />
+      {preview && <PreviewBar />}
       {/* White with dark cards, like the home page's use-cases section. */}
       <section style={{ backgroundColor: "var(--section-light)" }} className="px-6 pt-[150px] pb-28">
         <div className="max-w-6xl mx-auto">
