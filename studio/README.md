@@ -39,3 +39,22 @@ npm run deploy     # publishes the editor to https://aivik.sanity.studio
 4. **Publish**. The article is on the website within a few seconds.
 
 To take an article down, use **⋯ → Unpublish**.
+
+## Review before publishing
+
+- **Publishing settings** lists the people who can publish, by the email they
+  sign in with. Only they can publish, unpublish or delete an article, and only
+  they can change the list.
+- Everyone else writes, switches on **Ready for review**, and the article shows
+  up in the **Ready for review** list for the approvers. Publishing switches the
+  mark off again.
+- This is enforced by the Studio (`review.ts`), not by Sanity's permissions,
+  which need a paid plan. It prevents accidents; it is not a security boundary.
+
+## Covers
+
+Each category picks one of the animated covers the website can draw
+(`lib/blog-covers.ts`, served by `app/blog-cover`). An article gets its own
+variation of its category's cover, unless a cover image is uploaded for it.
+A new cover style is added in both places: the drawing in `lib/blog-covers.ts`
+and its name in `schemaTypes/category.ts`.

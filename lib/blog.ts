@@ -1,5 +1,6 @@
 import { escapeHTML, toHTML, uriLooksSafe } from "@portabletext/to-html";
 import { routing, type Locale } from "@/i18n/routing";
+import { coverPath, isCoverStyle } from "@/lib/blog-covers";
 import { SANITY_DATASET, SANITY_PROJECT_ID, sanityFetch } from "@/lib/sanity";
 
 /**
@@ -29,7 +30,7 @@ export type PostSummary = {
   tags: string[];
   /** Reading time, from the word count. */
   minutes: number;
-  /** The cover image: the article's own, or the shared default. */
+  /** The cover image: an uploaded one, else the animated cover of its category, else the shared default. */
   cover: string;
   /** Where the subject of an uploaded cover sits, as a CSS object-position. */
   coverFocus: string | null;
@@ -66,7 +67,7 @@ const IMAGE_CDN = `https://cdn.sanity.io/images/${SANITY_PROJECT_ID}/${SANITY_DA
 
 type Hotspot = { x?: number; y?: number } | null;
 
-function coverFor(slug: string, cover: { url?: string | null; hotspot?: Hotspot } | null) {
+function coverFor(slug: string, cover: { url?: string | null; hotspot?: Hotspot } | null, style: string | null) {
   const percent = (n: number | undefined) => `${Math.round((n ?? 0.5) * 100)}%`;
   if (cover?.url?.startsWith(IMAGE_CDN)) {
     return {
@@ -74,7 +75,9 @@ function coverFor(slug: string, cover: { url?: string | null; hotspot?: Hotspot 
       coverFocus: cover.hotspot ? `${percent(cover.hotspot.x)} ${percent(cover.hotspot.y)}` : null,
     };
   }
-  return { cover: DRAWN_COVERS.has(slug) ? `${BLOG_BASE}/${slug}/cover.svg` : DEFAULT_COVER, coverFocus: null };
+  if (DRAWN_COVERS.has(slug)) return { cover: `${BLOG_BASE}/${slug}/cover.svg`, coverFocus: null };
+  // The category's drawing, varied for this article (lib/blog-covers.ts).
+  return { cover: isCoverStyle(style) ? coverPath(style, slug) : DEFAULT_COVER, coverFocus: null };
 }
 
 // Articles are dated in German time: one dated today is out from midnight in Berlin.
@@ -97,6 +100,7 @@ const summaryFields = (locale: Locale) => `
   "tags": tags[]->{ "title": coalesce(title${SUFFIX[locale]}, titleEn) }.title,
   "words": count(string::split(pt::text(${locale}.body), " ")) + count(${locale}.body[_type == "block"]),
   "cover": cover{ "url": asset->url, hotspot },
+  "coverStyle": category->coverStyle,
   featured,
   noindex,
   "locales": [${routing.locales.map((l) => `select(defined(${l}.title) => "${l}")`).join(", ")}]`;
@@ -115,6 +119,7 @@ type SummaryRow = {
   tags: (string | null)[] | null;
   words: number | null;
   cover: { url: string | null; hotspot: Hotspot } | null;
+  coverStyle: string | null;
   featured: boolean | null;
   noindex: boolean | null;
   locales: (Locale | null)[];
@@ -131,7 +136,7 @@ function toSummary(row: SummaryRow, locale: Locale): PostSummary {
     category: row.category,
     tags: (row.tags ?? []).filter((tag): tag is string => Boolean(tag)),
     minutes: Math.max(1, Math.round((row.words ?? 0) / WORDS_PER_MINUTE)),
-    ...coverFor(row.slug, row.cover),
+    ...coverFor(row.slug, row.cover, row.coverStyle),
     featured: Boolean(row.featured),
     noindex: Boolean(row.noindex),
     locales: row.locales.filter((l): l is Locale => Boolean(l)),
