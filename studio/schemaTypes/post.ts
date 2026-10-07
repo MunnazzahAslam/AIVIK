@@ -78,6 +78,15 @@ export const post = defineType({
         }),
     }),
     defineField({
+      name: 'readyForReview',
+      title: 'Ready for review',
+      type: 'boolean',
+      group: ['en', 'de', 'details'],
+      description:
+        'Switch this on when the article is finished. It then shows up under "Ready for review" for the people who can publish. It switches itself off again when the article is published.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'date',
       title: 'Publication date',
       type: 'date',
@@ -116,7 +125,7 @@ export const post = defineType({
       type: 'image',
       group: 'details',
       description:
-        'Without one, the article gets the AIVIK cover. Landscape, at least 1600 × 900, with the subject in the middle: the article page crops it to a wide strip.',
+        'Without one, the article gets the animated cover of its category. Landscape, at least 1600 × 900, with the subject in the middle: the article page crops it to a wide strip.',
       options: {hotspot: true, accept: 'image/png,image/jpeg,image/webp'},
     }),
     defineField({
@@ -152,10 +161,12 @@ export const post = defineType({
     {title: 'Oldest first', name: 'dateAsc', by: [{field: 'date', direction: 'asc'}]},
   ],
   preview: {
-    select: {en: 'en.title', de: 'de.title', date: 'date', media: 'cover'},
-    prepare: ({en, de, date, media}) => ({
+    select: {en: 'en.title', de: 'de.title', date: 'date', media: 'cover', ready: 'readyForReview'},
+    prepare: ({en, de, date, media, ready}) => ({
       title: en || de || 'Untitled',
-      subtitle: [date, [en && 'EN', de && 'DE'].filter(Boolean).join(' + ')].filter(Boolean).join(' · '),
+      subtitle: [ready && 'Ready for review', date, [en && 'EN', de && 'DE'].filter(Boolean).join(' + ')]
+        .filter(Boolean)
+        .join(' · '),
       media,
     }),
   },
