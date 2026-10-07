@@ -305,6 +305,7 @@
     "page": {
       "back": "Alle Artikel",
       "published": "Veröffentlicht",
+      "author": "Autor",
       "topics": "Themen",
       "updated": "Aktualisiert am {date}",
       "ctaHeading": "Sie denken über KI für Ihr Unternehmen nach?",

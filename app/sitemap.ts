@@ -5,7 +5,11 @@ import { BLOG_BASE, blogPath, getPosts } from "@/lib/blog";
 
 const paths = ["", "/about", "/impressum", "/privacy"];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Built on each request instead of once at build time: a prebuilt sitemap did
+// not pick up newly published articles. The blog data behind it is still cached.
+export const dynamic = "force-dynamic";
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = paths.map((path) => ({
     url: `https://aivik.eu${path}`,
     lastModified: new Date(),
@@ -31,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     alternates: { languages: { en: siteUrl("en", en), de: siteUrl("de", de) } },
   }));
 
-  // Blog: the index and one entry per article and language, read from content/blog.
+  // Blog: the index and one entry per article and language, read from Sanity.
   const blogIndex: MetadataRoute.Sitemap = [
     {
       url: siteUrl("en", BLOG_BASE),
@@ -41,9 +45,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
       alternates: { languages: { en: siteUrl("en", BLOG_BASE), de: siteUrl("de", BLOG_BASE) } },
     },
   ];
-  const posts: MetadataRoute.Sitemap = routing.locales.flatMap((locale) =>
-    getPosts(locale).map((post) => ({
-      url: siteUrl(locale, blogPath(post.slug)),
+  const listed = await Promise.all(routing.locales.map((locale) => getPosts(locale)));
+  const posts: MetadataRoute.Sitemap = listed.flatMap((inLocale) =>
+    inLocale.filter((post) => !post.noindex).map((post) => ({
+      url: siteUrl(post.locale, blogPath(post.slug)),
       lastModified: new Date(post.updated ?? post.date),
       changeFrequency: "yearly" as const,
       priority: 0.6,

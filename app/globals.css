@@ -1210,7 +1210,7 @@ h6 {
 
 /* ─── Blog ──────────────────────────────────────────────────────────────
    White pages with the same dark cards as the use cases. The article body
-   comes from Markdown (content/blog), so its elements are styled here rather
+   comes from Sanity as plain HTML (lib/blog.ts), so its elements are styled here rather
    than with classes. */
 
 .link-on-light {
