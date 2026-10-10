@@ -1,13 +1,17 @@
 import { neon } from "@neondatabase/serverless";
 import { Submission, appendToGoogleSheet, insertSubmission, sendNotificationEmail } from "./contact";
+import { LIMITS } from "./validation";
 import { USE_CASES, USE_CASES_BASE, siteUrl, useCasePath } from "@/data/use-cases";
 
 export type ChatRole = "user" | "assistant";
-export type LeadTag = "hot" | "warm" | "cold";
+export type ChatContact = { name: string; email: string; phone: string };
 
 const ANTHROPIC_MODEL = "claude-haiku-4-5-20251001";
 const MAX_HISTORY_MESSAGES = 20;
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_PATTERN = /^[\d\s+\-()]{7,20}$/;
+// The visitor gets one answer, then the widget asks for their details.
+export const FREE_QUESTIONS = 1;
 
 function getSql() {
   const connectionString = process.env.POSTGRES_URL || process.env.DATABASE_URL;
@@ -39,6 +43,12 @@ async function ensureTables() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+  await sql`
+    ALTER TABLE chat_conversations
+      ADD COLUMN IF NOT EXISTS contact_name TEXT,
+      ADD COLUMN IF NOT EXISTS contact_email TEXT,
+      ADD COLUMN IF NOT EXISTS contact_phone TEXT
+  `;
 }
 
 export async function ensureConversation(sessionId: string) {
@@ -59,12 +69,20 @@ export async function saveMessage(sessionId: string, role: ChatRole, content: st
   `;
 }
 
-export async function getContactCaptured(sessionId: string): Promise<boolean> {
+export async function getConversationState(
+  sessionId: string
+): Promise<{ contactCaptured: boolean; contactName: string; userMessages: number }> {
   const sql = getSql();
   const rows = (await sql`
-    SELECT contact_captured FROM chat_conversations WHERE session_id = ${sessionId}
-  `) as { contact_captured: boolean }[];
-  return rows[0]?.contact_captured ?? false;
+    SELECT c.contact_captured, c.contact_name,
+      (SELECT count(*) FROM chat_messages m WHERE m.session_id = c.session_id AND m.role = 'user')::int AS user_messages
+    FROM chat_conversations c WHERE c.session_id = ${sessionId}
+  `) as { contact_captured: boolean; contact_name: string | null; user_messages: number }[];
+  return {
+    contactCaptured: rows[0]?.contact_captured ?? false,
+    contactName: rows[0]?.contact_name ?? "",
+    userMessages: rows[0]?.user_messages ?? 0,
+  };
 }
 
 export async function getHistory(sessionId: string): Promise<{ role: ChatRole; content: string }[]> {
@@ -75,26 +93,51 @@ export async function getHistory(sessionId: string): Promise<{ role: ChatRole; c
   return rows.slice(-MAX_HISTORY_MESSAGES);
 }
 
+export function validateChatContact(
+  body: unknown
+): { ok: true; data: ChatContact } | { ok: false; field: keyof ChatContact } {
+  const b = (typeof body === "object" && body !== null ? body : {}) as Record<string, unknown>;
+  const name = typeof b.name === "string" ? b.name.replace(/\s+/g, " ").trim() : "";
+  const email = typeof b.email === "string" ? b.email.trim() : "";
+  const phone = typeof b.phone === "string" ? b.phone.trim() : "";
+
+  if (name.length < 2 || name.length > LIMITS.name) return { ok: false, field: "name" };
+  if (email.length > LIMITS.email || !EMAIL_PATTERN.test(email)) return { ok: false, field: "email" };
+  if (!PHONE_PATTERN.test(phone) || phone.replace(/\D/g, "").length < 7) return { ok: false, field: "phone" };
+  return { ok: true, data: { name, email, phone } };
+}
+
 // A captured chat lead is just a `submissions` row with a distinct service
 // label — it lands in the same DB/Sheet/email pipeline the quote form uses
 // instead of becoming a second channel the team has to check separately.
-async function captureLead(
-  sessionId: string,
-  data: { name: string; email: string; company?: string; intent: string; tag: LeadTag }
-) {
+// Returns false when the conversation doesn't exist or has no question yet.
+export async function captureLead(sessionId: string, contact: ChatContact): Promise<boolean> {
   const sql = getSql();
-  await sql`
-    UPDATE chat_conversations SET contact_captured = true WHERE session_id = ${sessionId}
-  `;
+  await ensureTables();
+
+  const questions = (await sql`
+    SELECT content FROM chat_messages WHERE session_id = ${sessionId} AND role = 'user' ORDER BY id ASC
+  `) as { content: string }[];
+  if (questions.length === 0) return false;
+
+  // Only the request that flips the flag sends the lead, so a double submit
+  // doesn't notify the team twice.
+  const claimed = (await sql`
+    UPDATE chat_conversations
+    SET contact_captured = true, contact_name = ${contact.name}, contact_email = ${contact.email}, contact_phone = ${contact.phone}
+    WHERE session_id = ${sessionId} AND contact_captured = false
+    RETURNING id
+  `) as { id: number }[];
+  if (claimed.length === 0) return true;
 
   const submission: Submission = {
     timestamp: new Date().toISOString(),
-    name: data.name,
-    email: data.email,
-    company: data.company || "",
-    phone: "",
-    service: `Chatbot inquiry (${data.tag} lead)`,
-    message: data.intent,
+    name: contact.name,
+    email: contact.email,
+    company: "",
+    phone: contact.phone,
+    service: "Chatbot inquiry",
+    message: `Asked in the chat: ${questions.map((q) => q.content).join(" / ")}`.slice(0, LIMITS.message),
   };
 
   await insertSubmission(submission);
@@ -108,6 +151,7 @@ async function captureLead(
       console.error("[chat] lead notification failed:", result.reason);
     }
   });
+  return true;
 }
 
 // The use cases Mara can point to, built from the same data as the pages so
@@ -151,61 +195,21 @@ Visitor: "what do you build?"
 Good reply: "Mostly custom software and AI automation — chatbots, internal tools, that kind of thing."
 Bad reply: "At AIVIK, we offer a comprehensive range of services including custom software development, AI workflow automation, cloud infrastructure, data analysis, and digital marketing. We would be happy to discuss your specific needs in more detail!"
 
-GETTING THEIR NAME AND EMAIL:
-- Skip it on a bare "hi"/greeting with nothing else in it.
-- If they show clear intent right away (pricing, "I want to start", "book a call"), answer briefly and ask for their name + email in that SAME reply. Example: "...(short answer)... Who am I chatting with, and what's a good email for the team?"
-- If they give a name + email at any point, call the capture_lead tool once, using whatever they've told you about what they need.
-- You may also get an explicit instruction below telling you this exact reply must include the ask — when that happens, do it even if it doesn't feel like a natural pause, but keep it to one added line, not a form.
-- Once you've asked twice in a conversation without getting an answer, stop asking — don't nag. Keep chatting normally.
+CONTACT DETAILS: the widget collects the visitor's name, email and phone number itself, with a short form shown right after your first reply. Never ask for a name, email address or phone number yourself, and don't mention the form. If they want a call, a quote or a person, say the team will follow up using the details they leave in the chat.
 
-After every reply (except right after calling capture_lead), end on its own new line with exactly:
+After every reply, end on its own new line with exactly:
 SUGGESTIONS: <question 1> | <question 2> | <question 3>
 Short follow-up questions the visitor could tap next, from their point of view (e.g. "How does your process work?"). Under 8 words each, in the visitor's language, and only questions FACTS lets you answer (not prices, timelines, or client types beyond mid-to-enterprise). Omit only if the conversation has clearly wrapped up.`;
 
-function buildSystemPrompt(userTurnCount: number, contactCaptured: boolean): string {
-  if (contactCaptured) return SYSTEM_PROMPT;
-
-  if (userTurnCount === 2) {
-    return (
-      SYSTEM_PROMPT +
-      `\n\nMANDATORY FOR THIS REPLY: this is their 2nd message and you still don't have a name/email. Answer their message in one sentence, then add one casual line asking for their name and a good email — regardless of topic. Skip this only if you already asked for it in your very last reply.`
-    );
-  }
-
-  if (userTurnCount === 4) {
-    return (
-      SYSTEM_PROMPT +
-      `\n\nMANDATORY FOR THIS REPLY: still no name/email after 4 messages. Answer normally, then add one low-pressure last nudge, e.g. "No rush — drop your email anytime if you want the team to follow up." Skip this only if you already asked for it in your very last reply. Don't ask again after this turn.`
-    );
-  }
-
-  return SYSTEM_PROMPT;
+function buildSystemPrompt(contactName: string): string {
+  if (!contactName) return SYSTEM_PROMPT;
+  // The name is visitor input: keep it to one short line of plain characters.
+  const name = contactName.replace(/[^A-Za-z\u00C0-\u024F .'-]/g, "").slice(0, 60).trim();
+  return (
+    SYSTEM_PROMPT +
+    `\n\nThe visitor has left their contact details in the widget${name ? `; their name is ${name}` : ""}. The team will follow up by email or phone, so don't ask for contact details.`
+  );
 }
-
-const CAPTURE_LEAD_TOOL = {
-  name: "capture_lead",
-  description:
-    "Record a qualified lead once the visitor has typed their own name and email address in this conversation and wants follow-up or a call. Never call it before they have, and never with placeholder values. Call at most once per conversation.",
-  input_schema: {
-    type: "object",
-    properties: {
-      name: { type: "string" },
-      email: { type: "string" },
-      company: { type: "string", description: "Optional, only if volunteered." },
-      intent: {
-        type: "string",
-        description: "1-2 sentence recap of what they need, for the sales team to read.",
-      },
-      tag: {
-        type: "string",
-        enum: ["hot", "warm", "cold"],
-        description:
-          "hot = asked about pricing/timeline and wants to move soon, warm = interested but not urgent, cold = mostly browsing but left contact info anyway",
-      },
-    },
-    required: ["name", "email", "intent", "tag"],
-  },
-};
 
 function extractSuggestions(raw: string): { text: string; suggestions: string[] } {
   const match = raw.match(/\n?SUGGESTIONS:\s*(.+)\s*$/i);
@@ -218,18 +222,10 @@ function extractSuggestions(raw: string): { text: string; suggestions: string[] 
   return { text: raw.slice(0, match.index).trim(), suggestions };
 }
 
-type AnthropicContentBlock =
-  | { type: "text"; text: string }
-  | { type: "tool_use"; id: string; name: string; input: Record<string, unknown> }
-  | { type: "tool_result"; tool_use_id: string; content: string; is_error?: boolean };
-
-type AnthropicMessage = { role: "user" | "assistant"; content: string | AnthropicContentBlock[] };
-
 export async function callClaude(
   history: { role: ChatRole; content: string }[],
-  sessionId: string,
-  contactCaptured: boolean
-): Promise<{ reply: string; suggestions: string[]; leadCaptured: boolean }> {
+  contactName: string
+): Promise<{ reply: string; suggestions: string[] }> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.log("[chat] No ANTHROPIC_API_KEY set, chat is disabled");
@@ -237,85 +233,31 @@ export async function callClaude(
       reply:
         "Chat's not switched on just yet — please use the quote form below, or email us directly at info@aivik.eu.",
       suggestions: [],
-      leadCaptured: false,
     };
   }
 
-  const userTurnCount = history.filter((m) => m.role === "user").length;
-  const systemPrompt = buildSystemPrompt(userTurnCount, contactCaptured);
+  const res = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {
+      "x-api-key": apiKey,
+      "anthropic-version": "2023-06-01",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      model: ANTHROPIC_MODEL,
+      max_tokens: 350,
+      system: buildSystemPrompt(contactName),
+      messages: history.map((m) => ({ role: m.role, content: m.content })),
+    }),
+  });
 
-  const messages: AnthropicMessage[] = history.map((m) => ({ role: m.role, content: m.content }));
-  let leadCaptured = false;
-
-  // A few tool round-trips at most: the model may call capture_lead (and have a
-  // call rejected), then we send the tool result back so it can write the reply.
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        model: ANTHROPIC_MODEL,
-        max_tokens: 350,
-        system: systemPrompt,
-        tools: [CAPTURE_LEAD_TOOL],
-        messages,
-      }),
-    });
-
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error(`Anthropic API error: ${res.status} ${errText}`);
-    }
-
-    const data = (await res.json()) as { content: AnthropicContentBlock[] };
-    const toolUse = data.content.find((b): b is Extract<AnthropicContentBlock, { type: "tool_use" }> => b.type === "tool_use");
-    const textBlock = data.content.find((b): b is Extract<AnthropicContentBlock, { type: "text" }> => b.type === "text");
-
-    if (toolUse && toolUse.name === "capture_lead" && !leadCaptured) {
-      const input = toolUse.input as { name: string; email: string; company?: string; intent: string; tag: LeadTag };
-      // The model has called this with made-up values ("Visitor", "pending") before the
-      // visitor shared anything, so only save an email the visitor actually typed.
-      const email = String(input.email ?? "").trim();
-      const typedByVisitor = history.some(
-        (m) => m.role === "user" && m.content.toLowerCase().includes(email.toLowerCase())
-      );
-      const valid = EMAIL_PATTERN.test(email) && typedByVisitor && String(input.name ?? "").trim().length > 0;
-
-      if (valid) {
-        await captureLead(sessionId, { ...input, email });
-        leadCaptured = true;
-      }
-
-      messages.push({ role: "assistant", content: data.content });
-      messages.push({
-        role: "user",
-        content: [
-          {
-            type: "tool_result",
-            tool_use_id: toolUse.id,
-            content: valid
-              ? "Lead saved and the team has been notified by email."
-              : "Not saved: the visitor hasn't typed a valid email address in this conversation yet. Don't say the team was notified; ask for their name and a good email instead.",
-            ...(valid ? {} : { is_error: true }),
-          },
-        ],
-      });
-      continue;
-    }
-
-    const { text, suggestions } = extractSuggestions(textBlock?.text ?? "");
-    return { reply: text, suggestions, leadCaptured };
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Anthropic API error: ${res.status} ${errText}`);
   }
 
-  return {
-    reply: leadCaptured
-      ? "Thanks — I've passed this along to the team."
-      : "Who am I chatting with, and what's a good email for the team?",
-    suggestions: [],
-    leadCaptured,
-  };
+  const data = (await res.json()) as { content: { type: string; text?: string }[] };
+  const raw = data.content.find((b) => b.type === "text")?.text ?? "";
+  const { text, suggestions } = extractSuggestions(raw);
+  return { reply: text, suggestions };
 }

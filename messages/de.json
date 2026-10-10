@@ -286,7 +286,7 @@
     "cookiesHeading": "Cookies und Tracking",
     "cookiesBody": "Diese Website nutzt den Google Tag Manager, um Analyse- und Werbemessdienste zu laden. Diese können Cookies setzen und Nutzungsdaten an die Anbieter dieser Dienste, etwa Google, übermitteln. Der Google Tag Manager selbst wird auf jeder Seite geladen, jedoch mit dem Google Consent Mode standardmäßig auf „abgelehnt“: Bis Sie im Cookie-Banner zustimmen, setzen diese Dienste keine Analyse- oder Werbe-Cookies und übermitteln höchstens eingeschränkte, cookielose Signale. Lehnen Sie ab, bleibt es dabei. Ihre Auswahl wird in Ihrem Browser gespeichert und kann jederzeit geändert oder widerrufen werden.",
     "chatHeading": "Chat-Assistent",
-    "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können; wenn Sie Ihren Namen und Ihre E-Mail-Adresse für eine Rückmeldung angeben, wird diese Angabe wie bei einer Kontaktformular-Übermittlung behandelt.",
+    "chatBody": "Diese Website enthält einen KI-Chat-Assistenten. Unterhaltungen werden gespeichert, damit wir sie überprüfen und verbessern können. Nach Ihrer ersten Frage bittet der Assistent um Ihren Namen, Ihre E-Mail-Adresse und Ihre Telefonnummer, damit sich unser Team bei Ihnen melden kann; diese Angaben werden wie bei einer Kontaktformular-Übermittlung behandelt.",
     "contactHeading": "Kontakt",
     "disclaimer": "Für eine vollständige, DSGVO-konforme Datenschutzerklärung erstellen Sie bitte eine unter e-recht24.de und ersetzen Sie diese Seite."
   },
@@ -339,7 +339,23 @@
     "close": "Chat schließen",
     "typing": "Mara schreibt",
     "resize": "Chat-Höhe anpassen",
-    "leadConfirmed": "✓ Verstanden — jemand aus dem Team meldet sich per E-Mail.",
+    "leadConfirmed": "Danke, {name}. Das Team hat Ihre Angaben und meldet sich bei Ihnen. Was möchten Sie noch wissen?",
+    "contact": {
+      "intro": "Bevor es weitergeht: Wie kann das Team Sie erreichen?",
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefonnummer",
+      "submit": "Chat fortsetzen",
+      "sending": "Wird gesendet...",
+      "paused": "Bitte oben Ihre Angaben eintragen",
+      "errors": {
+        "name": "Bitte geben Sie Ihren Namen ein.",
+        "email": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "phone": "Bitte geben Sie eine gültige Telefonnummer ein."
+      },
+      "failed": "Das hat nicht geklappt. Bitte versuchen Sie es erneut.",
+      "privacy": "Wir nutzen diese Angaben nur, um auf Ihre Anfrage zu antworten. Mehr in unserer <link>Datenschutzerklärung</link>."
+    },
     "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an",
     "disclosure": "Sie chatten mit einem KI-Assistenten."
   },

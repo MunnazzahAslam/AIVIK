@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { callClaude, ensureConversation, getContactCaptured, getHistory, saveMessage } from "@/lib/chat";
+import { FREE_QUESTIONS, callClaude, ensureConversation, getConversationState, getHistory, saveMessage } from "@/lib/chat";
 
 export async function POST(req: NextRequest) {
   try {
@@ -17,17 +17,22 @@ export async function POST(req: NextRequest) {
     }
 
     await ensureConversation(sessionId);
+    const { contactCaptured, contactName, userMessages } = await getConversationState(sessionId);
+
+    // The widget pauses the chat behind its contact form after the first
+    // answer; this is the same rule for requests that skip the widget.
+    if (!contactCaptured && userMessages >= FREE_QUESTIONS) {
+      return NextResponse.json({ error: "Contact details required", needsContact: true }, { status: 403 });
+    }
+
     await saveMessage(sessionId, "user", message.trim());
 
-    const [history, contactCaptured] = await Promise.all([
-      getHistory(sessionId),
-      getContactCaptured(sessionId),
-    ]);
-    const { reply, suggestions, leadCaptured } = await callClaude(history, sessionId, contactCaptured);
+    const history = await getHistory(sessionId);
+    const { reply, suggestions } = await callClaude(history, contactName);
 
     await saveMessage(sessionId, "assistant", reply);
 
-    return NextResponse.json({ reply, suggestions, leadCaptured });
+    return NextResponse.json({ reply, suggestions, needsContact: !contactCaptured });
   } catch (err) {
     console.error("[chat] error:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
