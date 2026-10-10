@@ -286,7 +286,7 @@
     "cookiesHeading": "Cookies and tracking",
     "cookiesBody": "This website uses Google Tag Manager to load analytics and advertising measurement services. These may set cookies and send usage data to the providers of those services, such as Google. Google Tag Manager itself loads on every page, but with Google Consent Mode set to \"denied\" by default: until you accept in the cookie banner, these services set no analytics or advertising cookies and may only send limited, cookieless signals. If you decline, it stays that way. Your choice is saved in your browser, and you can change or withdraw it at any time.",
     "chatHeading": "Chat assistant",
-    "chatBody": "This website includes an AI chat assistant. Conversations are stored so we can review and improve them; if you share your name and email to request a follow-up, that information is handled the same way as a contact form submission.",
+    "chatBody": "This website includes an AI chat assistant. Conversations are stored so we can review and improve them. After your first question, the assistant asks for your name, email address and phone number so our team can follow up; that information is handled the same way as a contact form submission.",
     "contactHeading": "Contact",
     "disclaimer": "For a full GDPR-compliant privacy policy, generate one at e-recht24.de and replace this page."
   },
@@ -339,7 +339,23 @@
     "close": "Close chat",
     "typing": "Mara is typing",
     "resize": "Resize chat height",
-    "leadConfirmed": "✓ Got it — someone from the team will follow up by email.",
+    "leadConfirmed": "Thanks, {name}. The team has your details and will be in touch. What else would you like to know?",
+    "contact": {
+      "intro": "Before we go on, where can the team reach you?",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone number",
+      "submit": "Continue chat",
+      "sending": "Sending...",
+      "paused": "Fill in your details above to continue",
+      "errors": {
+        "name": "Please enter your name.",
+        "email": "Please enter a valid email address.",
+        "phone": "Please enter a valid phone number."
+      },
+      "failed": "That didn't go through. Please try again.",
+      "privacy": "We use these details only to follow up on your request. See our <link>privacy policy</link>."
+    },
     "error": "Something went wrong. Please try again, or email us directly at",
     "disclosure": "You're chatting with an AI assistant."
   },

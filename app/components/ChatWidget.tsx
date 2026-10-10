@@ -1,16 +1,36 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 type Message = {
   role: "user" | "assistant";
   content: string;
-  leadCaptured?: boolean;
 };
+
+type ContactField = "name" | "email" | "phone";
+const CONTACT_FIELDS: { field: ContactField; type: string; autoComplete: string }[] = [
+  { field: "name", type: "text", autoComplete: "name" },
+  { field: "email", type: "email", autoComplete: "email" },
+  { field: "phone", type: "tel", autoComplete: "tel" },
+];
+// Same rules as the server (lib/chat.ts), which checks again on submit.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const PHONE_PATTERN = /^[\d\s+\-()]{7,20}$/;
+
+function invalidFields(contact: Record<ContactField, string>): ContactField[] {
+  const invalid: ContactField[] = [];
+  if (contact.name.trim().length < 2) invalid.push("name");
+  if (!EMAIL_PATTERN.test(contact.email.trim())) invalid.push("email");
+  const phone = contact.phone.trim();
+  if (!PHONE_PATTERN.test(phone) || phone.replace(/\D/g, "").length < 7) invalid.push("phone");
+  return invalid;
+}
 
 const ACCENT = "var(--accent-code)"; // #2563EB — same blue as the nav logo's underscore
 const SESSION_KEY = "aivik_chat_session_id";
 const HISTORY_KEY = "aivik_chat_history";
+const NEEDS_CONTACT_KEY = "aivik_chat_needs_contact";
 const PANEL_HEIGHT_KEY = "aivik_chat_panel_height";
 const NUDGE_DELAY_MS = 20000;
 const MIN_PANEL_HEIGHT = 380;
@@ -68,9 +88,17 @@ export default function ChatWidget() {
   const [nudgeDismissed, setNudgeDismissed] = useState(false);
   const [panelHeight, setPanelHeight] = useState(DEFAULT_PANEL_HEIGHT);
   const [resizing, setResizing] = useState(false);
+  // After the first answer the chat pauses until the visitor leaves their details.
+  const [needsContact, setNeedsContact] = useState(false);
+  const [contact, setContact] = useState<Record<ContactField, string>>({ name: "", email: "", phone: "" });
+  const [contactErrors, setContactErrors] = useState<ContactField[]>([]);
+  const [contactSending, setContactSending] = useState(false);
+  const [contactFailed, setContactFailed] = useState(false);
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
+  const queuedRef = useRef(""); // a question asked while the form was open
   const heightRef = useRef(panelHeight);
   const dragStartRef = useRef<{ y: number; height: number } | null>(null);
 
@@ -79,6 +107,7 @@ export default function ChatWidget() {
     try {
       const savedHistory = sessionStorage.getItem(HISTORY_KEY);
       if (savedHistory) setMessages(JSON.parse(savedHistory) as Message[]);
+      setNeedsContact(sessionStorage.getItem(NEEDS_CONTACT_KEY) === "1");
     } catch {
       // ignore corrupt/missing history
     }
@@ -94,10 +123,11 @@ export default function ChatWidget() {
     if (!sessionId) return;
     try {
       sessionStorage.setItem(HISTORY_KEY, JSON.stringify(messages));
+      sessionStorage.setItem(NEEDS_CONTACT_KEY, needsContact ? "1" : "0");
     } catch {
       // storage unavailable (e.g. private browsing) — non-critical
     }
-  }, [messages, sessionId]);
+  }, [messages, needsContact, sessionId]);
 
   useEffect(() => {
     heightRef.current = panelHeight;
@@ -111,13 +141,13 @@ export default function ChatWidget() {
 
   useEffect(() => {
     if (open) {
-      inputRef.current?.focus();
+      (needsContact ? nameRef : inputRef).current?.focus();
     }
-  }, [open]);
+  }, [open, needsContact]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+  }, [messages, loading, needsContact]);
 
   const saveHeight = (h: number) => {
     try {
@@ -167,9 +197,13 @@ export default function ChatWidget() {
     setShowNudge(false);
   };
 
-  const send = async (text: string) => {
+  const send = async (text: string, afterContact = false) => {
     const trimmed = text.trim();
     if (!trimmed || loading || !sessionId) return;
+    if (needsContact && !afterContact) {
+      queuedRef.current = trimmed;
+      return;
+    }
 
     setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
     setInput("");
@@ -183,13 +217,19 @@ export default function ChatWidget() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ sessionId, message: trimmed }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (res.status === 403 && data.needsContact) {
+        // The server is still waiting for the form (e.g. storage was cleared):
+        // take the question back out and ask it once the form is in.
+        setMessages((prev) => prev.slice(0, -1));
+        queuedRef.current = trimmed;
+        setNeedsContact(true);
+        return;
+      }
       if (!res.ok) throw new Error("chat api error");
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: data.reply, leadCaptured: data.leadCaptured },
-      ]);
+      setMessages((prev) => [...prev, { role: "assistant", content: data.reply }]);
       setSuggestions(Array.isArray(data.suggestions) ? data.suggestions : []);
+      if (data.needsContact) setNeedsContact(true);
     } catch {
       setError(true);
     } finally {
@@ -215,6 +255,45 @@ export default function ChatWidget() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     send(input);
+  };
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (contactSending) return;
+    const invalid = invalidFields(contact);
+    setContactErrors(invalid);
+    setContactFailed(false);
+    if (invalid.length > 0) return;
+
+    setContactSending(true);
+    try {
+      const res = await fetch("/api/chat/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sessionId, ...contact }),
+      });
+      if (res.status === 400) {
+        const data = await res.json().catch(() => ({}));
+        if (data.field) {
+          setContactErrors([data.field as ContactField]);
+          return;
+        }
+      }
+      if (!res.ok) throw new Error("chat lead api error");
+
+      setNeedsContact(false);
+      setMessages((prev) => [
+        ...prev,
+        { role: "assistant", content: t("leadConfirmed", { name: contact.name.trim().split(/\s+/)[0] }) },
+      ]);
+      const queued = queuedRef.current;
+      queuedRef.current = "";
+      if (queued) send(queued, true);
+    } catch {
+      setContactFailed(true);
+    } finally {
+      setContactSending(false);
+    }
   };
 
   return (
@@ -356,11 +435,76 @@ export default function ChatWidget() {
                 }
               >
                 {m.role === "assistant" ? linkify(m.content) : m.content}
-                {m.leadCaptured && (
-                  <p className="font-body text-xs mt-2 opacity-70">{t("leadConfirmed")}</p>
-                )}
               </div>
             ))}
+
+            {needsContact && !loading && (
+              <form
+                onSubmit={handleContactSubmit}
+                noValidate
+                className="font-body text-sm w-full px-4 py-3.5 rounded-2xl rounded-tl-sm flex flex-col gap-2.5"
+                style={{ backgroundColor: "var(--section-light-surface)", color: "var(--section-light-text)" }}
+              >
+                <p className="leading-relaxed">{t("contact.intro")}</p>
+                {CONTACT_FIELDS.map(({ field, type, autoComplete }) => {
+                  const invalid = contactErrors.includes(field);
+                  return (
+                    <label key={field} className="flex flex-col gap-1">
+                      <span className="text-xs" style={{ color: "var(--section-light-muted)" }}>
+                        {t(`contact.${field}`)}
+                      </span>
+                      <input
+                        ref={field === "name" ? nameRef : undefined}
+                        type={type}
+                        name={field}
+                        autoComplete={autoComplete}
+                        value={contact[field]}
+                        onChange={(e) => {
+                          setContact((prev) => ({ ...prev, [field]: e.target.value }));
+                          setContactErrors((prev) => prev.filter((f) => f !== field));
+                        }}
+                        disabled={contactSending}
+                        aria-invalid={invalid}
+                        aria-describedby={invalid ? `aivik-chat-${field}-error` : undefined}
+                        className="font-body text-sm px-3 py-2 rounded-lg"
+                        style={{
+                          backgroundColor: "var(--section-light)",
+                          border: `1px solid ${invalid ? "#DC2626" : "var(--section-light-border)"}`,
+                          color: "var(--section-light-text)",
+                        }}
+                      />
+                      {invalid && (
+                        <span id={`aivik-chat-${field}-error`} className="text-xs" style={{ color: "#DC2626" }} role="alert">
+                          {t(`contact.errors.${field}`)}
+                        </span>
+                      )}
+                    </label>
+                  );
+                })}
+                {contactFailed && (
+                  <p className="text-xs" style={{ color: "#DC2626" }} role="alert">
+                    {t("contact.failed")}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={contactSending}
+                  className="font-body text-sm font-medium mt-1 px-4 py-2 rounded-lg disabled:opacity-60 cursor-pointer disabled:cursor-not-allowed"
+                  style={{ backgroundColor: ACCENT, color: "#fff" }}
+                >
+                  {contactSending ? t("contact.sending") : t("contact.submit")}
+                </button>
+                <p className="text-xs leading-snug" style={{ color: "var(--section-light-muted)" }}>
+                  {t.rich("contact.privacy", {
+                    link: (chunks) => (
+                      <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="underline">
+                        {chunks}
+                      </Link>
+                    ),
+                  })}
+                </p>
+              </form>
+            )}
 
             {loading && (
               <div
@@ -392,7 +536,7 @@ export default function ChatWidget() {
           </div>
 
           {/* Suggestion chips */}
-          {(messages.length === 0 ? starters : suggestions).length > 0 && !loading && (
+          {(messages.length === 0 ? starters : suggestions).length > 0 && !loading && !needsContact && (
             <div className="flex flex-wrap gap-2 px-5 pb-3">
               {(messages.length === 0 ? starters : suggestions).map((s) => (
                 <button
@@ -422,9 +566,9 @@ export default function ChatWidget() {
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={t("placeholder")}
-              aria-label={t("placeholder")}
-              disabled={loading}
+              placeholder={needsContact ? t("contact.paused") : t("placeholder")}
+              aria-label={needsContact ? t("contact.paused") : t("placeholder")}
+              disabled={loading || needsContact}
               className="flex-1 font-body text-sm px-3.5 py-2 rounded-xl transition-colors duration-150"
               style={{
                 backgroundColor: "var(--section-light-surface)",
@@ -434,7 +578,7 @@ export default function ChatWidget() {
             />
             <button
               type="submit"
-              disabled={loading || !input.trim()}
+              disabled={loading || needsContact || !input.trim()}
               aria-label={t("send")}
               className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
               style={{ backgroundColor: ACCENT }}
