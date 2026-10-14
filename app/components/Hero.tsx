@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
 import { scrambleFrame } from "@/lib/scrambleText";
-import SectionCurve from "./SectionCurve";
+import SectionCurve, { CURVE_HEIGHT } from "./SectionCurve";
 
 // Three.js is heavy and purely decorative (aria-hidden) — code-split it out
 // of the initial Hero bundle instead of loading it on every page view.
@@ -113,16 +113,19 @@ export default function Hero() {
       id="hero"
       data-theme="dark"
       className="relative flex flex-col pt-[72px]"
-      style={{ backgroundColor: "var(--section-dark)", minHeight: "calc(100vh + 110px)", zIndex: 0 }}
+      style={{ backgroundColor: "var(--section-dark)", zIndex: 0 }}
     >
       <GlobeBackground />
 
-      {/* Fixed to the first viewport (minus nav padding) so the curve at the
+      {/* At least the first viewport (minus nav padding) so the curve at the
           section's bottom stays below the fold instead of poking into view
-          on first load — only appears once the user scrolls past 100vh. */}
+          on first load — only appears once the user scrolls past 100vh. A
+          minimum rather than a fixed height: on short screens (a phone held
+          sideways) the content is taller than the viewport and grows the
+          box instead of running into the curve. */}
       <div
         className="relative z-10 flex items-center px-6"
-        style={{ height: "calc(100vh - 72px)" }}
+        style={{ minHeight: "calc(100vh - 72px)" }}
       >
         <div className="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-0 py-16 lg:py-0">
 
@@ -190,6 +193,8 @@ export default function Hero() {
           </div>
         </div>
       </div>
+      {/* The curve paints over the section's last CURVE_HEIGHT px; this keeps them empty. */}
+      <div aria-hidden="true" style={{ height: CURVE_HEIGHT, flexShrink: 0 }} />
       <SectionCurve fill="#f7f7f7" direction="dip" />
     </section>
   );
