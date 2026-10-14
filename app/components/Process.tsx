@@ -2,7 +2,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { scrambleFrame } from "@/lib/scrambleText";
-import SectionCurve from "./SectionCurve";
+import SectionCurve, { CURVE_HEIGHT } from "./SectionCurve";
 
 function ScrambleText({ text, triggered }: { text: string; triggered: boolean }) {
   const [display, setDisplay] = useState(text);
@@ -426,10 +426,16 @@ export default function Process() {
         </div>
       </div>
 
+      {/* The sticky block above ends flush with the scroll area, and the
+          SectionCurve below paints over this section's last CURVE_HEIGHT px:
+          without this spacer the curve covered step 04 at the end of the scroll. */}
+      <div className="hidden lg:block" style={{ height: CURVE_HEIGHT }} aria-hidden="true" />
+
       {/* ── MOBILE / TABLET (<1024px): single column with vertical line ── */}
       <div
         className="block lg:hidden"
-        style={{ padding: "80px 24px" }}
+        // Bottom padding adds the curve's rendered height (see SectionCurve) to the usual 80px.
+        style={{ padding: `80px 24px calc(80px + clamp(40px, 7.7vw, ${CURVE_HEIGHT}px))` }}
       >
         <div className="max-w-2xl mx-auto">
 
