@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
-import { USE_CASES_BASE, pathInLocale } from "@/data/use-cases";
+import { USE_CASES_BASE } from "@/data/use-cases";
+import { pathInLocale } from "@/data/service-paths";
 import AIVIKLogo from "./AIVIKLogo";
 
 type NavTheme = "hero-dark" | "dark" | "light";
@@ -14,7 +15,7 @@ export default function Nav() {
   const pathname = usePathname();
   const router = useRouter();
   const otherLocale: Locale = locale === "en" ? "de" : "en";
-  // Use-case pages have different addresses per language, so the switch maps
+  // Use-case and service pages have different addresses per language, so the switch maps
   // the path rather than reusing it.
   const otherLocalePath = pathInLocale(pathname, locale, otherLocale);
 

@@ -1358,3 +1358,56 @@ h6 {
   color: var(--section-light-text);
   border-bottom-color: #cbd5e1;
 }
+
+/* ─── Service pages ─── */
+
+/* The service's drawing beside the page title; hidden where it would push the text down. */
+.svc-page-art {
+  padding: 14px;
+  border-radius: var(--radius-card);
+  background: var(--section-dark-surface);
+  border: 1px solid var(--section-dark-border);
+}
+@media (max-width: 1023px) {
+  .svc-page-art { max-width: 420px; }
+}
+
+.svc-index {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+@media (max-width: 1000px) {
+  .svc-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .svc-index { grid-template-columns: 1fr; }
+}
+
+.svc-faq {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--section-dark-border);
+}
+.svc-faq:first-child { padding-top: 0; }
+.svc-faq summary {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--section-dark-text);
+}
+.svc-faq summary::-webkit-details-marker { display: none; }
+.svc-faq summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-weight: 400;
+  color: var(--section-dark-muted);
+}
+.svc-faq[open] summary::after { content: "–"; }
+.svc-faq summary:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}

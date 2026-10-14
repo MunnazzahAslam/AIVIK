@@ -75,6 +75,31 @@
       }
     ]
   },
+  "ServicePages": {
+    "titleSuffix": "Services",
+    "label": "Service",
+    "back": "All services",
+    "included": "What's included",
+    "approach": "How we work",
+    "processLink": "See our full process",
+    "built": "See it built",
+    "faq": "Questions",
+    "articles": "From the blog",
+    "ctaHeading": "Have a project in mind?",
+    "ctaText": "Tell us what you need and we'll say honestly how we'd approach it.",
+    "ctaContact": "Get a quote",
+    "ctaAsk": "Ask the AI assistant",
+    "ctaAskMessage": "I'd like to know more about {service}.",
+    "others": "Other services",
+    "cardLink": "More about this service",
+    "index": {
+      "metaTitle": "Services",
+      "metaDescription": "What AIVIK does: custom software development, AI workflow automation, cloud infrastructure, data analysis and digital marketing.",
+      "heading": "SERVICES",
+      "intro": "Five areas, one team. Each page explains what's included and how a project runs.",
+      "view": "View service"
+    }
+  },
   "UseCases": {
     "navLabel": "Use cases",
     "badge": "Concept build",

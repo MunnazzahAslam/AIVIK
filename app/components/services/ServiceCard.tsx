@@ -8,6 +8,7 @@ export default function ServiceCard({
   items,
   index,
   cases,
+  more,
   children,
 }: {
   title: string;
@@ -16,6 +17,8 @@ export default function ServiceCard({
   index: number;
   /** Use cases that show this service built, linked under the list. */
   cases?: { label: string; links: { name: string; href: string }[] };
+  /** The service's own page. */
+  more: { label: string; href: string };
   children: React.ReactNode;
 }) {
   const { ref, inView } = useInView<HTMLDivElement>();
@@ -51,6 +54,11 @@ export default function ServiceCard({
               ))}
             </p>
           )}
+          <p className="svc-cases">
+            <Link href={more.href} aria-label={`${more.label}: ${title}`}>
+              {more.label} →
+            </Link>
+          </p>
         </div>
       </div>
     </div>

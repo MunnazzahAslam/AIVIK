@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { USE_CASES, USE_CASES_BASE, siteUrl, useCasePath } from "@/data/use-cases";
+import { SERVICES, SERVICES_BASE, servicePath } from "@/data/services";
 import { routing } from "@/i18n/routing";
 import { BLOG_BASE, blogPath, getPosts } from "@/lib/blog";
 
@@ -23,8 +24,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   }));
 
-  // Use cases: the index and one page per case. Their paths differ per language.
+  // Services and use cases: an index and one page each. Their paths differ per language.
   const useCases: MetadataRoute.Sitemap = [
+    { en: SERVICES_BASE.en, de: SERVICES_BASE.de, priority: 0.8 },
+    ...SERVICES.map((s) => ({ en: servicePath("en", s), de: servicePath("de", s), priority: 0.8 })),
     { en: USE_CASES_BASE.en, de: USE_CASES_BASE.de, priority: 0.8 },
     ...USE_CASES.map((u) => ({ en: useCasePath("en", u), de: useCasePath("de", u), priority: 0.7 })),
   ].map(({ en, de, priority }) => ({

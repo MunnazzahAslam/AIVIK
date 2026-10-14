@@ -1,6 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { USE_CASES_BASE } from "@/data/use-cases";
+import { SERVICES, servicePath } from "@/data/services";
 import AIVIKLogo from "./AIVIKLogo";
 import { CookieSettingsButton } from "./CookieConsent";
 import { Link } from "@/i18n/navigation";
@@ -12,7 +13,6 @@ export default async function Footer() {
   const locale = (await getLocale()) as Locale;
   const useCasesLabel = (await getTranslations("UseCases"))("navLabel");
   const blogLabel = (await getTranslations("Blog"))("navLabel");
-  const services = (await getTranslations("Services")).raw("list") as { title: string }[];
 
   return (
     <footer
@@ -50,13 +50,13 @@ export default async function Footer() {
               {t("servicesHeading")}
             </p>
             <div className="flex flex-col gap-2.5">
-              {services.map(({ title }) => (
+              {SERVICES.map((s) => (
                 <Link
-                  key={title}
-                  href="/#services"
+                  key={s.id}
+                  href={servicePath(locale, s)}
                   className="font-body text-sm link-on-dark"
                 >
-                  {title}
+                  {s.title[locale]}
                 </Link>
               ))}
             </div>
