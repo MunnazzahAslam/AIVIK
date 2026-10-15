@@ -75,6 +75,31 @@
       }
     ]
   },
+  "ServicePages": {
+    "titleSuffix": "Leistungen",
+    "label": "Leistung",
+    "back": "Alle Leistungen",
+    "included": "Was dazugehört",
+    "approach": "So arbeiten wir",
+    "processLink": "Unseren gesamten Prozess ansehen",
+    "built": "So sieht es gebaut aus",
+    "faq": "Fragen",
+    "articles": "Aus dem Blog",
+    "ctaHeading": "Haben Sie ein Projekt im Sinn?",
+    "ctaText": "Sagen Sie uns, was Sie brauchen, und wir sagen Ihnen ehrlich, wie wir es angehen würden.",
+    "ctaContact": "Angebot anfragen",
+    "ctaAsk": "KI-Assistenten fragen",
+    "ctaAskMessage": "Ich möchte mehr über {service} erfahren.",
+    "others": "Weitere Leistungen",
+    "cardLink": "Mehr zu dieser Leistung",
+    "index": {
+      "metaTitle": "Leistungen",
+      "metaDescription": "Was AIVIK macht: individuelle Softwareentwicklung, KI-Workflow-Automatisierung, Cloud-Infrastruktur, Datenanalyse und digitales Marketing.",
+      "heading": "LEISTUNGEN",
+      "intro": "Fünf Bereiche, ein Team. Jede Seite erklärt, was dazugehört und wie ein Projekt abläuft.",
+      "view": "Leistung ansehen"
+    }
+  },
   "UseCases": {
     "navLabel": "Anwendungsfälle",
     "badge": "Konzeptprojekt",

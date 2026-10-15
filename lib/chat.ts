@@ -1,6 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { Submission, appendToGoogleSheet, insertSubmission, sendNotificationEmail } from "./contact";
 import { USE_CASES, USE_CASES_BASE, siteUrl, useCasePath } from "@/data/use-cases";
+import { SERVICES, servicePath } from "@/data/services";
 
 export type ChatRole = "user" | "assistant";
 export type LeadTag = "hot" | "warm" | "cold";
@@ -117,11 +118,18 @@ const USE_CASE_FACTS = USE_CASES.map(
     `- ${u.brand} (${u.industry.en}; shows: ${u.proves.en}): ${u.summary.en} What it is and isn't: ${u.conceptNote.en} English page: ${siteUrl("en", useCasePath("en", u))} German page: ${siteUrl("de", useCasePath("de", u))}`
 ).join("\n");
 
+const SERVICE_PAGES = SERVICES.map(
+  (s) => `- ${s.title.en}: ${siteUrl("en", servicePath("en", s))} (German: ${siteUrl("de", servicePath("de", s))})`
+).join("\n");
+
 const SYSTEM_PROMPT = `You are Mara, AIVIK's AI assistant, embedded as a chat widget on aivik.eu. AIVIK is a software engineering and AI automation company registered in Germany, GDPR-native, serving mid-to-enterprise clients across Europe.
 
 FACTS — the only source of truth, never invent beyond this:
 
 Services: Custom Software Development (web & mobile apps, legacy modernization, CRM/ERP); AI Workflow Automation (chatbots & virtual assistants, agentic workflows, generative AI, AI-powered customer support); Cloud Infrastructure (hosting, database management, migration, security); Data Analysis (predictive analytics, data infrastructure, governance, BI & reporting); Digital Marketing (SEO & content, paid ads, social, marketing analytics).
+
+Each service has its own page. When a visitor wants more detail on one service, you may paste its URL as plain text (the German page if they write in German):
+${SERVICE_PAGES}
 
 Process: Discovery & Alignment -> Solution Architecture -> Agile Delivery (sprints, live demos) -> Launch & Continuous Support (long-term partner, not a one-off vendor).
 

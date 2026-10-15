@@ -4,28 +4,15 @@ import { USE_CASES, useCasePath } from "@/data/use-cases";
 import FadeIn from "./FadeIn";
 import SectionCurve from "./SectionCurve";
 import ServiceCard from "./services/ServiceCard";
-import SoftwareArtifact from "./services/SoftwareArtifact";
-import WorkflowArtifact from "./services/WorkflowArtifact";
-import CloudArtifact from "./services/CloudArtifact";
-import DataArtifact from "./services/DataArtifact";
-import MarketingArtifact from "./services/MarketingArtifact";
-
-const ARTIFACTS = [
-  SoftwareArtifact,
-  WorkflowArtifact,
-  CloudArtifact,
-  DataArtifact,
-  MarketingArtifact,
-];
+import { SERVICE_ARTIFACTS } from "./services/artifacts";
+import { SERVICES, servicePath } from "@/data/services";
 
 type ServiceEntry = { title: string; description: string; items: string[] };
-
-// Which service card each use case belongs under, by the card's position.
-const CARD_SERVICE = ["software", "ai"] as const;
 
 export default async function Services() {
   const t = await getTranslations("Services");
   const tCases = await getTranslations("UseCases");
+  const tPages = await getTranslations("ServicePages");
   const locale = (await getLocale()) as Locale;
   const services = t.raw("list") as ServiceEntry[];
 
@@ -55,11 +42,13 @@ export default async function Services() {
 
         <div className="svc-grid">
           {services.map(({ title, description, items }, index) => {
-            const Artifact = ARTIFACTS[index];
-            const links = USE_CASES.filter((u) => u.service === CARD_SERVICE[index]).map((u) => ({ name: u.brand, href: useCasePath(locale, u) }));
+            // The cards and data/services.ts list the services in the same order.
+            const service = SERVICES[index];
+            const Artifact = SERVICE_ARTIFACTS[service.id];
+            const links = USE_CASES.filter((u) => u.service === service.id).map((u) => ({ name: u.brand, href: useCasePath(locale, u) }));
             const cases = links.length ? { label: tCases("serviceLink"), links } : undefined;
             return (
-              <ServiceCard key={title} title={title} description={description} items={items} index={index} cases={cases}>
+              <ServiceCard key={title} title={title} description={description} items={items} index={index} cases={cases} more={{ label: tPages("cardLink"), href: servicePath(locale, service) }}>
                 <Artifact />
               </ServiceCard>
             );

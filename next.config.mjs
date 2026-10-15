@@ -10,8 +10,9 @@ const nextConfig = {
   images: {
     remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io", pathname: "/images/qs3r3e0a/production/**" }],
   },
-  // The use-case pages have German addresses (/de/anwendungsfaelle/ki-rezeption)
-  // but one set of route files (app/[locale]/use-cases). The German paths are
+  // The use-case and service pages have German addresses
+  // (/de/anwendungsfaelle/ki-rezeption, /de/leistungen/datenanalyse) but one
+  // set of route files each (app/[locale]/use-cases, app/[locale]/services). The German paths are
   // rewritten onto those files, and the English-named paths under /de redirect
   // to the German ones so each page has a single address per language.
   async rewrites() {
@@ -19,6 +20,8 @@ const nextConfig = {
       beforeFiles: [
         { source: "/de/anwendungsfaelle", destination: "/de/use-cases" },
         { source: "/de/anwendungsfaelle/:slug", destination: "/de/use-cases/:slug" },
+        { source: "/de/leistungen", destination: "/de/services" },
+        { source: "/de/leistungen/:slug", destination: "/de/services/:slug" },
       ],
     };
   },
@@ -26,6 +29,8 @@ const nextConfig = {
     return [
       { source: "/de/use-cases", destination: "/de/anwendungsfaelle", permanent: true },
       { source: "/de/use-cases/:slug", destination: "/de/anwendungsfaelle/:slug", permanent: true },
+      { source: "/de/services", destination: "/de/leistungen", permanent: true },
+      { source: "/de/services/:slug", destination: "/de/leistungen/:slug", permanent: true },
     ];
   },
   async headers() {
