@@ -434,8 +434,8 @@ export default function Process() {
       {/* ── MOBILE / TABLET (<1024px): single column with vertical line ── */}
       <div
         className="block lg:hidden"
-        // Bottom padding adds the curve's rendered height (see SectionCurve) to the usual 80px.
-        style={{ padding: `80px 24px calc(80px + clamp(40px, 7.7vw, ${CURVE_HEIGHT}px))` }}
+        // Bottom padding adds the curve's rendered height (see SectionCurve) to the usual 120px.
+        style={{ padding: `120px 24px calc(120px + clamp(40px, 7.7vw, ${CURVE_HEIGHT}px))` }}
       >
         <div className="max-w-2xl mx-auto">
 

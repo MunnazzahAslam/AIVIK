@@ -1,6 +1,5 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
-import { USE_CASES, useCasePath } from "@/data/use-cases";
 import FadeIn from "./FadeIn";
 import SectionCurve from "./SectionCurve";
 import ServiceCard from "./services/ServiceCard";
@@ -11,7 +10,6 @@ type ServiceEntry = { title: string; description: string; items: string[] };
 
 export default async function Services() {
   const t = await getTranslations("Services");
-  const tCases = await getTranslations("UseCases");
   const tPages = await getTranslations("ServicePages");
   const locale = (await getLocale()) as Locale;
   const services = t.raw("list") as ServiceEntry[];
@@ -26,7 +24,7 @@ export default async function Services() {
       style={{ position: "relative", zIndex: 0 }}
     >
       <div className="max-w-6xl mx-auto">
-        <FadeIn className="mb-16">
+        <FadeIn className="mb-10">
           <h2
             className="font-heading font-black"
             style={{
@@ -45,10 +43,8 @@ export default async function Services() {
             // The cards and data/services.ts list the services in the same order.
             const service = SERVICES[index];
             const Artifact = SERVICE_ARTIFACTS[service.id];
-            const links = USE_CASES.filter((u) => u.service === service.id).map((u) => ({ name: u.brand, href: useCasePath(locale, u) }));
-            const cases = links.length ? { label: tCases("serviceLink"), links } : undefined;
             return (
-              <ServiceCard key={title} title={title} description={description} items={items} index={index} cases={cases} more={{ label: tPages("cardLink"), href: servicePath(locale, service) }}>
+              <ServiceCard key={title} title={title} description={description} items={items} index={index} more={{ label: tPages("cardLink"), href: servicePath(locale, service) }}>
                 <Artifact />
               </ServiceCard>
             );
