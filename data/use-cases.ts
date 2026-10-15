@@ -73,17 +73,17 @@ export const USE_CASES: UseCase[] = [
     },
     features: [
       {
-        name: { en: "Answers from the clinic's own information", de: "Antworten aus den Informationen der Praxis" },
+        name: { en: "Grounded in the clinic's own information", de: "Basiert auf den Informationen der Praxis" },
         line: {
-          en: "Noor answers questions about treatments, prices and insurance from what the clinic has published, and shows where each answer comes from.",
-          de: "Noor beantwortet Fragen zu Behandlungen, Preisen und Versicherungen aus den Angaben der Praxis und zeigt, woher jede Antwort stammt.",
+          en: "Noor answers questions about treatments, prices and insurance using what the clinic has published, and cites the source for each answer.",
+          de: "Noor beantwortet Fragen zu Behandlungen, Preisen und Versicherungen anhand der Angaben der Praxis und nennt für jede Antwort die Quelle.",
         },
       },
       {
-        name: { en: "Real free slots", de: "Echte freie Termine" },
+        name: { en: "Only real availability", de: "Ausschließlich echte Verfügbarkeit" },
         line: {
-          en: "She reads the calendar and offers only times that are actually free, as buttons the patient taps.",
-          de: "Sie liest den Kalender und bietet nur Zeiten an, die wirklich frei sind – als Schaltflächen zum Antippen.",
+          en: "She reads the calendar and offers only times that are genuinely free, presented as buttons the patient can tap.",
+          de: "Sie liest den Kalender und bietet ausschließlich tatsächlich freie Zeiten an, dargestellt als antippbare Schaltflächen.",
         },
       },
       {
@@ -96,12 +96,12 @@ export const USE_CASES: UseCase[] = [
       {
         name: { en: "Handles emergencies", de: "Reagiert auf Notfälle" },
         line: {
-          en: "Severe pain or swelling gets the clinic's emergency instructions straight away, not a booking flow.",
+          en: "Severe pain or swelling receives the clinic's emergency instructions immediately, not a booking flow.",
           de: "Bei starken Schmerzen oder Schwellungen nennt sie sofort die Notfallhinweise der Praxis, statt einen Termin anzubieten.",
         },
       },
       {
-        name: { en: "Every booking lands in the clinic admin", de: "Jede Buchung landet in der Praxisverwaltung" },
+        name: { en: "Every booking appears in the clinic admin", de: "Jede Buchung erscheint in der Praxisverwaltung" },
         line: {
           en: "The team sees the day's appointments and which ones Noor booked overnight.",
           de: "Das Team sieht die Termine des Tages und welche davon Noor über Nacht gebucht hat.",
@@ -109,8 +109,8 @@ export const USE_CASES: UseCase[] = [
       },
     ],
     techNote: {
-      en: "The assistant can't invent a time or a price: it reads slots and writes bookings only through a small set of server tools, and it is told not to give medical advice.",
-      de: "Die Assistentin kann weder Zeiten noch Preise erfinden: Sie liest Termine und schreibt Buchungen ausschließlich über wenige Server-Tools und gibt keine medizinische Beratung.",
+      en: "The assistant can't invent a time or a price — it reads slots and writes bookings only through a small set of server tools, and is restricted from offering medical advice.",
+      de: "Die Assistentin kann weder Zeiten noch Preise erfinden – sie liest Termine und schreibt Buchungen ausschließlich über wenige Server-Tools und ist von jeder medizinischen Beratung ausgeschlossen.",
     },
     stack: ["Next.js", "Vercel AI SDK", "Claude", "Supabase"],
     shows: [
@@ -123,8 +123,8 @@ export const USE_CASES: UseCase[] = [
         de: "Wir bauen ihn mit klaren Grenzen: keine medizinische Beratung, Quellen sichtbar, keine erfundenen Termine.",
       },
       {
-        en: "The work the AI does lands where your team already looks, not in a separate inbox.",
-        de: "Was die KI erledigt, landet dort, wo Ihr Team ohnehin hinschaut – nicht in einem weiteren Postfach.",
+        en: "What the AI does appears where your team already looks, not in a separate inbox.",
+        de: "Was die KI erledigt, erscheint dort, wo Ihr Team ohnehin hinschaut – nicht in einem weiteren Postfach.",
       },
     ],
     video: video("oravie", 34),
@@ -184,7 +184,7 @@ export const USE_CASES: UseCase[] = [
         },
       },
       {
-        name: { en: "Filters you can see and change", de: "Sichtbare, änderbare Filter" },
+        name: { en: "Filters you can see and edit", de: "Sichtbare, änderbare Filter" },
         line: {
           en: "Every filter shows as a chip the buyer can edit or remove, with a note where the AI made an assumption.",
           de: "Jeder Filter erscheint als Chip, den der Käufer ändern oder entfernen kann – mit Hinweis, wo die KI etwas angenommen hat.",
@@ -213,8 +213,8 @@ export const USE_CASES: UseCase[] = [
       },
     ],
     techNote: {
-      en: "The AI only writes filters; the listings always come from the database, so it can't invent a home, a price or a permit. If the AI is unavailable, a plain word-by-word reader takes over and the page says so.",
-      de: "Die KI schreibt nur Filter; die Inserate kommen immer aus der Datenbank. Sie kann also kein Objekt, keinen Preis und keine Genehmigung erfinden. Fällt die KI aus, übernimmt eine einfache Wort-für-Wort-Auswertung, und die Seite weist darauf hin.",
+      en: "The AI only writes filters — the listings always come from the database, so it can't invent a home, a price or a permit. If the AI is unavailable, a simple keyword-based fallback takes over, and the page discloses this.",
+      de: "Die KI schreibt nur Filter – die Inserate kommen immer aus der Datenbank, sodass sie weder ein Objekt noch einen Preis oder eine Genehmigung erfinden kann. Fällt die KI aus, übernimmt eine einfache Stichwortsuche, und die Seite weist darauf hin.",
     },
     stack: ["Next.js", "Claude API", "Supabase", "Leaflet"],
     shows: [
@@ -264,7 +264,7 @@ export const USE_CASES: UseCase[] = [
     id: "stielvoll",
     slug: { en: "3d-online-shop", de: "3d-onlineshop" },
     brand: "Stielvoll",
-    headline: { en: "An online shop with a 3D jelly popsicle", de: "Ein Onlineshop mit wackelndem 3D-Eis am Stiel" },
+    headline: { en: "Turning a single product into an interactive 3D experience", de: "Aus einem einzelnen Produkt wird ein interaktives 3D-Erlebnis" },
     summary: {
       en: "An organic popsicle shop with a real-time 3D product you can drag and bite, a box builder and Stripe checkout.",
       de: "Ein Bio-Eis-Shop mit einem Echtzeit-3D-Produkt zum Ziehen und Abbeißen, einem Box-Konfigurator und Stripe-Checkout.",
@@ -277,28 +277,28 @@ export const USE_CASES: UseCase[] = [
       de: "Stielvoll ist eine Konzeptmarke, die wir entworfen und entwickelt haben, um diese Art von Produkt zu zeigen. Der Shop nimmt keine echten Bestellungen an, hat keine echte Zertifizierung, und Zahlungen laufen im Testmodus von Stripe.",
     },
     problem: {
-      en: "Small food brands need a shop that feels like their brand, not a template. Most shop templates look the same, and the product, the one thing that makes the brand, ends up as a flat photo in a grid.",
+      en: "Small food brands need a shop that feels like their brand, not a template. Most shop templates look the same, and the product — the one thing that actually makes the brand — ends up as a flat photo in a grid.",
       de: "Kleine Lebensmittelmarken brauchen einen Shop, der sich nach ihrer Marke anfühlt, nicht nach einer Vorlage. Die meisten Shop-Vorlagen sehen gleich aus, und das Produkt – das, was die Marke ausmacht – endet als flaches Foto in einem Raster.",
     },
     features: [
       {
         name: { en: "A real-time 3D jelly popsicle", de: "Ein 3D-Eis in Echtzeit" },
         line: {
-          en: "Drag it and it wobbles like jelly; tap it and you take a bite. It runs in the browser, on phones too.",
-          de: "Ziehen, und es wackelt wie Wackelpudding; antippen, und man beißt ab. Es läuft im Browser, auch auf dem Handy.",
+          en: "Drag it and it wobbles like jelly; tap it and you take a bite. It runs smoothly in the browser, including on phones.",
+          de: "Ziehen, und es wackelt wie Wackelpudding; antippen, und man beißt ab. Es läuft reibungslos im Browser, auch auf dem Handy.",
         },
       },
       {
         name: { en: "A box builder with live pricing", de: "Box-Konfigurator mit Live-Preis" },
         line: {
-          en: "Mix six or twelve popsicles in any combination and see the price and the saving as you go.",
-          de: "Sechs oder zwölf Eis frei kombinieren und dabei Preis und Ersparnis sehen.",
+          en: "Mix six or twelve popsicles in any combination and watch the price and savings update as you go.",
+          de: "Sechs oder zwölf Eis frei kombinieren und dabei Preis und Ersparnis live mitverfolgen.",
         },
       },
       {
         name: { en: "Stripe checkout", de: "Stripe-Checkout" },
         line: {
-          en: "Pickup or same-day delivery in a two-hour slot, paid through Stripe Checkout, with prices worked out on the server.",
+          en: "Pickup or same-day delivery within a two-hour window, paid through Stripe Checkout, with pricing calculated server-side.",
           de: "Abholung oder Lieferung am selben Tag im Zwei-Stunden-Fenster, bezahlt über Stripe Checkout; die Preise berechnet der Server.",
         },
       },
@@ -318,8 +318,8 @@ export const USE_CASES: UseCase[] = [
       },
     ],
     techNote: {
-      en: "The popsicle is a small hand-written soft-body simulation, a lattice of springs, rather than a video or a heavy physics library, which keeps it smooth and light enough for a phone.",
-      de: "Das Eis ist eine kleine, selbst geschriebene Soft-Body-Simulation – ein Gitter aus Federn – statt eines Videos oder einer schweren Physik-Bibliothek. So bleibt es flüssig und leicht genug fürs Handy.",
+      en: "The popsicle runs on a small, hand-written soft-body simulation — a lattice of springs — rather than a video or a heavy physics library, which keeps it smooth and light enough for mobile.",
+      de: "Das Eis ist eine kleine, selbst geschriebene Soft-Body-Simulation – ein Gitter aus Federn – statt eines Videos oder einer schweren Physik-Bibliothek. So bleibt es flüssig und leicht genug für mobile Geräte.",
     },
     stack: ["Next.js", "React Three Fiber", "Stripe", "Supabase"],
     shows: [

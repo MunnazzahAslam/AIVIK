@@ -4,7 +4,7 @@ import { useTranslations, useLocale } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { USE_CASES_BASE } from "@/data/use-cases";
-import { pathInLocale } from "@/data/service-paths";
+import { SERVICES_BASE, pathInLocale } from "@/data/service-paths";
 import AIVIKLogo from "./AIVIKLogo";
 
 type NavTheme = "hero-dark" | "dark" | "light";
@@ -20,7 +20,7 @@ export default function Nav() {
   const otherLocalePath = pathInLocale(pathname, locale, otherLocale);
 
   const links = [
-    [t("services"), "/#services"],
+    [t("services"), SERVICES_BASE[locale]],
     [t("useCases"), USE_CASES_BASE[locale]],
     [t("blog"), "/blog"],
     [t("process"), "/#process"],

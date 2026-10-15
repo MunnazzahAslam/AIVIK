@@ -7,7 +7,6 @@ export default function ServiceCard({
   description,
   items,
   index,
-  cases,
   more,
   children,
 }: {
@@ -15,8 +14,6 @@ export default function ServiceCard({
   description: string;
   items: string[];
   index: number;
-  /** Use cases that show this service built, linked under the list. */
-  cases?: { label: string; links: { name: string; href: string }[] };
   /** The service's own page. */
   more: { label: string; href: string };
   children: React.ReactNode;
@@ -43,17 +40,6 @@ export default function ServiceCard({
               </li>
             ))}
           </ul>
-          {cases && (
-            <p className="svc-cases">
-              {cases.label}:{" "}
-              {cases.links.map((c, i) => (
-                <span key={c.href}>
-                  {i > 0 && ", "}
-                  <Link href={c.href}>{c.name}</Link>
-                </span>
-              ))}
-            </p>
-          )}
           <p className="svc-cases">
             <Link href={more.href} aria-label={`${more.label}: ${title}`}>
               {more.label} →
