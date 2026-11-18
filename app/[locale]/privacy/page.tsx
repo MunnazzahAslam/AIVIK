@@ -18,7 +18,7 @@ export async function generateMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
     alternates: {
-      canonical: `https://aivik.eu${path}`,
+      canonical: `https://aixik.eu${path}`,
     },
   };
 }
@@ -47,13 +47,13 @@ export default async function Privacy({
         </h1>
 
         <div className="flex flex-col gap-6">
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-body text-sm text-on-dark-muted leading-relaxed">
               {t("intro")}
             </p>
           </div>
 
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
               {t("dataCollectionHeading")}
             </p>
@@ -62,7 +62,7 @@ export default async function Privacy({
             </p>
           </div>
 
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
               {t("cookiesHeading")}
             </p>
@@ -72,7 +72,7 @@ export default async function Privacy({
             <CookieSettingsButton className="font-body text-sm link-on-dark underline mt-3" />
           </div>
 
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
               {t("chatHeading")}
             </p>
@@ -81,19 +81,19 @@ export default async function Privacy({
             </p>
           </div>
 
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-mono text-xs text-on-dark-muted uppercase tracking-widest mb-3">
               {t("contactHeading")}
             </p>
             <a
-              href="mailto:info@aivik.eu"
+              href="mailto:info@aixik.eu"
               className="font-body text-sm link-on-dark"
             >
-              info@aivik.eu
+              info@aixik.eu
             </a>
           </div>
 
-          <div className="aivik-section-divider pt-6">
+          <div className="aixik-section-divider pt-6">
             <p className="font-body text-xs text-on-dark-muted leading-relaxed">
               {t("disclaimer")}
             </p>

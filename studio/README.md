@@ -1,6 +1,6 @@
-# AIVIK Studio
+# AIXIK Studio
 
-The editor for the blog on aivik.eu, built with [Sanity Studio](https://www.sanity.io/docs/studio).
+The editor for the blog on aixik.eu, built with [Sanity Studio](https://www.sanity.io/docs/studio).
 It is its own app with its own dependencies: the website never imports from this
 folder, and the website's build and type-check skip it (`tsconfig.json`,
 `.vercelignore`).
@@ -10,7 +10,7 @@ cd studio
 npm install
 npm run dev        # http://localhost:3333
 npm run typecheck
-npm run deploy     # publishes the editor to https://aivik.sanity.studio
+npm run deploy     # publishes the editor to https://aixik.sanity.studio
 ```
 
 - Project `qs3r3e0a`, dataset `production` (`sanity.config.ts`, `sanity.cli.ts`).
@@ -22,7 +22,7 @@ npm run deploy     # publishes the editor to https://aivik.sanity.studio
 
 - The website reads published articles from Sanity on the server and caches the
   pages (`lib/sanity.ts`, `lib/blog.ts`).
-- A Sanity webhook calls `https://aivik.eu/api/revalidate` on every change to an
+- A Sanity webhook calls `https://aixik.eu/api/revalidate` on every change to an
   article, category, tag or author; the pages are rebuilt on their next visit.
   Without the webhook they catch up within an hour.
 - An article with a future date appears on that day (German time), within the hour.

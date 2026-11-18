@@ -114,7 +114,7 @@ export async function sendNotificationEmail(data: Submission) {
   ].filter(Boolean);
 
   const body = `
-New AIVIK inquiry received:
+New AIXIK inquiry received:
 
 Name: ${data.name}
 Email: ${data.email}
@@ -132,12 +132,12 @@ Reply directly to follow up -- include a Calendly link if it's time to schedule 
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "AIVIK Website <noreply@aivik.eu>",
-      to: ["info@aivik.eu", "aslammunnazzah@gmail.com"],
+      from: "AIXIK Website <noreply@aixik.eu>",
+      to: ["info@aixik.eu", "aslammunnazzah@gmail.com"],
       // So "Reply" on this notification goes to the lead, not to noreply@ --
       // makes the "reply directly to follow up" instruction above actually work.
       reply_to: data.email,
-      subject: `New AIVIK inquiry from ${data.name}`,
+      subject: `New AIXIK inquiry from ${data.name}`,
       text: body,
     }),
   });

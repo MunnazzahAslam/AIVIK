@@ -20,9 +20,9 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!u) return {};
   const t = await getTranslations({ locale, namespace: "UseCases" });
   const url = siteUrl(locale, useCasePath(locale, u));
-  const title = `${u.headline[locale]} · ${t("titleSuffix")} · AIVIK`;
+  const title = `${u.headline[locale]} · ${t("titleSuffix")} · AIXIK`;
   const description = u.meta.description[locale];
-  const image = { url: `https://aivik.eu${u.video.poster}`, width: 1920, height: 1080, alt: `${u.brand}: ${u.headline[locale]}` };
+  const image = { url: `https://aixik.eu${u.video.poster}`, width: 1920, height: 1080, alt: `${u.brand}: ${u.headline[locale]}` };
 
   return {
     title: { absolute: title },
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
         "x-default": siteUrl("en", useCasePath("en", u)),
       },
     },
-    openGraph: { type: "article", url, siteName: "AIVIK", title, description, locale: locale === "de" ? "de_DE" : "en_EU", images: [image] },
+    openGraph: { type: "article", url, siteName: "AIXIK", title, description, locale: locale === "de" ? "de_DE" : "en_EU", images: [image] },
     twitter: { card: "summary_large_image", title, description, images: [image.url] },
   };
 }

@@ -12,7 +12,7 @@ import { SERVICE_ARTIFACTS } from "./artifacts";
 /** A labelled block of the page: the label sits beside the content on wide screens, above it on narrow ones. */
 function Block({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 py-12 aivik-section-divider">
+    <section className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 py-12 aixik-section-divider">
       <h2 className="uc-label pt-1.5">{label}</h2>
       <div>{children}</div>
     </section>
@@ -53,7 +53,7 @@ export default async function ServicePage({ service: s, locale }: { service: Ser
       description: s.meta.description[locale],
       url,
       areaServed: "Europe",
-      provider: { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
+      provider: { "@type": "Organization", name: "AIXIK", url: "https://aixik.eu" },
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: title,

@@ -9,7 +9,7 @@ export default {
         mono: ["var(--font-jetbrains-mono)", "monospace"],
       },
       transitionTimingFunction: {
-        aivik: "cubic-bezier(0.16, 1, 0.3, 1)",
+        aixik: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
     },
   },

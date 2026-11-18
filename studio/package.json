@@ -1,8 +1,8 @@
 {
-  "name": "aivik-studio",
+  "name": "aixik-studio",
   "private": true,
   "version": "1.0.0",
-  "description": "Sanity Studio for the AIVIK blog (aivik.eu)",
+  "description": "Sanity Studio for the AIXIK blog (aixik.eu)",
   "type": "module",
   "scripts": {
     "dev": "sanity dev",

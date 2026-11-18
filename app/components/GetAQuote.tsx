@@ -10,7 +10,7 @@ import FadeIn from "./FadeIn";
 
 // Same fields as the original form (name, email, company, phone, service
 // selection, optional message) -- only the post-submit behavior changed:
-// no auto-redirect into a booking flow. The AIVIK team follows up by email
+// no auto-redirect into a booking flow. The AIXIK team follows up by email
 // with a Calendly link once they've actually read the inquiry, rather than
 // making every visitor book a slot before they can finish.
 type FormState = {
@@ -33,8 +33,8 @@ const initialForm: FormState = {
   message: "",
 };
 
-// Color classes (.aivik-input) are defined in globals.css
-const inputClass = "w-full font-body text-sm px-4 py-3 aivik-input";
+// Color classes (.aixik-input) are defined in globals.css
+const inputClass = "w-full font-body text-sm px-4 py-3 aixik-input";
 
 const labelClass = "block font-body text-xs mb-1.5";
 const labelColor = "#F5F5F7";
@@ -277,11 +277,11 @@ export default function GetAQuote() {
                 {t("preferEmail")}
               </p>
               <a
-                href="mailto:info@aivik.eu"
+                href="mailto:info@aixik.eu"
                 className="font-body text-sm"
                 style={{ color: mutedColor }}
               >
-                info@aivik.eu
+                info@aixik.eu
               </a>
             </div>
           </FadeIn>
@@ -479,7 +479,7 @@ export default function GetAQuote() {
                           type="button"
                           aria-pressed={checked}
                           onClick={() => toggleService(option)}
-                          className={`font-body text-sm transition-colors duration-150 aivik-pill${checked ? " is-checked" : ""}`}
+                          className={`font-body text-sm transition-colors duration-150 aixik-pill${checked ? " is-checked" : ""}`}
                           style={{
                             padding: "8px 14px",
                             borderRadius: 999,
@@ -534,10 +534,10 @@ export default function GetAQuote() {
                   <p className="font-body text-xs text-red-400" role="alert">
                     {t("form.apiError")}{" "}
                     <a
-                      href="mailto:info@aivik.eu"
+                      href="mailto:info@aixik.eu"
                       className="underline hover:text-white"
                     >
-                      info@aivik.eu
+                      info@aixik.eu
                     </a>
                   </p>
                 )}

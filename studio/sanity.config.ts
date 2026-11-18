@@ -6,11 +6,11 @@ import {reviewActions, SETTINGS_ID} from './review'
 import {schemaTypes} from './schemaTypes'
 
 // The website the preview opens on. For a local site: SANITY_STUDIO_SITE_URL=http://localhost:3000
-const SITE_URL = process.env.SANITY_STUDIO_SITE_URL || 'https://aivik.eu'
+const SITE_URL = process.env.SANITY_STUDIO_SITE_URL || 'https://aixik.eu'
 
 export default defineConfig({
   name: 'default',
-  title: 'AIVIK',
+  title: 'AIXIK',
 
   projectId: 'qs3r3e0a',
   dataset: 'production',

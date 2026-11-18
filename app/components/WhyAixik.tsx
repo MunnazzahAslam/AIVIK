@@ -17,8 +17,8 @@ const BORDER_CLASSES = [
   "",                                              // i=5: no borders
 ] as const;
 
-export default function WhyAivik() {
-  const t = useTranslations("WhyAivik");
+export default function WhyAixik() {
+  const t = useTranslations("WhyAixik");
   const REASONS = t.raw("reasons") as Reason[];
   const gridRef                           = useRef<HTMLDivElement>(null);
   const overlayRef                        = useRef<HTMLDivElement>(null);
@@ -91,7 +91,7 @@ export default function WhyAivik() {
 
   return (
     <section
-      id="why-aivik"
+      id="why-aixik"
       data-theme="light"
       className="px-6"
       // Process paints a curve in THIS section's light color across its own
@@ -152,7 +152,7 @@ export default function WhyAivik() {
           >
             {t("heading")}
             <span
-              className="aivik-cursor"
+              className="aixik-cursor"
               aria-hidden="true"
               style={{ color: "#2563EB" }}
             >

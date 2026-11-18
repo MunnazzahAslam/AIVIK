@@ -13,7 +13,7 @@ const sizes = {
 
 const wordmarkColor = { dark: "#FFFFFF", light: "#0D1117" } as const;
 
-export default function AIVIKLogo({
+export default function AIXIKLogo({
   variant = "dark",
   size = "md",
   animate = true,
@@ -23,7 +23,7 @@ export default function AIVIKLogo({
 
   return (
     <span
-      className={`aivik-logo${className ? ` ${className}` : ""}`}
+      className={`aixik-logo${className ? ` ${className}` : ""}`}
       style={{
         display: "inline-flex",
         alignItems: "flex-end",
@@ -36,11 +36,11 @@ export default function AIVIKLogo({
         userSelect: "none",
         transition: "color 300ms ease",
       }}
-      aria-label="AIVIK"
+      aria-label="AIXIK"
     >
-      AIVIK
+      AIXIK
       <span
-        className={animate ? "aivik-cursor" : undefined}
+        className={animate ? "aixik-cursor" : undefined}
         aria-hidden="true"
         style={{
           display: "inline-block",

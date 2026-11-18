@@ -22,7 +22,7 @@ export default function SoftwareArtifact() {
           <span className="c1-dot c1-dot-y" />
           <span className="c1-dot c1-dot-g" />
         </span>
-        app.aivik.dev
+        app.aixik.dev
         <span className="c1-cursor" />
       </div>
 

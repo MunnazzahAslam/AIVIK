@@ -94,7 +94,7 @@
     "cardLink": "More about this service",
     "index": {
       "metaTitle": "Services",
-      "metaDescription": "What AIVIK does: custom software development, AI workflow automation, cloud infrastructure, data analysis and digital marketing.",
+      "metaDescription": "What AIXIK does: custom software development, AI workflow automation, cloud infrastructure, data analysis and digital marketing.",
       "heading": "SERVICES",
       "intro": "Five areas, one team. Each page explains what's included and how a project runs.",
       "view": "View service"
@@ -106,7 +106,7 @@
     "titleSuffix": "Use case",
     "index": {
       "metaTitle": "Use cases",
-      "metaDescription": "Four concept builds by AIVIK, each as a short video: an AI receptionist, AI property search, a 3D online shop and a scroll-animated website.",
+      "metaDescription": "Four concept builds by AIXIK, each as a short video: an AI receptionist, AI property search, a 3D online shop and a scroll-animated website.",
       "heading": "USE CASES",
       "intro": "Four products we designed and built to show what we can build for you. The brands are fictional; the software is real and running."
     },
@@ -167,8 +167,8 @@
       }
     ]
   },
-  "WhyAivik": {
-    "heading": "WHY AIVIK",
+  "WhyAixik": {
+    "heading": "WHY AIXIK",
     "reasons": [
       {
         "title": "You Own Everything, Always",
@@ -258,9 +258,9 @@
   },
   "About": {
     "metaTitle": "About",
-    "metaDescription": "AIVIK is a Germany-based software engineering and AI automation company. Learn how we work and why clients keep direct access to the engineers building their product.",
+    "metaDescription": "AIXIK is a Germany-based software engineering and AI automation company. Learn how we work and why clients keep direct access to the engineers building their product.",
     "introHeading": "A small team building software the way we'd want it built for us.",
-    "introBody": "AIVIK is a software engineering and AI automation company, based in Germany. We build custom software, automate workflows with AI, and set up the cloud infrastructure and data systems underneath, for founders and teams who want a direct line to the people doing the work, not a chain of account managers between them and their own product.",
+    "introBody": "AIXIK is a software engineering and AI automation company, based in Germany. We build custom software, automate workflows with AI, and set up the cloud infrastructure and data systems underneath, for founders and teams who want a direct line to the people doing the work, not a chain of account managers between them and their own product.",
     "principlesHeading": "How we work",
     "principles": [
       {
@@ -281,31 +281,31 @@
       }
     ],
     "trustHeading": "Registered, accountable, and easy to check.",
-    "trustBodyPre": "AIVIK is a registered German business. The full legal details are public on our",
+    "trustBodyPre": "AIXIK is a registered German business. The full legal details are public on our",
     "trustBodyLink": "Impressum",
     "trustBodyPost": ". We'd rather you verify that yourself than take our word for it.",
     "getInTouch": "Get in touch"
   },
   "Impressum": {
     "metaTitle": "Impressum",
-    "metaDescription": "Legal notice for AIVIK, a Germany-based software engineering and AI automation company, per §5 TMG.",
+    "metaDescription": "Legal notice for AIXIK, a Germany-based software engineering and AI automation company, per §5 TMG.",
     "back": "Back",
     "title": "Impressum",
     "sectionLabel": "Angaben gemäß § 5 TMG",
-    "addressLine1": "AIVIK",
+    "addressLine1": "AIXIK",
     "addressLine2": "Munich, Germany",
     "contactHeading": "Contact",
-    "emailLine": "Email: info@aivik.eu",
-    "websiteLine": "Website: aivik.eu",
+    "emailLine": "Email: info@aixik.eu",
+    "websiteLine": "Website: aixik.eu",
     "responsibleHeading": "Responsible for content",
-    "responsibleName": "Team AIVIK"
+    "responsibleName": "Team AIXIK"
   },
   "Privacy": {
     "metaTitle": "Privacy Policy",
-    "metaDescription": "How AIVIK collects, uses, and protects personal data submitted through this website, in line with GDPR.",
+    "metaDescription": "How AIXIK collects, uses, and protects personal data submitted through this website, in line with GDPR.",
     "back": "Back",
     "title": "Privacy Policy",
-    "intro": "This website is operated by AIVIK, based in Germany.",
+    "intro": "This website is operated by AIXIK, based in Germany.",
     "dataCollectionHeading": "Data collection",
     "dataCollectionBody": "This website does not collect personal data beyond what you voluntarily submit via contact forms or email.",
     "cookiesHeading": "Cookies and tracking",
@@ -348,9 +348,9 @@
     "settings": "Cookie settings"
   },
   "Chat": {
-    "title": "AIVIK Assistant",
+    "title": "AIXIK Assistant",
     "subtitle": "AI Assistant · usually replies in seconds",
-    "greeting": "Hey! I'm Mara, AIVIK's AI assistant. Ask me about what we build, how we work, or what something might cost — I'll do my best, and loop in the team for anything specific.",
+    "greeting": "Hey! I'm Mara, AIXIK's AI assistant. Ask me about what we build, how we work, or what something might cost — I'll do my best, and loop in the team for anything specific.",
     "starters": [
       "What do you build?",
       "How does pricing work?",
@@ -385,8 +385,8 @@
     "disclosure": "You're chatting with an AI assistant."
   },
   "Metadata": {
-    "titleDefault": "AIVIK — Software Engineering & AI Automation",
-    "description": "AIVIK is a Germany-based tech consultancy delivering custom software development, AI automation, cloud infrastructure, and data analysis for European startups and growing companies.",
+    "titleDefault": "AIXIK — Software Engineering & AI Automation",
+    "description": "AIXIK is a Germany-based tech consultancy delivering custom software development, AI automation, cloud infrastructure, and data analysis for European startups and growing companies.",
     "ogDescription": "Custom software, AI automation, and cloud infrastructure for companies ready to move faster. Based in Germany. GDPR compliant.",
     "twitterDescription": "Custom software, AI automation, and cloud infrastructure for European companies."
   }

@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   if (!s) return {};
   const t = await getTranslations({ locale, namespace: "ServicePages" });
   const url = siteUrl(locale, servicePath(locale, s));
-  const title = `${s.title[locale]} · ${t("titleSuffix")} · AIVIK`;
+  const title = `${s.title[locale]} · ${t("titleSuffix")} · AIXIK`;
   const description = s.meta.description[locale];
 
   return {
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
         "x-default": siteUrl("en", servicePath("en", s)),
       },
     },
-    openGraph: { type: "website", url, siteName: "AIVIK", title, description, locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
+    openGraph: { type: "website", url, siteName: "AIXIK", title, description, locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
     twitter: { card: "summary_large_image", title, description, images: ["/twitter-image"] },
   };
 }

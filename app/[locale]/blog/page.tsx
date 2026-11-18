@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
       canonical: url,
       languages: { en: siteUrl("en", BLOG_BASE), de: siteUrl("de", BLOG_BASE), "x-default": siteUrl("en", BLOG_BASE) },
     },
-    openGraph: { type: "website", url, siteName: "AIVIK", title: `${t("index.metaTitle")} | AIVIK`, description: t("index.metaDescription"), locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
+    openGraph: { type: "website", url, siteName: "AIXIK", title: `${t("index.metaTitle")} | AIXIK`, description: t("index.metaDescription"), locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
   };
 }
 
