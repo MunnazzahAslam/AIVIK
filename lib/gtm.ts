@@ -1,4 +1,4 @@
-export const GTM_ID = "GTM-MSBD5SV6";
+export const GTM_ID = "GTM-TSLLHXFD";
 export const CONSENT_KEY = "aixik_consent";
 
 // Runs inline at the top of <head>, before anything else. Sets Google Consent
