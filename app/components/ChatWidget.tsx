@@ -28,10 +28,10 @@ function invalidFields(contact: Record<ContactField, string>): ContactField[] {
 }
 
 const ACCENT = "var(--accent-code)"; // #2563EB — same blue as the nav logo's underscore
-const SESSION_KEY = "aivik_chat_session_id";
-const HISTORY_KEY = "aivik_chat_history";
-const NEEDS_CONTACT_KEY = "aivik_chat_needs_contact";
-const PANEL_HEIGHT_KEY = "aivik_chat_panel_height";
+const SESSION_KEY = "aixik_chat_session_id";
+const HISTORY_KEY = "aixik_chat_history";
+const NEEDS_CONTACT_KEY = "aixik_chat_needs_contact";
+const PANEL_HEIGHT_KEY = "aixik_chat_panel_height";
 const NUDGE_DELAY_MS = 20000;
 const MIN_PANEL_HEIGHT = 380;
 const DEFAULT_PANEL_HEIGHT = 560;
@@ -49,7 +49,7 @@ function getSessionId(): string {
 
 // Replies are plain text. Links to our own site (the use-case pages Mara
 // points to) become real links; nothing else is turned into markup.
-const OWN_LINK = /(https:\/\/(?:www\.)?aivik\.eu\/[^\s<>"')\]]*)/g;
+const OWN_LINK = /(https:\/\/(?:www\.)?aixik\.eu\/[^\s<>"')\]]*)/g;
 
 function linkify(text: string): React.ReactNode[] {
   return text.split(OWN_LINK).map((part, i) => {
@@ -248,8 +248,8 @@ export default function ChatWidget() {
       const message = (e as CustomEvent<{ message?: string }>).detail?.message;
       if (message) sendRef.current(message);
     };
-    window.addEventListener("aivik:open-chat", onAsk);
-    return () => window.removeEventListener("aivik:open-chat", onAsk);
+    window.addEventListener("aixik:open-chat", onAsk);
+    return () => window.removeEventListener("aixik:open-chat", onAsk);
   }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -465,7 +465,7 @@ export default function ChatWidget() {
                         }}
                         disabled={contactSending}
                         aria-invalid={invalid}
-                        aria-describedby={invalid ? `aivik-chat-${field}-error` : undefined}
+                        aria-describedby={invalid ? `aixik-chat-${field}-error` : undefined}
                         className="font-body text-sm px-3 py-2 rounded-lg"
                         style={{
                           backgroundColor: "var(--section-light)",
@@ -474,7 +474,7 @@ export default function ChatWidget() {
                         }}
                       />
                       {invalid && (
-                        <span id={`aivik-chat-${field}-error`} className="text-xs" style={{ color: "#DC2626" }} role="alert">
+                        <span id={`aixik-chat-${field}-error`} className="text-xs" style={{ color: "#DC2626" }} role="alert">
                           {t(`contact.errors.${field}`)}
                         </span>
                       )}
@@ -518,7 +518,7 @@ export default function ChatWidget() {
                     className="w-1.5 h-1.5 rounded-full"
                     style={{
                       backgroundColor: "var(--section-light-muted)",
-                      animation: `aivik-chat-bounce 1.2s ${i * 0.15}s ease-in-out infinite`,
+                      animation: `aixik-chat-bounce 1.2s ${i * 0.15}s ease-in-out infinite`,
                     }}
                   />
                 ))}
@@ -528,8 +528,8 @@ export default function ChatWidget() {
             {error && (
               <p className="font-body text-xs" style={{ color: "#DC2626" }} role="alert">
                 {t("error")}{" "}
-                <a href="mailto:info@aivik.eu" className="underline">
-                  info@aivik.eu
+                <a href="mailto:info@aixik.eu" className="underline">
+                  info@aixik.eu
                 </a>
               </p>
             )}
@@ -596,12 +596,12 @@ export default function ChatWidget() {
       )}
 
       <style jsx global>{`
-        @keyframes aivik-chat-bounce {
+        @keyframes aixik-chat-bounce {
           0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
           30% { transform: translateY(-4px); opacity: 1; }
         }
         @media (prefers-reduced-motion: reduce) {
-          @keyframes aivik-chat-bounce {
+          @keyframes aixik-chat-bounce {
             0%, 100% { opacity: 1; transform: none; }
           }
         }

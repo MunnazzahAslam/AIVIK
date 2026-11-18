@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
-export const alt = "AIVIK — Software Engineering & AI Automation";
+export const alt = "AIXIK — Software Engineering & AI Automation";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -28,7 +28,7 @@ export default function OGImage() {
             lineHeight: 1,
           }}
         >
-          AIVIK
+          AIXIK
         </div>
         <div
           style={{
@@ -48,7 +48,7 @@ export default function OGImage() {
             letterSpacing: "2px",
           }}
         >
-          AIVIK.EU · GERMANY
+          AIXIK.EU · GERMANY
         </div>
       </div>
     ),

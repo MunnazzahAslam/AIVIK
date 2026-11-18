@@ -6,7 +6,7 @@ export default function AskAssistantButton({ label, message }: { label: string; 
     <button
       type="button"
       className="uc-btn uc-btn-ghost"
-      onClick={() => window.dispatchEvent(new CustomEvent("aivik:open-chat", { detail: { message } }))}
+      onClick={() => window.dispatchEvent(new CustomEvent("aixik:open-chat", { detail: { message } }))}
     >
       {label}
     </button>

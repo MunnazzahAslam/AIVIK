@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
-// The browser-tab icon: the "A" of the AIVIK wordmark with the logo's blue
+// The browser-tab icon: the "A" of the AIXIK wordmark with the logo's blue
 // underscore, on the site's dark background.
 export default function Icon() {
   return new ImageResponse(

@@ -94,7 +94,7 @@
     "cardLink": "Mehr zu dieser Leistung",
     "index": {
       "metaTitle": "Leistungen",
-      "metaDescription": "Was AIVIK macht: individuelle Softwareentwicklung, KI-Workflow-Automatisierung, Cloud-Infrastruktur, Datenanalyse und digitales Marketing.",
+      "metaDescription": "Was AIXIK macht: individuelle Softwareentwicklung, KI-Workflow-Automatisierung, Cloud-Infrastruktur, Datenanalyse und digitales Marketing.",
       "heading": "LEISTUNGEN",
       "intro": "Fünf Bereiche, ein Team. Jede Seite erklärt, was dazugehört und wie ein Projekt abläuft.",
       "view": "Leistung ansehen"
@@ -106,7 +106,7 @@
     "titleSuffix": "Anwendungsfall",
     "index": {
       "metaTitle": "Anwendungsfälle",
-      "metaDescription": "Vier Konzeptprojekte von AIVIK, jedes als kurzes Video: eine KI-Rezeption, eine KI-Immobiliensuche, ein 3D-Onlineshop und eine scroll-animierte Website.",
+      "metaDescription": "Vier Konzeptprojekte von AIXIK, jedes als kurzes Video: eine KI-Rezeption, eine KI-Immobiliensuche, ein 3D-Onlineshop und eine scroll-animierte Website.",
       "heading": "ANWENDUNGSFÄLLE",
       "intro": "Vier Produkte, die wir entworfen und entwickelt haben, um zu zeigen, was wir für Sie bauen können. Die Marken sind fiktiv; die Software ist echt und läuft."
     },
@@ -167,8 +167,8 @@
       }
     ]
   },
-  "WhyAivik": {
-    "heading": "WARUM AIVIK",
+  "WhyAixik": {
+    "heading": "WARUM AIXIK",
     "reasons": [
       {
         "title": "Ihnen gehört alles, immer",
@@ -258,9 +258,9 @@
   },
   "About": {
     "metaTitle": "Über uns",
-    "metaDescription": "AIVIK ist ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung. Erfahren Sie, wie wir arbeiten und warum unsere Kunden direkten Zugang zu den Entwicklern haben, die ihr Produkt bauen.",
+    "metaDescription": "AIXIK ist ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung. Erfahren Sie, wie wir arbeiten und warum unsere Kunden direkten Zugang zu den Entwicklern haben, die ihr Produkt bauen.",
     "introHeading": "Ein kleines Team, das Software so baut, wie wir sie uns selbst wünschen würden.",
-    "introBody": "AIVIK ist ein Unternehmen für Softwareentwicklung und KI-Automatisierung mit Sitz in Deutschland. Wir entwickeln individuelle Software, automatisieren Arbeitsabläufe mit KI und bauen die dahinterliegende Cloud-Infrastruktur und Datensysteme auf — für Gründer und Teams, die eine direkte Verbindung zu den Menschen wollen, die die Arbeit leisten, statt einer Kette von Account-Managern zwischen sich und ihrem eigenen Produkt.",
+    "introBody": "AIXIK ist ein Unternehmen für Softwareentwicklung und KI-Automatisierung mit Sitz in Deutschland. Wir entwickeln individuelle Software, automatisieren Arbeitsabläufe mit KI und bauen die dahinterliegende Cloud-Infrastruktur und Datensysteme auf — für Gründer und Teams, die eine direkte Verbindung zu den Menschen wollen, die die Arbeit leisten, statt einer Kette von Account-Managern zwischen sich und ihrem eigenen Produkt.",
     "principlesHeading": "Wie wir arbeiten",
     "principles": [
       {
@@ -281,31 +281,31 @@
       }
     ],
     "trustHeading": "Registriert, verantwortlich und leicht zu überprüfen.",
-    "trustBodyPre": "AIVIK ist ein eingetragenes deutsches Unternehmen. Die vollständigen rechtlichen Angaben finden Sie öffentlich in unserem ",
+    "trustBodyPre": "AIXIK ist ein eingetragenes deutsches Unternehmen. Die vollständigen rechtlichen Angaben finden Sie öffentlich in unserem ",
     "trustBodyLink": "Impressum",
     "trustBodyPost": ". Wir möchten lieber, dass Sie das selbst überprüfen, als dass Sie uns einfach glauben.",
     "getInTouch": "Kontakt aufnehmen"
   },
   "Impressum": {
     "metaTitle": "Impressum",
-    "metaDescription": "Impressum für AIVIK, ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung, gemäß §5 TMG.",
+    "metaDescription": "Impressum für AIXIK, ein in Deutschland ansässiges Unternehmen für Softwareentwicklung und KI-Automatisierung, gemäß §5 TMG.",
     "back": "Zurück",
     "title": "Impressum",
     "sectionLabel": "Angaben gemäß § 5 TMG",
-    "addressLine1": "AIVIK",
+    "addressLine1": "AIXIK",
     "addressLine2": "München, Deutschland",
     "contactHeading": "Kontakt",
-    "emailLine": "E-Mail: info@aivik.eu",
-    "websiteLine": "Webseite: aivik.eu",
+    "emailLine": "E-Mail: info@aixik.eu",
+    "websiteLine": "Webseite: aixik.eu",
     "responsibleHeading": "Verantwortlich für den Inhalt",
-    "responsibleName": "Team AIVIK"
+    "responsibleName": "Team AIXIK"
   },
   "Privacy": {
     "metaTitle": "Datenschutzerklärung",
-    "metaDescription": "Wie AIVIK personenbezogene Daten, die über diese Website übermittelt werden, im Einklang mit der DSGVO erhebt, verwendet und schützt.",
+    "metaDescription": "Wie AIXIK personenbezogene Daten, die über diese Website übermittelt werden, im Einklang mit der DSGVO erhebt, verwendet und schützt.",
     "back": "Zurück",
     "title": "Datenschutzerklärung",
-    "intro": "Diese Website wird von AIVIK betrieben, ansässig in Deutschland.",
+    "intro": "Diese Website wird von AIXIK betrieben, ansässig in Deutschland.",
     "dataCollectionHeading": "Datenerhebung",
     "dataCollectionBody": "Diese Website erhebt keine personenbezogenen Daten über das hinaus, was Sie freiwillig über Kontaktformulare oder E-Mail übermitteln.",
     "cookiesHeading": "Cookies und Tracking",
@@ -348,9 +348,9 @@
     "settings": "Cookie-Einstellungen"
   },
   "Chat": {
-    "title": "AIVIK Assistent",
+    "title": "AIXIK Assistent",
     "subtitle": "KI-Assistent · antwortet meist in Sekunden",
-    "greeting": "Hallo! Ich bin Mara, der KI-Assistent von AIVIK. Fragen Sie mich, was wir entwickeln, wie wir arbeiten, oder was etwas kosten könnte — ich helfe gerne weiter und binde bei Bedarf das Team ein.",
+    "greeting": "Hallo! Ich bin Mara, der KI-Assistent von AIXIK. Fragen Sie mich, was wir entwickeln, wie wir arbeiten, oder was etwas kosten könnte — ich helfe gerne weiter und binde bei Bedarf das Team ein.",
     "starters": [
       "Was entwickelt ihr?",
       "Wie funktioniert die Preisgestaltung?",
@@ -385,8 +385,8 @@
     "disclosure": "Sie chatten mit einem KI-Assistenten."
   },
   "Metadata": {
-    "titleDefault": "AIVIK — Softwareentwicklung & KI-Automatisierung",
-    "description": "AIVIK ist eine in Deutschland ansässige Technologieberatung, die individuelle Softwareentwicklung, KI-Automatisierung, Cloud-Infrastruktur und Datenanalyse für europäische Start-ups und wachsende Unternehmen anbietet.",
+    "titleDefault": "AIXIK — Softwareentwicklung & KI-Automatisierung",
+    "description": "AIXIK ist eine in Deutschland ansässige Technologieberatung, die individuelle Softwareentwicklung, KI-Automatisierung, Cloud-Infrastruktur und Datenanalyse für europäische Start-ups und wachsende Unternehmen anbietet.",
     "ogDescription": "Individuelle Software, KI-Automatisierung und Cloud-Infrastruktur für Unternehmen, die schneller vorankommen wollen. Ansässig in Deutschland. DSGVO-konform.",
     "twitterDescription": "Individuelle Software, KI-Automatisierung und Cloud-Infrastruktur für europäische Unternehmen."
   }

@@ -5,7 +5,7 @@ import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { USE_CASES_BASE } from "@/data/use-cases";
 import { SERVICES_BASE, pathInLocale } from "@/data/service-paths";
-import AIVIKLogo from "./AIVIKLogo";
+import AIXIKLogo from "./AIXIKLogo";
 
 type NavTheme = "hero-dark" | "dark" | "light";
 
@@ -92,7 +92,7 @@ export default function Nav() {
       >
           {/* Logo — far left */}
           <Link href="/" className="flex items-center shrink-0">
-            <AIVIKLogo size="md" variant={isLight ? "light" : "dark"} />
+            <AIXIKLogo size="md" variant={isLight ? "light" : "dark"} />
           </Link>
 
           {/* Desktop nav links — centered within the space between the logo

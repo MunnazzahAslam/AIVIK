@@ -46,10 +46,10 @@ export async function generateMetadata({
   const path = locale === routing.defaultLocale ? "" : `/${locale}`;
 
   return {
-    metadataBase: new URL("https://aivik.eu"),
+    metadataBase: new URL("https://aixik.eu"),
     title: {
       default: t("titleDefault"),
-      template: "%s | AIVIK",
+      template: "%s | AIXIK",
     },
     description: t("description"),
     keywords: [
@@ -63,9 +63,9 @@ export async function generateMetadata({
       "GDPR compliant software",
       "software agency Germany",
     ],
-    authors: [{ name: "AIVIK", url: "https://aivik.eu" }],
-    creator: "AIVIK",
-    publisher: "AIVIK",
+    authors: [{ name: "AIXIK", url: "https://aixik.eu" }],
+    creator: "AIXIK",
+    publisher: "AIXIK",
     robots: {
       index: true,
       follow: true,
@@ -77,8 +77,8 @@ export async function generateMetadata({
     openGraph: {
       type: "website",
       locale: locale === "de" ? "de_DE" : "en_EU",
-      url: `https://aivik.eu${path}`,
-      siteName: "AIVIK",
+      url: `https://aixik.eu${path}`,
+      siteName: "AIXIK",
       title: t("titleDefault"),
       description: t("ogDescription"),
     },
@@ -88,10 +88,10 @@ export async function generateMetadata({
       description: t("twitterDescription"),
     },
     alternates: {
-      canonical: `https://aivik.eu${path}`,
+      canonical: `https://aixik.eu${path}`,
       languages: {
-        en: "https://aivik.eu",
-        de: "https://aivik.eu/de",
+        en: "https://aixik.eu",
+        de: "https://aixik.eu/de",
       },
     },
   };
@@ -118,9 +118,9 @@ export default async function RootLayout({
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "AIVIK",
-    url: "https://aivik.eu",
-    email: "info@aivik.eu",
+    name: "AIXIK",
+    url: "https://aixik.eu",
+    email: "info@aixik.eu",
     description: t("description"),
     areaServed: "Europe",
     address: {

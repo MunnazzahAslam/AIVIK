@@ -19,7 +19,7 @@ export async function generateMetadata({
     title: t("metaTitle"),
     description: t("metaDescription"),
     alternates: {
-      canonical: `https://aivik.eu${path}`,
+      canonical: `https://aixik.eu${path}`,
     },
   };
 }

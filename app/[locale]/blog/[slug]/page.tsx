@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     openGraph: {
       type: "article",
       url,
-      siteName: "AIVIK",
+      siteName: "AIXIK",
       title,
       description,
       locale: locale === "de" ? "de_DE" : "en_EU",
@@ -82,8 +82,8 @@ export default async function BlogPost({ params }: { params: Params }) {
     ...(post.category && { articleSection: post.category }),
     author: post.author
       ? { "@type": "Person", name: post.author.name, ...(post.author.role && { jobTitle: post.author.role }) }
-      : { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
-    publisher: { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
+      : { "@type": "Organization", name: "AIXIK", url: "https://aixik.eu" },
+    publisher: { "@type": "Organization", name: "AIXIK", url: "https://aixik.eu" },
   };
 
   return (

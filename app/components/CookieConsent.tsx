@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { CONSENT_KEY } from "@/lib/gtm";
 
-const OPEN_EVENT = "aivik:open-consent";
+const OPEN_EVENT = "aixik:open-consent";
 // Cookies set by Google tags, removed when consent is withdrawn.
 const TRACKING_COOKIE = /^(_ga|_gid|_gat|_gcl|_gac)/;
 

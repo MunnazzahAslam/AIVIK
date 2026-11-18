@@ -12,14 +12,14 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const pages: MetadataRoute.Sitemap = paths.map((path) => ({
-    url: `https://aivik.eu${path}`,
+    url: `https://aixik.eu${path}`,
     lastModified: new Date(),
     changeFrequency: path === "" ? "monthly" : "yearly",
     priority: path === "" ? 1 : 0.3,
     alternates: {
       languages: {
-        en: `https://aivik.eu${path}`,
-        de: `https://aivik.eu/de${path}`,
+        en: `https://aixik.eu${path}`,
+        de: `https://aixik.eu/de${path}`,
       },
     },
   }));

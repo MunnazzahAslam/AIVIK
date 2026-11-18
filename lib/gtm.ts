@@ -1,5 +1,5 @@
 export const GTM_ID = "GTM-MSBD5SV6";
-export const CONSENT_KEY = "aivik_consent";
+export const CONSENT_KEY = "aixik_consent";
 
 // Runs inline at the top of <head>, before anything else. Sets Google Consent
 // Mode v2 defaults to "denied" (or "granted" for a visitor who already

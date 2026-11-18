@@ -58,7 +58,7 @@ export const post = defineType({
       type: 'slug',
       group: 'details',
       description:
-        'The end of the link in both languages: aivik.eu/blog/<address>. It can\'t be changed once the article is published, because links to it would break.',
+        'The end of the link in both languages: aixik.eu/blog/<address>. It can\'t be changed once the article is published, because links to it would break.',
       options: {
         source: (doc) => (doc.en as Content | undefined)?.title || (doc.de as Content | undefined)?.title || '',
         maxLength: 80,

@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: L
         "x-default": siteUrl("en", USE_CASES_BASE.en),
       },
     },
-    openGraph: { type: "website", url, siteName: "AIVIK", title: `${t("index.metaTitle")} | AIVIK`, description: t("index.metaDescription"), locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
+    openGraph: { type: "website", url, siteName: "AIXIK", title: `${t("index.metaTitle")} | AIXIK`, description: t("index.metaDescription"), locale: locale === "de" ? "de_DE" : "en_EU", images: ["/opengraph-image"] },
   };
 }
 

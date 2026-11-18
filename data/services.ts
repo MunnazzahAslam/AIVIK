@@ -130,8 +130,8 @@ export const SERVICES: Service[] = [
     formOption: "software",
     meta: {
       description: {
-        en: "Custom web and mobile applications, legacy modernization and CRM/ERP platforms from AIVIK. You own the source code from day one.",
-        de: "Individuelle Web- und Mobilanwendungen, Modernisierung von Altsystemen und CRM-/ERP-Plattformen von AIVIK. Der Quellcode gehört Ihnen vom ersten Tag an.",
+        en: "Custom web and mobile applications, legacy modernization and CRM/ERP platforms from AIXIK. You own the source code from day one.",
+        de: "Individuelle Web- und Mobilanwendungen, Modernisierung von Altsystemen und CRM-/ERP-Plattformen von AIXIK. Der Quellcode gehört Ihnen vom ersten Tag an.",
       },
     },
   },
@@ -204,8 +204,8 @@ export const SERVICES: Service[] = [
       {
         q: { en: "Where does our data go?", de: "Wohin gehen unsere Daten?" },
         a: {
-          en: "We agree that with you before anything is built: which model provider is used, where data is processed and what is stored. AIVIK is registered in Germany and plans projects with the GDPR in mind from the start.",
-          de: "Das legen wir mit Ihnen fest, bevor etwas gebaut wird: welcher Modellanbieter genutzt wird, wo Daten verarbeitet werden und was gespeichert wird. AIVIK ist in Deutschland registriert und plant Projekte von Anfang an DSGVO-konform.",
+          en: "We agree that with you before anything is built: which model provider is used, where data is processed and what is stored. AIXIK is registered in Germany and plans projects with the GDPR in mind from the start.",
+          de: "Das legen wir mit Ihnen fest, bevor etwas gebaut wird: welcher Modellanbieter genutzt wird, wo Daten verarbeitet werden und was gespeichert wird. AIXIK ist in Deutschland registriert und plant Projekte von Anfang an DSGVO-konform.",
         },
       },
       {
@@ -234,8 +234,8 @@ export const SERVICES: Service[] = [
     formOption: "ai",
     meta: {
       description: {
-        en: "AI chatbots, agents and generative AI built into your workflows by AIVIK, grounded in your data and planned with the GDPR in mind.",
-        de: "KI-Chatbots, Agenten und generative KI in Ihren Abläufen, entwickelt von AIVIK – auf Ihren Daten aufgebaut und DSGVO-konform geplant.",
+        en: "AI chatbots, agents and generative AI built into your workflows by AIXIK, grounded in your data and planned with the GDPR in mind.",
+        de: "KI-Chatbots, Agenten und generative KI in Ihren Abläufen, entwickelt von AIXIK – auf Ihren Daten aufgebaut und DSGVO-konform geplant.",
       },
     },
   },
@@ -337,8 +337,8 @@ export const SERVICES: Service[] = [
     formOption: "cloud",
     meta: {
       description: {
-        en: "Hosting, deployment, database management, cloud migration and security from AIVIK. Documented setups that belong to you.",
-        de: "Hosting, Deployment, Datenbankverwaltung, Cloud-Migration und Sicherheit von AIVIK. Dokumentierte Umgebungen, die Ihnen gehören.",
+        en: "Hosting, deployment, database management, cloud migration and security from AIXIK. Documented setups that belong to you.",
+        de: "Hosting, Deployment, Datenbankverwaltung, Cloud-Migration und Sicherheit von AIXIK. Dokumentierte Umgebungen, die Ihnen gehören.",
       },
     },
   },
@@ -441,8 +441,8 @@ export const SERVICES: Service[] = [
     formOption: "data",
     meta: {
       description: {
-        en: "Data pipelines, governance, dashboards and forecasts from AIVIK, so your team works from numbers it can trust.",
-        de: "Datenpipelines, Governance, Dashboards und Prognosen von AIVIK – damit Ihr Team mit Zahlen arbeitet, denen es vertrauen kann.",
+        en: "Data pipelines, governance, dashboards and forecasts from AIXIK, so your team works from numbers it can trust.",
+        de: "Datenpipelines, Governance, Dashboards und Prognosen von AIXIK – damit Ihr Team mit Zahlen arbeitet, denen es vertrauen kann.",
       },
     },
   },
@@ -544,8 +544,8 @@ export const SERVICES: Service[] = [
     formOption: null,
     meta: {
       description: {
-        en: "SEO, content, paid campaigns, social media and consent-based analytics from AIVIK, in English and German.",
-        de: "SEO, Content, bezahlte Kampagnen, Social Media und einwilligungsbasierte Analysen von AIVIK – auf Deutsch und Englisch.",
+        en: "SEO, content, paid campaigns, social media and consent-based analytics from AIXIK, in English and German.",
+        de: "SEO, Content, bezahlte Kampagnen, Social Media und einwilligungsbasierte Analysen von AIXIK – auf Deutsch und Englisch.",
       },
     },
   },

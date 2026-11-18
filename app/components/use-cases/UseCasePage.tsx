@@ -10,7 +10,7 @@ import AskAssistantButton from "./AskAssistantButton";
 /** A labelled block of the case page: the label sits beside the content on wide screens, above it on narrow ones. */
 function Block({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <section className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 py-12 aivik-section-divider">
+    <section className="grid gap-4 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10 py-12 aixik-section-divider">
       <h2 className="uc-label pt-1.5">{label}</h2>
       <div>{children}</div>
     </section>
@@ -38,13 +38,13 @@ export default async function UseCasePage({ useCase: u, locale }: { useCase: Use
     url,
     inLanguage: locale,
     genre: t("badge"),
-    creator: { "@type": "Organization", name: "AIVIK", url: "https://aivik.eu" },
-    image: `https://aivik.eu${u.video.poster}`,
+    creator: { "@type": "Organization", name: "AIXIK", url: "https://aixik.eu" },
+    image: `https://aixik.eu${u.video.poster}`,
     video: {
       "@type": "VideoObject",
       name: `${u.brand}: ${headline}`,
       description: u.videoSummary[locale],
-      thumbnailUrl: `https://aivik.eu${u.video.poster}`,
+      thumbnailUrl: `https://aixik.eu${u.video.poster}`,
       uploadDate: `${u.published}T00:00:00+00:00`,
       duration: `PT${u.video.seconds}S`,
       contentUrl: u.video.src1080,

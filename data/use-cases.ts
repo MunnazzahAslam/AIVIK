@@ -4,7 +4,7 @@ import type { Locale } from "@/i18n/routing";
  * The four use cases, in the order they appear. Everything a card or a case
  * page shows comes from here, so a fifth use case is one new entry.
  *
- * All four are concept builds: fictional brands that AIVIK designed and built.
+ * All four are concept builds: fictional brands that AIXIK designed and built.
  * Copy must not imply clients, results or testimonials.
  */
 
@@ -18,7 +18,7 @@ export type UseCase = {
   headline: Localised;
   summary: Localised;
   industry: Localised;
-  /** The AIVIK service this build proves, as shown on the badge. */
+  /** The AIXIK service this build proves, as shown on the badge. */
   proves: Localised;
   /** Which service card links here, and which option the contact form preselects. */
   service: "ai" | "software";
@@ -470,7 +470,7 @@ export const USE_CASES_BASE: Localised = { en: "/use-cases", de: "/anwendungsfae
 export const useCasePath = (locale: Locale, useCase: UseCase) => `${USE_CASES_BASE[locale]}/${useCase.slug[locale]}`;
 
 /** Full URL for metadata, hreflang and the sitemap. English is unprefixed, German lives under /de. */
-export const siteUrl = (locale: Locale, path: string) => `https://aivik.eu${locale === "de" ? "/de" : ""}${path}`;
+export const siteUrl = (locale: Locale, path: string) => `https://aixik.eu${locale === "de" ? "/de" : ""}${path}`;
 
 export const findUseCase = (locale: Locale, slug: string) => USE_CASES.find((u) => u.slug[locale] === slug) ?? null;
 

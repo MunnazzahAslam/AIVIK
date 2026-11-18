@@ -106,7 +106,7 @@ export default function AboutContent() {
 
   // Scroll-triggered fade + slide-up reveal for the principle cards, staggered
   // per card — replays each time the grid (re-)enters view, same as
-  // Services and WhyAivik's grids.
+  // Services and WhyAixik's grids.
   useEffect(() => {
     const el = principlesGridRef.current;
     if (!el) return;
@@ -329,10 +329,10 @@ export default function AboutContent() {
                   {t("getInTouch")}
                 </Link>
                 <a
-                  href="mailto:info@aivik.eu"
+                  href="mailto:info@aixik.eu"
                   className="font-body text-sm link-on-dark px-7 py-[14px] text-center"
                 >
-                  info@aivik.eu
+                  info@aixik.eu
                 </a>
               </div>
             </FadeIn>

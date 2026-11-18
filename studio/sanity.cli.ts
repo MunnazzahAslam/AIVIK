@@ -5,8 +5,8 @@ export default defineCliConfig({
     projectId: 'qs3r3e0a',
     dataset: 'production',
   },
-  // The Studio's address once deployed: https://aivik.sanity.studio
-  studioHost: 'aivik',
+  // The Studio's address once deployed: https://aixik.sanity.studio
+  studioHost: 'aixik',
   deployment: {
     appId: 'ii5abevvgqfc3kup0lqqafyj',
     autoUpdates: true,

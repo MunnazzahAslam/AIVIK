@@ -2,7 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import type { Locale } from "@/i18n/routing";
 import { USE_CASES_BASE } from "@/data/use-cases";
 import { SERVICES, servicePath } from "@/data/services";
-import AIVIKLogo from "./AIVIKLogo";
+import AIXIKLogo from "./AIXIKLogo";
 import { CookieSettingsButton } from "./CookieConsent";
 import { Link } from "@/i18n/navigation";
 
@@ -37,7 +37,7 @@ export default async function Footer() {
           {/* Column 1 — Brand */}
           <div>
             <Link href="/" className="block mb-2">
-              <AIVIKLogo size="sm" variant="dark" />
+              <AIXIKLogo size="sm" variant="dark" />
             </Link>
             <p className="font-mono text-[10px] text-on-dark-muted leading-relaxed">
               {t("tagline")}
@@ -100,10 +100,10 @@ export default async function Footer() {
             </p>
             <div className="flex flex-col gap-2.5">
               <a
-                href="mailto:info@aivik.eu"
+                href="mailto:info@aixik.eu"
                 className="font-body text-sm link-on-dark"
               >
-                info@aivik.eu
+                info@aixik.eu
               </a>
               <a
                 href={CALENDLY_URL}
@@ -114,12 +114,12 @@ export default async function Footer() {
                 {t("bookCall")}
               </a>
               <a
-                href="https://linkedin.com/company/aivik"
+                href="https://linkedin.com/company/aixik"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-body text-sm link-on-dark"
               >
-                linkedin.com/company/aivik
+                linkedin.com/company/aixik
               </a>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default async function Footer() {
           style={{ borderColor: "var(--section-dark-border)" }}
         >
           <p className="font-body text-xs text-on-dark-muted">
-            © {new Date().getFullYear()} AIVIK. {t("copyright")}
+            © {new Date().getFullYear()} AIXIK. {t("copyright")}
           </p>
           <p className="font-body text-xs text-on-dark-muted">
             {t("tagline2")}

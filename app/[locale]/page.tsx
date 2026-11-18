@@ -4,7 +4,7 @@ import Nav from "@/app/components/Nav";
 import Hero from "@/app/components/Hero";
 import Services from "@/app/components/Services";
 import UseCasesTeaser from "@/app/components/use-cases/UseCasesTeaser";
-import WhyAivik from "@/app/components/WhyAivik";
+import WhyAixik from "@/app/components/WhyAixik";
 import Process from "@/app/components/Process";
 import GetAQuote from "@/app/components/GetAQuote";
 import Footer from "@/app/components/Footer";
@@ -24,7 +24,7 @@ export default async function Home({
       <Services />
       <UseCasesTeaser />
       <Process />
-      <WhyAivik />
+      <WhyAixik />
       <GetAQuote />
       <Footer />
     </main>

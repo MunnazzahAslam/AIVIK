@@ -1,10 +1,10 @@
-# AIVIK — CLAUDE.md
+# AIXIK — CLAUDE.md
 
 ## Project overview
 
-AIVIK is the marketing/agency website for AIVIK, a software engineering and AI automation company registered in Germany. The site is a single-page landing with sections for services, process, team, and a call-to-action, plus two legally required routes (`/impressum` and `/privacy`).
+AIXIK is the marketing/agency website for AIXIK, a software engineering and AI automation company registered in Germany. The site is a single-page landing with sections for services, process, team, and a call-to-action, plus two legally required routes (`/impressum` and `/privacy`).
 
-Live domain: `https://aivik.eu`
+Live domain: `https://aixik.eu`
 
 ---
 
@@ -26,7 +26,7 @@ No UI libraries, no animation libraries, no state management. Pure Next.js + Tai
 ## Folder structure
 
 ```
-aivik/
+aixik/
 ├── app/
 │   ├── layout.tsx              # Root layout — metadata, global CSS import
 │   ├── page.tsx                # Home page — imports and orders all sections
@@ -37,7 +37,7 @@ aivik/
 │   │   ├── TrustBar.tsx        # Past employer / trust logos bar
 │   │   ├── Services.tsx        # 2-col grid of service cards
 │   │   ├── HowItWorks.tsx      # 3-step process section (dark background)
-│   │   ├── WhyAivik.tsx        # 6-item reasons grid
+│   │   ├── WhyAixik.tsx        # 6-item reasons grid
 │   │   ├── Team.tsx            # 3-card team section (dark background)
 │   │   ├── CTA.tsx             # Full-width CTA block with glow effect
 │   │   └── Footer.tsx          # Footer with nav links and legal links
@@ -159,10 +159,10 @@ These are placeholder values in the current codebase that must be replaced:
 | `app/components/Nav.tsx` | `https://calendly.com` → real Calendly URL |
 | `app/components/Hero.tsx` | `https://calendly.com` → real Calendly URL |
 | `app/components/CTA.tsx` | `https://calendly.com` → real Calendly URL |
-| `app/components/Footer.tsx` | `https://linkedin.com/company/aivik` → real LinkedIn URL |
+| `app/components/Footer.tsx` | `https://linkedin.com/company/aixik` → real LinkedIn URL |
 | `app/impressum/page.tsx` | `[Your registered address in Germany]` → real registered address |
 | `app/privacy/page.tsx` | Replace entire content with a proper GDPR policy (generate at e-recht24.de) |
-| `app/layout.tsx` | Update `openGraph.url` if domain changes from `aivik.eu` |
+| `app/layout.tsx` | Update `openGraph.url` if domain changes from `aixik.eu` |
 
 ---
 
